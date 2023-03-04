@@ -1,0 +1,106 @@
+.property-search{
+    padding: 30px;
+    background: rgba(0, 28, 56, 0.6);
+    border-radius: 10px;
+}
+
+.p-locations{
+    margin-right: 24px;
+}
+.p-locations .data{
+    width: 166px;
+    background: transparent;
+    color: #C7C7C7;
+    font-size: 15px;
+    font-weight: 400;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    height: 45px;
+    line-height: 45px;
+    border-radius: 5px;
+    border: solid 1px #e8e8e8;
+    box-sizing: border-box;
+    clear: both;
+    cursor: pointer;
+    display: block;
+    float: left;
+    font-family: inherit;
+    outline: none;
+    padding-left: 18px;
+    padding-right: 30px;
+    position: relative;
+    text-align: left !important;
+    transition: all 0.2s ease-in-out;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.p-locations label{
+    display: block;
+    font-size: 15px;
+    color: #e86ed0;
+    text-align: left;
+}
+
+.p-locations .data ul{
+    color: #000;
+    border-radius: 0;
+    opacity: 1;
+    pointer-events: auto;
+    left: 0 !important;
+    right: 0 !important;
+    background-color: #fff;
+    box-shadow: 0 0 0 1px rgb(68 68 68 / 11%);
+    box-sizing: border-box;
+    margin-top: 4px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    top: 100%;
+    transform-origin: 50% 0;
+    transition: all 0.2s cubic-bezier(0.5, 0, 0, 1.25), opacity 0.15s ease-out;
+    z-index: 9;
+
+}
+
+.p-locations .data ul li{
+    cursor: pointer;
+    font-weight: 400;
+    line-height: 40px;
+    list-style: none;
+    min-height: 40px;
+    outline: none;
+    padding-left: 18px;
+    padding-right: 29px;
+    text-align: left;
+    transition: all 0.2s;
+}
+
+.s-icon{
+    display: flex;
+    align-items: end;
+}
+
+.s-icon a{
+    width: 45px;
+    height: 45px;
+    background: #e86ed0;
+    text-align: center;
+    line-height: 45px;
+    color: #fff;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.s-icon a svg{
+    color: #fff;
+    font-size: 24px;
+}
+
+.data svg{
+    position: absolute;
+    right: 9px;
+    transition: all 0.15s ease-in-out;
+    color: #e86ed0;
+    top: 9px;
+    font-size: 27px;
+}

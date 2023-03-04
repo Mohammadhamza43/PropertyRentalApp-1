@@ -1,0 +1,15 @@
+.loader_parent{
+    position: absolute;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #fff;
+    z-index: 9999;
+}
+
+.loader_child{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: inherit;
+}
