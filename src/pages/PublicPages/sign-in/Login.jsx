@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import bgOne from '../../../assets/media/images/bg_1.jpg'
+import Header from '../../../shared/Header/Header'
 
 import './Login.css'
 
@@ -21,6 +22,7 @@ function Login() {
 
     return (
         <>
+        <Header/>
             <div className="hero-wrap ftco-degree-bg" style={{ backgroundImage: `url(${bgOne})` }} data-stellar-background-ratio="0.5">
                 <div className="overlay"></div>
                 <div className="container">
