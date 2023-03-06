@@ -104,3 +104,32 @@
     top: 9px;
     font-size: 27px;
 }
+
+@media only screen and (max-width: 600px) {
+
+    .text h1{
+        font-size: 30px;
+    }
+
+    .s-icon{
+        display: block;
+    }
+
+    .s-icon a{
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    .p-locations{
+        margin: 0px;
+    }
+    .p-locations label{
+        margin: 0.5rem 0px;
+    }
+    .p-locations .data{
+       width: 100%;
+    }
+    .property-search .d-flex {
+     flex-direction: column;
+    }
+  }

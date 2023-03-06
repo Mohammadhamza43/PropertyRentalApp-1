@@ -11595,6 +11595,14 @@ h5,
 }
 
 @media (max-width: 991.98px) {
+
+  .hero-wrap {
+    height: auto !important;
+  }
+
+  .text {
+    padding-bottom: 50px;
+  }
   .ftco-navbar-light {
     background: #000000 !important;
     position: relative;
@@ -12420,6 +12428,27 @@ h5,
     width: 90%;
     margin-left: 10px;
   }
+
+  
+  .hero-wrap.hero-wrap-2{
+    height: auto !important;
+  }
+
+  .hero-wrap.hero-wrap-2 .slider-text {
+    height: auto !important;
+}
+
+.slider-text h1{
+  font-size: 40px;
+}
+
+.no-gutters{
+  padding: 20px;
+}
+
+  .slider-text {
+    height: auto;
+}
 }
 
 .property-wrap .text p.price span {
@@ -12954,7 +12983,7 @@ textarea.form-control {
 
 @media (max-width: 767.98px) {
   .ftco-section {
-    padding: 6em 0;
+    padding: 2em 0;
   }
 }
 

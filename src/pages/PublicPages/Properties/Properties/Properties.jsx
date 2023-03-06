@@ -10,10 +10,12 @@ import workSix from '../../../../assets/media/images/work-6.jpg'
 import {BiBed} from 'react-icons/bi'
 import {TbBath} from 'react-icons/tb'
 import {MdOutlineMapsHomeWork} from 'react-icons/md'
+import Header from '../../../../shared/Header/Header'
 
 function Properties() {
   return (
     <>
+	<Header/>
     <section className="hero-wrap hero-wrap-2 ftco-degree-bg js-fullheight" style={{backgroundImage: `url(${bgOne})`}} data-stellar-background-ratio="0.5">
       <div className="overlay"></div>
       <div className="container">

@@ -33,7 +33,7 @@ const Login = lazy(() => import('./pages/PublicPages/sign-in/Login'))
 function App() {
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <Router>
         <Suspense fallback={<Loading/>}>
         <Routes>
