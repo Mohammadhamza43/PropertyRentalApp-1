@@ -70,10 +70,10 @@ function PropertiesDetails() {
 							</div>
 						</div>
 						<div className="parent">
-							<div className="one"> <img src={PropertyOne} alt="" /> </div>
-							<div className="two"> <img src={Propertytwo} alt="" />  </div>
-							<div className="three"> <img src={Propertyseven} alt="" />  </div>
-							<div className="four"> <img src={Propertyfour} alt="" />  </div>
+							<div className="one" onClick={() => { setGallery(!gallery) }}> <img src={PropertyOne} alt="" /> </div>
+							<div className="two" onClick={() => { setGallery(!gallery) }}> <img src={Propertytwo} alt="" />  </div>
+							<div className="three" onClick={() => { setGallery(!gallery) }}> <img src={Propertyseven} alt="" />  </div>
+							<div className="four" onClick={() => { setGallery(!gallery) }}> <img src={Propertyfour} alt="" />  </div>
 							<div className="five" onClick={() => { setGallery(!gallery) }}>
 								<div className="count-overlay">
 									<div className="div">

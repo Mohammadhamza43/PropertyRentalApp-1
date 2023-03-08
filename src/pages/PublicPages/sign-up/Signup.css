@@ -10,17 +10,7 @@
     font-size: 40px !important;
     font-weight: 600 !important;
     text-transform: capitalize !important;
-	/* color: #fff !important; */
-}
-.main-hee{
-    font-size: 40px !important;
-    font-weight: 600 !important;
-    text-transform: capitalize !important;
-	color: #fff !important;
-}
-
-.main-p{
-	color: #fff !important;
+    /* color: #fff !important; */
 }
 
 .login-sigin h2 {
@@ -59,6 +49,10 @@
 	transition: transform 80ms ease-in;
 }
 
+.text{
+    margin-inline: auto;
+}
+
 .login-sigin button:active {
 	transform: scale(0.95);
 }
@@ -67,19 +61,9 @@
 	outline: none;
 }
 
-.login-sigin button.ghostt{
+.login-sigin button.ghost {
 	background-color: transparent;
 	border-color: #FFFFFF;
-}
-
-.text{
-    margin-inline: auto;
-}
-
-.login-sigin button.ghostt a{
-	background-color: transparent;
-	border-color: #FFFFFF;
-	color: #fff !important;
 }
 
 .login-sigin form {
@@ -292,14 +276,14 @@ footer a {
 		text-align: center;
 	}
 
-	.login-sigin .form-container{
+	.login-sigin .form-containerr{
 		position: static !important;
 		width: 100% !important;
 		
 	}
 
-	.login-sigin .sign-in-container{
-		width: 100%;
-	}
+    .login-sigin .containerr.right-panel-active .sign-up-container{
+        transform: none !important;
+    }
 }
 
