@@ -27,6 +27,7 @@ const PropertiesDetails = lazy(() => import('./pages/PublicPages/Properties/Prop
 const Blog = lazy(() => import('./pages/PublicPages/Blog/Blog/Blog'))
 const BlogDetails = lazy(() => import('./pages/PublicPages/Blog/BlogDetails/BlogDetails'))
 const Login = lazy(() => import('./pages/PublicPages/sign-in/Login'))
+const Signup = lazy(() => import('./pages/PublicPages/sign-up/Signup'))
 
 
 
@@ -47,6 +48,7 @@ function App() {
           <Route path="/blog/:id" element={<BlogDetails/>} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="*" element={<Error />} />
         </Routes>
         </Suspense>

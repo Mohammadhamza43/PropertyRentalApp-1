@@ -99,6 +99,11 @@ p {
   margin-bottom: 1rem;
 }
 
+.oi-menu svg{
+  font-size: 35px;
+  color: #e86ed0;
+}
+
 abbr[title],
 abbr[data-original-title] {
   text-decoration: underline;
@@ -11630,6 +11635,10 @@ h5,
   }
 }
 
+.ftco-navbar-light .navbar-nav>.nav-item>.active{
+  color: #e86ed0 !important;
+}
+
 .ftco-navbar-light .navbar-nav>.nav-item>.nav-link {
   font-size: 15px;
   padding-top: .9rem;
@@ -12740,12 +12749,7 @@ h5,
   background: #000000;
 }
 
-@media (max-width: 767.98px) {
-  .services-section .overlay {
-    width: 100%;
-    opacity: .4;
-  }
-}
+
 
 .services {
   -moz-transition: all 0.3s ease;
@@ -12983,7 +12987,7 @@ textarea.form-control {
 
 @media (max-width: 767.98px) {
   .ftco-section {
-    padding: 2em 0;
+    padding: 2em 0 !important;
   }
 }
 
@@ -14348,3 +14352,27 @@ textarea.form-control {
 
 
 /* animation*/
+
+@media (max-width: 767.98px) {
+
+  .block-23 ul{
+    list-style: none;
+    padding: 0px 30px;
+  }
+  .block-23 ul li{
+    display: block;
+  }
+  .block-23 ul li span{
+    padding: 0px !important;
+    text-align: left;
+  }
+  .services-section .overlay {
+    width: 100%;
+    opacity: .4;
+  }
+
+  .align-items-center{
+    justify-content: center;
+    padding: 0px;
+  }
+}

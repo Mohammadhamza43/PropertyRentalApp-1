@@ -41,9 +41,9 @@ function Properties() {
 									<li><span className="flaticon-bathtub three-margin-icon"><TbBath/></span>2</li>
 									<li><span className="flaticon-floor-plan three-margin-icon"><MdOutlineMapsHomeWork/></span>1,878 sqft</li>
         				</ul>
-        				<h3><a href="properties/1\">The Blue Sky Home</a></h3>
+        				<h3><a href="properties/1">The Blue Sky Home</a></h3>
         				<span className="location">Oakland</span>
-        				<a href="properties/1\" className="d-flex align-items-center justify-content-center btn-custom">
+        				<a href="properties/1" className="d-flex align-items-center justify-content-center btn-custom">
         					<span className="ion-ios-link"></span>
         				</a>
         			</div>
@@ -51,7 +51,7 @@ function Properties() {
         	</div>
         	<div className="col-md-4">
         		<div className="property-wrap">
-        			<a href="properties/1\" className="img" style={{backgroundImage: `url(${workTwo})`}}></a>
+        			<a href="properties/1" className="img" style={{backgroundImage: `url(${workTwo})`}}></a>
         			<div className="text">
         				<p className="price"><span className="old-price">800,000</span><span className="orig-price">$3,050<small>/mo</small></span></p>
         				<ul className="property_list">
@@ -59,9 +59,9 @@ function Properties() {
 									<li><span className="flaticon-bathtub three-margin-icon"><TbBath/></span>2</li>
 									<li><span className="flaticon-floor-plan three-margin-icon"><MdOutlineMapsHomeWork/></span>1,878 sqft</li>
         				</ul>
-        				<h3><a href="properties/1\">The Blue Sky Home</a></h3>
+        				<h3><a href="properties/1">The Blue Sky Home</a></h3>
         				<span className="location">Oakland</span>
-        				<a href="properties/1\" className="d-flex align-items-center justify-content-center btn-custom">
+        				<a href="properties/1" className="d-flex align-items-center justify-content-center btn-custom">
         					<span className="ion-ios-link"></span>
         				</a>
         			</div>
@@ -69,7 +69,7 @@ function Properties() {
         	</div>
         	<div className="col-md-4">
         		<div className="property-wrap">
-        			<a href="properties/1\" className="img" style={{backgroundImage: `url(${workThree})`}}></a>
+        			<a href="properties/1" className="img" style={{backgroundImage: `url(${workThree})`}}></a>
         			<div className="text">
         				<p className="price"><span className="old-price">800,000</span><span className="orig-price">$3,050<small>/mo</small></span></p>
         				<ul className="property_list">
@@ -77,9 +77,9 @@ function Properties() {
 									<li><span className="flaticon-bathtub three-margin-icon"><TbBath/></span>2</li>
 									<li><span className="flaticon-floor-plan three-margin-icon"><MdOutlineMapsHomeWork/></span>1,878 sqft</li>
         				</ul>
-        				<h3><a href="properties/1\">The Blue Sky Home</a></h3>
+        				<h3><a href="properties/1">The Blue Sky Home</a></h3>
         				<span className="location">Oakland</span>
-        				<a href="properties/1\" className="d-flex align-items-center justify-content-center btn-custom">
+        				<a href="properties/1" className="d-flex align-items-center justify-content-center btn-custom">
         					<span className="ion-ios-link"></span>
         				</a>
         			</div>
@@ -88,7 +88,7 @@ function Properties() {
 
         	<div className="col-md-4">
         		<div className="property-wrap">
-        			<a href="properties/1\" className="img" style={{backgroundImage: `url(${workFour})`}}></a>
+        			<a href="properties/1" className="img" style={{backgroundImage: `url(${workFour})`}}></a>
         			<div className="text">
         				<p className="price"><span className="old-price">800,000</span><span className="orig-price">$3,050<small>/mo</small></span></p>
         				<ul className="property_list">
@@ -96,9 +96,9 @@ function Properties() {
 									<li><span className="flaticon-bathtub three-margin-icon"><TbBath/></span>2</li>
 									<li><span className="flaticon-floor-plan three-margin-icon"><MdOutlineMapsHomeWork/></span>1,878 sqft</li>
         				</ul>
-        				<h3><a href="properties/1\">The Blue Sky Home</a></h3>
+        				<h3><a href="properties/1">The Blue Sky Home</a></h3>
         				<span className="location">Oakland</span>
-        				<a href="properties/1\" className="d-flex align-items-center justify-content-center btn-custom">
+        				<a href="properties/1" className="d-flex align-items-center justify-content-center btn-custom">
         					<span className="ion-ios-link"></span>
         				</a>
         			</div>
@@ -106,7 +106,7 @@ function Properties() {
         	</div>
         	<div className="col-md-4">
         		<div className="property-wrap">
-        			<a href="properties/1\" className="img" style={{backgroundImage: `url(${workFive})`}}></a>
+        			<a href="properties/1" className="img" style={{backgroundImage: `url(${workFive})`}}></a>
         			<div className="text">
         				<p className="price"><span className="old-price">800,000</span><span className="orig-price">$3,050<small>/mo</small></span></p>
         				<ul className="property_list">
@@ -114,9 +114,9 @@ function Properties() {
 									<li><span className="flaticon-bathtub three-margin-icon"><TbBath/></span>2</li>
 									<li><span className="flaticon-floor-plan three-margin-icon"><MdOutlineMapsHomeWork/></span>1,878 sqft</li>
         				</ul>
-        				<h3><a href="properties/1\">The Blue Sky Home</a></h3>
+        				<h3><a href="properties/1">The Blue Sky Home</a></h3>
         				<span className="location">Oakland</span>
-        				<a href="properties/1\" className="d-flex align-items-center justify-content-center btn-custom">
+        				<a href="properties/1" className="d-flex align-items-center justify-content-center btn-custom">
         					<span className="ion-ios-link"></span>
         				</a>
         			</div>
@@ -124,7 +124,7 @@ function Properties() {
         	</div>
         	<div className="col-md-4">
         		<div className="property-wrap">
-        			<a href="properties/1\" className="img" style={{backgroundImage: `url(${workSix})`}}></a>
+        			<a href="properties/1" className="img" style={{backgroundImage: `url(${workSix})`}}></a>
         			<div className="text">
         				<p className="price"><span className="old-price">800,000</span><span className="orig-price">$3,050<small>/mo</small></span></p>
         				<ul className="property_list">
@@ -132,9 +132,9 @@ function Properties() {
 									<li><span className="flaticon-bathtub three-margin-icon"><TbBath/></span>2</li>
 									<li><span className="flaticon-floor-plan three-margin-icon"><MdOutlineMapsHomeWork/></span>1,878 sqft</li>
         				</ul>
-        				<h3><a href="properties/1\">The Blue Sky Home</a></h3>
+        				<h3><a href="properties/1">The Blue Sky Home</a></h3>
         				<span className="location">Oakland</span>
-        				<a href="properties/1\" className="d-flex align-items-center justify-content-center btn-custom">
+        				<a href="properties/1" className="d-flex align-items-center justify-content-center btn-custom">
         					<span className="ion-ios-link"></span>
         				</a>
         			</div>
@@ -143,7 +143,7 @@ function Properties() {
 
         	<div className="col-md-4">
         		<div className="property-wrap">
-        			<a href="properties/1\" className="img" style={{backgroundImage: `url(${workOne})`}}></a>
+        			<a href="properties/1" className="img" style={{backgroundImage: `url(${workOne})`}}></a>
         			<div className="text">
         				<p className="price"><span className="old-price">800,000</span><span className="orig-price">$3,050<small>/mo</small></span></p>
         				<ul className="property_list">
@@ -151,9 +151,9 @@ function Properties() {
 									<li><span className="flaticon-bathtub three-margin-icon"><TbBath/></span>2</li>
 									<li><span className="flaticon-floor-plan three-margin-icon"><MdOutlineMapsHomeWork/></span>1,878 sqft</li>
         				</ul>
-        				<h3><a href="properties/1\">The Blue Sky Home</a></h3>
+        				<h3><a href="properties/1">The Blue Sky Home</a></h3>
         				<span className="location">Oakland</span>
-        				<a href="properties/1\" className="d-flex align-items-center justify-content-center btn-custom">
+        				<a href="properties/1" className="d-flex align-items-center justify-content-center btn-custom">
         					<span className="ion-ios-link"></span>
         				</a>
         			</div>
@@ -161,7 +161,7 @@ function Properties() {
         	</div>
         	<div className="col-md-4">
         		<div className="property-wrap">
-        			<a href="properties/1\" className="img" style={{backgroundImage: `url(${workTwo})`}}></a>
+        			<a href="properties/1" className="img" style={{backgroundImage: `url(${workTwo})`}}></a>
         			<div className="text">
         				<p className="price"><span className="old-price">800,000</span><span className="orig-price">$3,050<small>/mo</small></span></p>
         				<ul className="property_list">
@@ -169,17 +169,17 @@ function Properties() {
 									<li><span className="flaticon-bathtub three-margin-icon"><TbBath/></span>2</li>
 									<li><span className="flaticon-floor-plan three-margin-icon"><MdOutlineMapsHomeWork/></span>1,878 sqft</li>
         				</ul>
-        				<h3><a href="properties/1\">The Blue Sky Home</a></h3>
+        				<h3><a href="properties/1">The Blue Sky Home</a></h3>
         				<span className="location">Oakland</span>
-        				<a href="properties/1\" className="d-flex align-items-center justify-content-center btn-custom">
+        				<a href="properties/1" className="d-flex align-items-center justify-content-center btn-custom">
         					<span className="ion-ios-link"></span>
         				</a>
         			</div>
         		</div>
         	</div>
         	<div className="col-md-4">
-        		<div className="property-wrap ftco-animate">
-        			<a href="properties/1\" className="img" style={{backgroundImage: `url(${workThree})`}}></a>
+        		<div className="property-wrap">
+        			<a href="properties/1" className="img" style={{backgroundImage: `url(${workThree})`}}></a>
         			<div className="text">
         				<p className="price"><span className="old-price">800,000</span><span className="orig-price">$3,050<small>/mo</small></span></p>
         				<ul className="property_list">
@@ -187,9 +187,9 @@ function Properties() {
 									<li><span className="flaticon-bathtub three-margin-icon"><TbBath/></span>2</li>
 									<li><span className="flaticon-floor-plan three-margin-icon"><MdOutlineMapsHomeWork/></span>1,878 sqft</li>
         				</ul>
-        				<h3><a href="properties/1\">The Blue Sky Home</a></h3>
+        				<h3><a href="properties/1">The Blue Sky Home</a></h3>
         				<span className="location">Oakland</span>
-        				<a href="properties/1\" className="d-flex align-items-center justify-content-center btn-custom">
+        				<a href="properties/1" className="d-flex align-items-center justify-content-center btn-custom">
         					<span className="ion-ios-link"></span>
         				</a>
         			</div>
