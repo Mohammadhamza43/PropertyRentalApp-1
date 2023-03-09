@@ -270,7 +270,7 @@ footer a {
 	.login-sigin .containerr{
 		width: auto !important;
 		min-height: auto !important;
-		padding: 40px 0px;
+		/* padding: 40px 0px; */
 	}
 
 	.login-sigin input {
@@ -300,6 +300,10 @@ footer a {
 
 	.login-sigin .sign-in-container{
 		width: 100%;
+	}
+
+	.login-sigin{
+		margin: 30px 0px;
 	}
 }
 

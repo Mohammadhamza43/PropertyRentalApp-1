@@ -1,11 +1,10 @@
-import React, { useState } from 'react'
-import { Link, NavLink } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import React from 'react'
+import { NavLink } from 'react-router-dom';
 import { GiHamburgerMenu } from 'react-icons/gi';
 
 function Header() {
 
-  
+
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
