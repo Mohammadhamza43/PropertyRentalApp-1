@@ -97,7 +97,7 @@
 	min-height: 480px;
 }
 
-.login-sigin .form-container {
+.login-sigin .form-containerr {
 	position: absolute;
 	top: 0;
 	height: 100%;
@@ -285,5 +285,9 @@ footer a {
     .login-sigin .containerr.right-panel-active .sign-up-container{
         transform: none !important;
     }
+
+	.login-sigin{
+		margin: 30px 0px;
+	}
 }
 
