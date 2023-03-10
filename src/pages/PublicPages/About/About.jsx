@@ -8,6 +8,7 @@ import PersonFour from '../../../assets/media/images/person_4.jpg'
 import about from '../../../assets/media/images/about.jpg'
 import ClientCarousel from '../../../shared/ClientCarousel/ClientCarousel'
 import Header from '../../../shared/Header/Header'
+import Footer from '../../../shared/Footer/Footer'
 
 function About() {
 
@@ -131,7 +132,7 @@ function About() {
 					</div>
 				</div>
 			</section>
-
+            <Footer/>
         </>
     )
 }

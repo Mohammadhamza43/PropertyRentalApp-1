@@ -6,6 +6,7 @@ import {BsPhone} from 'react-icons/bs'
 import bgOne from '../../../assets/media/images/bg_1.jpg'
 import GoogleMapReact from 'google-map-react';
 import Header from '../../../shared/Header/Header'
+import Footer from '../../../shared/Footer/Footer'
 
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
@@ -104,6 +105,7 @@ function Contact() {
         </div>
       </div>
     </section>
+    <Footer/>
     </>
   )
 }

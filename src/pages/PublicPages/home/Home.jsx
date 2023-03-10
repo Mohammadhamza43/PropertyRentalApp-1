@@ -30,6 +30,7 @@ import {MdOutlineMapsHomeWork} from 'react-icons/md'
 import ClientCarousel from '../../../shared/ClientCarousel/ClientCarousel'
 import Search from '../../../shared/Search/Search'
 import Header from '../../../shared/Header/Header'
+import Footer from '../../../shared/Footer/Footer'
 
 
 function Home() {
@@ -480,7 +481,7 @@ function Home() {
 					</div>
 				</div>
 			</section>
-			
+			<Footer/>
 			
 		</>
 	)

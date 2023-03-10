@@ -27,6 +27,7 @@ import Propertyseven from '../../../../assets/media/images/property/property-7.j
 import Tom from '../../../../assets/media/images/tom.webp'
 import GoogleMapReact from 'google-map-react';
 import Header from '../../../../shared/Header/Header'
+import Footer from '../../../../shared/Footer/Footer'
 // import { AiFillStar} from 'react-icons/ai'
 // import {MdKeyboardArrowRight} from 'react-icons/md'
 // import { IoArrowUndoSharp } from 'react-icons/io5'
@@ -466,7 +467,7 @@ function PropertiesDetails() {
 					</div>
 			}
 
-
+			        <Footer/>
 		</>
 	)
 }

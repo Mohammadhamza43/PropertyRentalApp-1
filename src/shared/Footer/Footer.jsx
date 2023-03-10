@@ -12,7 +12,7 @@ function Footer() {
     <footer className="ftco-footer ftco-section">
     <div className="container">
       <div className="row mb-5">
-        <div className="col-md">
+        <div className="col-md section-1">
           <div className="ftco-footer-widget mb-4">
             <h2 className="ftco-heading-2">Uptown</h2>
             <p>Far far away, behind the word mountains, far from the countries.</p>
@@ -23,7 +23,7 @@ function Footer() {
             </ul>
           </div>
         </div>
-        <div className="col-md">
+        <div className="col-md section-2">
           <div className="ftco-footer-widget mb-4 ml-md-4">
             <h2 className="ftco-heading-2">Community</h2>
             <ul className="list-unstyled">
@@ -34,7 +34,7 @@ function Footer() {
             </ul>
           </div>
         </div>
-        <div className="col-md">
+        <div className="col-md section-3">
           <div className="ftco-footer-widget mb-4 ml-md-4">
             <h2 className="ftco-heading-2">About Us</h2>
             <ul className="list-unstyled">
@@ -44,7 +44,7 @@ function Footer() {
             </ul>
           </div>
         </div>
-        <div className="col-md">
+        <div className="col-md section-4">
            <div className="ftco-footer-widget mb-4">
             <h2 className="ftco-heading-2">Company</h2>
             <ul className="list-unstyled">
@@ -55,7 +55,7 @@ function Footer() {
             </ul>
           </div>
         </div>
-        <div className="col-md">
+        <div className="col-md section-5">
           <div className="ftco-footer-widget mb-4">
             <h2 className="ftco-heading-2">Have a Questions?</h2>
             <div className="block-23 mb-3">

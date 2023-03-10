@@ -1,19 +1,7 @@
 import React , {lazy , Suspense} from "react";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-// import Login from "./pages/PublicPages/sign-in/Login";
-// import Home from './pages/PublicPages/home/Home'
-// import About from './pages/PublicPages/About/About'
-// import Agent from './pages/PublicPages/Agent/Agent'
-// import Contact from './pages/PublicPages/Contact/Contact'
-// import Error from './pages/PublicPages/Error/Error'
-import Footer from "./shared/Footer/Footer";
-import Header from "./shared/Header/Header";
+
 import Loading from "./shared/Loading/Loading";
-// import Services from "./pages/PublicPages/Services/Services";
-// import Properties from "./pages/PublicPages/Properties/Properties/Properties";
-// import PropertiesDetails from "./pages/PublicPages/Properties/PropertiesDetails/PropertiesDetails";
-// import Blog from "./pages/PublicPages/Blog/Blog/Blog";
-// import BlogDetails from "./pages/PublicPages/Blog/BlogDetails/BlogDetails";
 
 
 const Home = lazy(() => import('./pages/PublicPages/home/Home'))
@@ -28,13 +16,13 @@ const Blog = lazy(() => import('./pages/PublicPages/Blog/Blog/Blog'))
 const BlogDetails = lazy(() => import('./pages/PublicPages/Blog/BlogDetails/BlogDetails'))
 const Login = lazy(() => import('./pages/PublicPages/sign-in/Login'))
 const Signup = lazy(() => import('./pages/PublicPages/sign-up/Signup'))
+const ResetPassword = lazy(() => import('./pages/PublicPages/ResetPassword/ResetPassword'))
 
 
 
 function App() {
   return (
     <>
-      {/* <Header /> */}
       <Router>
         <Suspense fallback={<Loading/>}>
         <Routes>
@@ -49,11 +37,11 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="*" element={<Error />} />
         </Routes>
         </Suspense>
       </Router>
-      <Footer />
     </>
   );
 }

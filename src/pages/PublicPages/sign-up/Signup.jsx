@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import bgOne from '../../../assets/media/images/bg_1.jpg'
+import Footer from '../../../shared/Footer/Footer'
 import Header from '../../../shared/Header/Header'
 import './Signup.css'
 
@@ -46,7 +47,7 @@ function Signup() {
                 </div>
 
             </div>
-
+            <Footer/>
         </>
     )
 }
