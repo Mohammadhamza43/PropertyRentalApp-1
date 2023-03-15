@@ -6,6 +6,7 @@ import imageOne from '../../../../assets/media/images/image_1.jpg'
 import imageTwo from '../../../../assets/media/images/image_2.jpg'
 import imageThree from '../../../../assets/media/images/image_3.jpg'
 import imageFour from '../../../../assets/media/images/image_4.jpg'
+import Footer from '../../../../shared/Footer/Footer'
 
 function Blog() {
   return (
@@ -164,6 +165,7 @@ function Blog() {
         </div>
       </div>
     </section>
+    <Footer/>
     </>
   )
 }

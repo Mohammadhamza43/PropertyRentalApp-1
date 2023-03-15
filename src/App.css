@@ -11865,6 +11865,13 @@ h5,
   background-position: top center;
 }
 
+input:-internal-autofill-selected {
+  appearance: menulist-button;
+  background-image: none !important;
+  background-color: -internal-light-dark(#fff, #fff) !important;
+  color: fieldtext !important;
+}
+
 .hero-wrap .overlay {
   position: absolute;
   top: 0;
@@ -12962,6 +12969,20 @@ textarea.form-control {
 
 .media-custom {
   background: #fff;
+}
+
+.image-dd{
+  position: absolute;
+  background: #fff;
+    padding: 0.5vw;
+    border-radius: 0.5vw!important;
+    border: 1px solid #d3d3d3!important;
+    right: 10px;
+    text-align: center;
+    width: 150px;
+}
+.image-dd li a{
+  color: #000 !important;
 }
 
 .media-custom .media-body .name {

@@ -11,6 +11,7 @@ import {BiBed} from 'react-icons/bi'
 import {TbBath} from 'react-icons/tb'
 import {MdOutlineMapsHomeWork} from 'react-icons/md'
 import Header from '../../../../shared/Header/Header'
+import Footer from '../../../../shared/Footer/Footer'
 
 function Properties() {
   return (
@@ -213,6 +214,7 @@ function Properties() {
         </div>
     	</div>
     </section>
+	<Footer/>
     </>
   )
 }

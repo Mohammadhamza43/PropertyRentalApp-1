@@ -11,6 +11,7 @@ import imageTwo from '../../../../assets/media/images/image_2.jpg'
 import imageThree from '../../../../assets/media/images/image_3.jpg'
 import imageSeven from '../../../../assets/media/images/image_7.jpg'
 import imageEight from '../../../../assets/media/images/image_8.jpg'
+import Footer from '../../../../shared/Footer/Footer'
 
 
 
@@ -261,6 +262,7 @@ function BlogDetails() {
         </div>
       </div>
     </section>
+    <Footer/>
     </>
   )
 }
