@@ -1,3 +1,4 @@
+import axios from 'axios'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import bgOne from '../../../assets/media/images/bg_1.jpg'
@@ -6,6 +7,30 @@ import Header from '../../../shared/Header/Header'
 import './Signup.css'
 
 function Signup() {
+    const [name , setName] = useState('');
+    const [email , setEmail] = useState('');
+    const [password , setPassword] = useState('');
+    const [conformPassword , setConformPassword] = useState('');
+    // const [status  , setStatus] = useState('notActive');
+    // const [type  , setType] = useState('agent');
+    // const [contact  , setContact] = useState('03332192649');
+
+    const signup = async (event) =>{
+        let item = {name , email , password}
+        event.preventDefault(); // 👈️ prevent page refresh
+
+        if(password === conformPassword){
+
+            axios.post('user/create', item)
+            .then((res) => {
+                console.log(res);
+             
+            }).catch((error) => {
+                console.log(error);
+                alert('password doesnot match')
+            })
+        }
+    }
 
     return (
         <>
@@ -19,12 +44,13 @@ function Signup() {
                                 <div className='login-sigin'>
                                     <div className='containerr right-panel-active' id="containerr">
                                         <div className="form-containerr sign-up-container">
-                                            <form action="#">
+                                            <form onSubmit={signup}>
                                                 <h1 className='main-he'>Sign up</h1>
-                                                <input type="text" placeholder="Name" />
-                                                <input type="email" placeholder="Email" />
-                                                <input type="password" placeholder="Password" />
-                                                <button>Sign Up</button>
+                                                <input type="text" placeholder="Name" onChange={e =>{setName(e.target.value)}}/>
+                                                <input type="email" placeholder="Email" onChange={e =>{setEmail(e.target.value)}}/>
+                                                <input type="password" placeholder="Password" onChange={e =>{setPassword(e.target.value)}}/>
+                                                <input type="password" placeholder="Conform Password" onChange={e =>{setConformPassword(e.target.value)}}/>
+                                                <button type="submit">Submit</button>
                                             </form>
                                         </div>
                                         

@@ -57,6 +57,7 @@
     letter-spacing: 1px;
     text-transform: uppercase;
     transition: transform 80ms ease-in;
+	margin-top: 10px;
 }
 
 .login-sigin button:active {
@@ -94,11 +95,18 @@
 }
 
 .login-sigin input {
-	background-color: #eee;
-	border: none;
-	padding: 12px 15px;
-	margin: 8px 0;
-	width: 100%;
+	background-color: transparent !important;
+    margin: 8px 0;
+    width: 100%;
+    border: 1px solid #ccd0d5;
+    outline: 1px solid transparent;
+    border-radius: 6px;
+    padding: 10px 0 10px 16px;
+}
+
+input:focus{
+	border: 1px solid transparent;
+	outline: 1px solid #e86ed0;
 }
 
 .login-sigin .containerr {
@@ -300,6 +308,7 @@ footer a {
 
 	.login-sigin .sign-in-container{
 		width: 100%;
+		padding: 40px 0px;
 	}
 
 	.login-sigin{
