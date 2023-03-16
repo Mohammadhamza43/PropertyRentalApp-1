@@ -193,7 +193,7 @@ function Profile() {
                                                 </select>
                                             </div> */}
 
-                                            <div className="col-lg-6 mt-4">
+                                            {/* <div className="col-lg-6 mt-4">
                                                 <label>User Type</label>
                                                 <div>
                                                     <BootstrapSwitchButton
@@ -205,7 +205,7 @@ function Profile() {
                                                         }}
                                                     />
                                                 </div>
-                                            </div>
+                                            </div> */}
                                             <div className="col-lg-12 mt-4">
                                                 <label>Upload a picture</label>
                                                 <div className='upload-file'>
