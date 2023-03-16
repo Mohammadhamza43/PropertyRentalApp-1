@@ -2220,6 +2220,19 @@ pre code {
   background-color: rgba(255, 255, 255, 0.075);
 }
 
+.header-user-icon{
+  background-color: #F4F5F7;
+    color: #ADB4D2;
+    align-self: start;
+    border-radius: 50%;
+    display: grid;
+    place-content: center;
+    padding: 18px;
+}
+.header-user-icon svg{
+font-size: 24px;
+}
+
 @media (max-width: 575.98px) {
   .table-responsive-sm {
     display: block;
@@ -5453,6 +5466,41 @@ input[type="button"].btn-block {
   bottom: 0;
   left: 0;
   padding: 1.25rem;
+}
+
+.ftco-navbar-light .navbar-nav>.nav-item .dropdown-menu {
+  border: 1px solid #d3d3d3 !important;
+  background: #fff;
+  box-shadow: 0px 10px 34px -20px rgba(0, 0, 0, 0.41);
+  left: -107px;
+  text-align: center;
+}
+.ftco-navbar-light .navbar-nav>.nav-item .dropdown-menu ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover{
+  color: #e86ed0;
+}
+
+.ftco-navbar-light .navbar-nav>.nav-item .dropdown-menu .dropdown-item:nth-child(1) {
+  border-bottom: 1px solid #d3d3d3 !important;
+}
+.navbar-dark .navbar-nav .nav-link {
+  color: black;
+}
+
+.navbar-dark .navbar-nav .nav-link.active {
+  color: #e86ed0;
+}
+
+.dd-buttom{
+  padding: 0;
+    margin: 0;
+    border: whitesmoke;
+    background: transparent;
 }
 
 .card-img {
@@ -12981,6 +13029,11 @@ textarea.form-control {
     text-align: center;
     width: 150px;
 }
+.image-dd ul{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
 .image-dd li a{
   color: #000 !important;
 }
@@ -13182,9 +13235,25 @@ textarea.form-control {
   width: 100%;
 }
 
+.desk-hide{
+  display: none;
+}
+
+.mobile-hide{
+  display: block;
+}
+
 @media (max-width: 991.98px) {
   #map {
     height: 300px;
+  }
+
+  .desk-hide{
+    display: block;
+  }
+
+  .mobile-hide{
+    display: none;
   }
 }
 

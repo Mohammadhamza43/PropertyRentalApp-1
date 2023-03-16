@@ -17,8 +17,10 @@ const BlogDetails = lazy(() => import('./pages/PublicPages/Blog/BlogDetails/Blog
 const Login = lazy(() => import('./pages/PublicPages/sign-in/Login'))
 const Signup = lazy(() => import('./pages/PublicPages/sign-up/Signup'))
 const ResetPassword = lazy(() => import('./pages/PublicPages/ResetPassword/ResetPassword'))
+const Reset = lazy(() => import('./pages/PublicPages/Reset/Reset'))
 const Dashboard = lazy(() => import('./pages/dashboard/Dashboard/Dashboard'))
 const Profile = lazy(() => import('./pages/dashboard/Profile/Profile'))
+const Verify = lazy(() => import('./pages/Verify/Verify'))
 
 
 
@@ -39,9 +41,11 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/reset-password" element={<Reset />} />
+          <Route path="/reset" element={<ResetPassword />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/verify" element={<Verify />} />
           <Route path="*" element={<Error />} />
         </Routes>
         </Suspense>
