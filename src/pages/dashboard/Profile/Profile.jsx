@@ -299,7 +299,7 @@ return (
                                     <div className="user-card-body">
                                         <div className="user-mete">
                                             <div className='user-card-meta-avatar'>
-                                                <h1>Reset Password</h1>
+                                                <h1>Change Password</h1>
                                             </div>
                                         </div>
                                         <div className='divider'></div>
@@ -314,11 +314,11 @@ return (
                                                     <input type="password" ref={newpassword} className='input' placeholder="New Password" />
                                                 </div>
                                                 <div className="col-lg-6 mt-4">
-                                                    <label>Conform New Password</label>
+                                                    <label>Confirm New Password</label>
                                                     <input type="password" ref={newPasswordConform} className='input' placeholder="Conform New Password" />
                                                 </div>
                                                 <div className="col-lg-12 mt-4">
-                                                    <button className='button'>Changes Password</button>
+                                                    <button className='button'>Change Password</button>
                                                 </div>
                                             </div>
                                         </form>
