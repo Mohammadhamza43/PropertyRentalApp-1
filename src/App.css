@@ -5485,6 +5485,21 @@ input[type="button"].btn-block {
   color: #e86ed0;
 }
 
+.password-filed{
+  position: relative;
+  width: 100%;
+  
+}
+.password-filed span{
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translatey(-50%);
+}
+.password-filed span svg{
+  font-size: 22px;
+}
+
 .ftco-navbar-light .navbar-nav>.nav-item .dropdown-menu .dropdown-item:nth-child(1) {
   border-bottom: 1px solid #d3d3d3 !important;
 }
