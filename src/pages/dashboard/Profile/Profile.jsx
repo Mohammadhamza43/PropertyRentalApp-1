@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import BootstrapSwitchButton from 'bootstrap-switch-button-react'
 import { FiUser } from 'react-icons/fi'
 import Footer from '../../../shared/Footer/Footer'
 import Header from '../../../shared/Header/Header'
@@ -8,7 +9,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import './Profile.css'
 import Apiloader from '../../../shared/ApiLoader/Apiloader'
 import axios from 'axios'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { json, Navigate, useNavigate } from 'react-router-dom'
 
 function Profile() {
 
@@ -29,6 +30,7 @@ function Profile() {
     const [email, setEmail] = useState('');
     const [loader, setLoader] = useState(false)
     const [formLoader, setFormLoader] = useState(false)
+    const [rSLoader, setRSLoader] = useState(false)
     const [getUserdata, setGetUserdata] = useState(true)
 
     const oldPassword = useRef(null);
@@ -58,7 +60,7 @@ function Profile() {
                     setName(data.data.name)
                     setContact(data.data.contact)
                     setAddress(data.data.address)
-                    setIsAgent(false)
+                    setIsAgent(data.data.isAgent)
                     setCountry(data.data.country)
                     setCity(data.data.city)
                     localStorage.setItem('image', JSON.stringify({ userPic: data.data.image }))
@@ -122,7 +124,7 @@ function Profile() {
 
     }
 
-    const resetPassword = async (event) => {
+    const resetPassword = (event) => {
         event.preventDefault(); // 👈️ prevent page refresh
         const password  = oldPassword.current.value
         const newPassword = newpassword.current.value
@@ -131,25 +133,30 @@ function Profile() {
         // let items = {password , newPassword , confirmNewPassword}
 
         // console.log(items)
-
-        await fetch('https://walrus-app-ovpy2.ondigitalocean.app/user/change-password', {
+        setRSLoader(true)
+         fetch('https://walrus-app-ovpy2.ondigitalocean.app/user/change-password', {
             method: "POST",
             headers: {
                 "Accept": "application/json",
+                'Content-Type': 'application/json',
                 "AUTHORIZATION": `BEARER ${token}`
             },
-            body: {password , newPassword , confirmNewPassword}
+            body: JSON.stringify({
+                "password" : password,
+                "newPassword" : newPassword,
+                "confirmNewPassword" : confirmNewPassword
+            })
         })
             .then((res) => {
                 if (res.ok) {
-                    // setFormLoader(false)
+                    setRSLoader(false)
                     localStorage.removeItem('user')
                     navigate('/login')
                 }
             })
             .catch((error) => {
                 if (error) {
-
+                    setRSLoader(false)
                     toast.error(error, { position: toast.POSITION.BOTTOM_RIGHT })
                 }
 
@@ -253,8 +260,16 @@ return (
                                                     <option value="four">Four</option>
                                                 </select>
                                             </div> */}
-
-                                                {/* <div className="col-lg-6 mt-4">
+                                                <div className="col-lg-6 mt-4">
+                                                    <label>Upload a picture</label>
+                                                    <div className='upload-file'>
+                                                        <button>Browse and Upload</button>
+                                                        <span>{image.name}</span>
+                                                        <input required type="file" id="img" name="img" accept="image/*" className='button' onChange={(e) => setImage(e.target.files[0])} />
+                                                    </div>
+                                                    {/* <input required type="file" id="img" name="img" accept="image/*"  onChange={(e) =>setImage(e)}/> */}
+                                                </div>
+                                                <div className="col-lg-6 mt-4">
                                                 <label>User Type</label>
                                                 <div>
                                                     <BootstrapSwitchButton
@@ -266,16 +281,8 @@ return (
                                                         }}
                                                     />
                                                 </div>
-                                            </div> */}
-                                                <div className="col-lg-12 mt-4">
-                                                    <label>Upload a picture</label>
-                                                    <div className='upload-file'>
-                                                        <button>Browse and Upload</button>
-                                                        <span>{image.name}</span>
-                                                        <input required type="file" id="img" name="img" accept="image/*" className='button' onChange={(e) => setImage(e.target.files[0])} />
-                                                    </div>
-                                                    {/* <input required type="file" id="img" name="img" accept="image/*"  onChange={(e) =>setImage(e)}/> */}
-                                                </div>
+                                            </div>
+                                                
                                                 <div className="col-lg-12 mt-4">
                                                     <button className='button'>Save changes</button>
                                                 </div>
@@ -288,7 +295,7 @@ return (
 
                             <div className="col-lg-9 mx-auto mt-5">
                                 <div className='user-card' style={{ position: 'relative' }}>
-                                    {formLoader && <Apiloader />}
+                                    {rSLoader && <Apiloader />}
                                     <div className="user-card-body">
                                         <div className="user-mete">
                                             <div className='user-card-meta-avatar'>

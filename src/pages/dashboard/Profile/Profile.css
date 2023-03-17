@@ -26,6 +26,7 @@
 
 .user-mete{
     display: flex;
+    align-items: center;
 }
 
 .user-card-meta-avatar{
