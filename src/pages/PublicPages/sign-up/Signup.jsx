@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import bgOne from '../../../assets/media/images/bg_1.jpg'
 import Footer from '../../../shared/Footer/Footer'
 import Header from '../../../shared/Header/Header'
@@ -11,6 +11,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import Apiloader from '../../../shared/ApiLoader/Apiloader'
 
 function Signup() {
+    const navigate = useNavigate()
     const [name , setName] = useState('');
     const [email , setEmail] = useState('');
     const [password , setPassword] = useState('');
@@ -45,13 +46,11 @@ function Signup() {
             setLoader(true);
             axios.post('user/create', item)
             .then((res) => {
-                    setLoader(false);
-                toast.success('Varify Your Email', {
-                    position: toast.POSITION.BOTTOM_RIGHT })
+                navigate('/login')
                 
             }).catch((error) => {
                 setLoader(false);
-                toast.error('Account Already Exists', {
+                toast.error('Email alredy exist', {
                     position: toast.POSITION.BOTTOM_RIGHT 
                 });
             })

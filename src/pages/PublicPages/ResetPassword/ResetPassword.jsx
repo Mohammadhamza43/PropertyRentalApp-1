@@ -56,7 +56,7 @@ function ResetPassword() {
         console.log(item);
         event.preventDefault(); // 👈️ prevent page refresh
         setLoader(true)
-        axios.post('user/change-password', item)
+        axios.post('user/reset-password', item)
             .then((res) => {
                 setLoader(false);
                 navigate('/login')
