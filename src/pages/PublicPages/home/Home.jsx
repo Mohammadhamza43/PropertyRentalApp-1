@@ -31,6 +31,7 @@ import ClientCarousel from '../../../shared/ClientCarousel/ClientCarousel'
 import Search from '../../../shared/Search/Search'
 import Header from '../../../shared/Header/Header'
 import Footer from '../../../shared/Footer/Footer'
+import Loading from '../../../shared/Loading/Loading'
 
 
 function Home() {

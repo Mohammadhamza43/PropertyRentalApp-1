@@ -1,8 +1,10 @@
 import React , {lazy , Suspense} from "react";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-
 import Loading from "./shared/Loading/Loading";
 
+// Import toastify css file
+import 'react-toastify/dist/ReactToastify.css';
+import ProtectedRoutes from "./ProtectedRoutes";
 
 const Home = lazy(() => import('./pages/PublicPages/home/Home'))
 const About = lazy(() => import('./pages/PublicPages/About/About'))
@@ -43,8 +45,9 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/reset-password" element={<Reset />} />
           <Route path="/reset" element={<ResetPassword />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/dashboard" element={<ProtectedRoutes Component={Dashboard}/>}/>
+          <Route path="/profile" element={<Profile/>}/>
+          {/* <Route path="/profile" element={<ProtectedRoutes Component={Profile}/>}/> */}
           <Route path="/verify" element={<Verify />} />
           <Route path="*" element={<Error />} />
         </Routes>

@@ -4,30 +4,56 @@ import { Link } from 'react-router-dom'
 import bgOne from '../../../assets/media/images/bg_1.jpg'
 import Footer from '../../../shared/Footer/Footer'
 import Header from '../../../shared/Header/Header'
+import { AiOutlineEyeInvisible , AiOutlineEye } from 'react-icons/ai'
 import './Signup.css'
+// Importing toastify module
+import { toast, ToastContainer } from 'react-toastify';
+import Apiloader from '../../../shared/ApiLoader/Apiloader'
 
 function Signup() {
     const [name , setName] = useState('');
     const [email , setEmail] = useState('');
     const [password , setPassword] = useState('');
     const [conformPassword , setConformPassword] = useState('');
-    // const [status  , setStatus] = useState('notActive');
-    // const [type  , setType] = useState('agent');
-    // const [contact  , setContact] = useState('03332192649');
+    const [passwordType, setPasswordType] = useState("password");
+    const [conformPasswordType , setConformPasswordType] = useState('password');
+    const [loader, setLoader] = useState(false);
+
+    const togglePassword = (e) => {
+        if(e === 'password'){
+            if (passwordType === "password") {
+                setPasswordType("text")
+                return;
+            }
+            setPasswordType("password")
+        }
+        if(e === 'conformPassword'){
+            if (conformPasswordType === "password") {
+                setConformPasswordType("text")
+                return;
+            }
+            setConformPasswordType("password")
+        }
+        
+    }
 
     const signup = async (event) =>{
         let item = {name , email , password}
         event.preventDefault(); // 👈️ prevent page refresh
 
         if(password === conformPassword){
-
+            setLoader(true);
             axios.post('user/create', item)
             .then((res) => {
-                console.log(res);
-             
+                    setLoader(false);
+                toast.success('Varify Your Email', {
+                    position: toast.POSITION.BOTTOM_RIGHT })
+                
             }).catch((error) => {
-                console.log(error);
-                alert('password doesnot match')
+                setLoader(false);
+                toast.error('Account Already Exists', {
+                    position: toast.POSITION.BOTTOM_RIGHT 
+                });
             })
         }
     }
@@ -41,15 +67,26 @@ function Signup() {
                     <div className="row no-gutters slider-text justify-content-center align-items-center">
                         <div className="col-lg-12 col-md-12 col-sm-12 d-flex align-items-end">
                             <div className="text text-center">
-                                <div className='login-sigin'>
+                            <div className='login-sigin' style={{position:'relative'}}>
+                                    {loader &&  <Apiloader/>}
                                     <div className='containerr right-panel-active' id="containerr">
                                         <div className="form-containerr sign-up-container">
                                             <form onSubmit={signup}>
                                                 <h1 className='main-he'>Sign up</h1>
                                                 <input type="text" placeholder="Name" onChange={e =>{setName(e.target.value)}}/>
                                                 <input type="email" placeholder="Email" onChange={e =>{setEmail(e.target.value)}}/>
-                                                <input type="password" placeholder="Password" onChange={e =>{setPassword(e.target.value)}}/>
-                                                <input type="password" placeholder="Conform Password" onChange={e =>{setConformPassword(e.target.value)}}/>
+                                                <div className='password-filed'>
+                                                <input type={passwordType} placeholder="Password" onChange={e =>{setPassword(e.target.value)}}/>
+                                                <span onClick={() => togglePassword('password')}>
+                                                        {passwordType === "password" ? <AiOutlineEyeInvisible/> : <AiOutlineEye/>}
+                                                </span>
+                                                </div>
+                                                <div className='password-filed'>
+                                                <input type={conformPasswordType} placeholder="Conform Password" onChange={e =>{setConformPassword(e.target.value)}}/>
+                                                <span onClick={() => togglePassword('conformPassword')}>
+                                                        {conformPasswordType === "password" ? <AiOutlineEyeInvisible/> : <AiOutlineEye/>}
+                                                    </span>
+                                                </div>
                                                 <button type="submit">Submit</button>
                                             </form>
                                         </div>
@@ -71,8 +108,8 @@ function Signup() {
                         </div>
                     </div>
                 </div>
-
             </div>
+            <ToastContainer/>
             <Footer/>
         </>
     )

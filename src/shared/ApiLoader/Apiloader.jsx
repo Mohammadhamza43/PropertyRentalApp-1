@@ -1,9 +1,10 @@
 import React from 'react'
-import './Loader.css'
+import './Apiloader.css'
 
-function Loading() {
+
+const Apiloader = () => {
   return (
-    <div className='Loader-Parent'>
+    <div className='Loader-Parent-api'>
       <div className="child">
      <div className="lds-ring"><div></div><div></div><div></div><div></div></div>
       </div>
@@ -11,4 +12,4 @@ function Loading() {
   )
 }
 
-export default Loading
+export default Apiloader
