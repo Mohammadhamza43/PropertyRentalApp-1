@@ -3,30 +3,37 @@ import { Link } from 'react-router-dom'
 import bgOne from '../../../assets/media/images/bg_1.jpg'
 import Header from '../../../shared/Header/Header'
 import Footer from '../../../shared/Footer/Footer'
+// Importing toastify module
+import { toast, ToastContainer } from 'react-toastify';
 import './Reset.css'
 import axios from 'axios'
+import Apiloader from '../../../shared/ApiLoader/Apiloader'
 
 function Reset() {
 
     const [email, setEmail] = useState('');
+    const [loader, setLoader] = useState(false);
 
     const reset = async (event) => {
         let item = { email }
         console.log(item);
         event.preventDefault(); // 👈️ prevent page refresh
-
-        axios.post('/user/forgot-password', item)
+        setLoader(true);
+        axios.post('user/forgot-password', item)
             .then((res) => {
-                console.log(res.data.data.user);
+                setLoader(false);
+                toast.success('Password reset link is sent to your email', {
+                    position: toast.POSITION.BOTTOM_RIGHT 
+                });
                 localStorage.setItem('user', JSON.stringify({
                     login: true,
                     token: res.data.data.user
                 }))
-                // if (localStorage.getItem('user')) {
-                //     navigate('/')
-                // }
             }).catch((error) => {
-                console.log(error);
+                setLoader(false);
+                toast.error('error', {
+                    position: toast.POSITION.BOTTOM_RIGHT 
+                });
             })
     }
 
@@ -37,7 +44,8 @@ function Reset() {
             <div className="container">
                 <div className="row no-gutters justify-content-center align-items-center">
                     <div className="col-lg-5 col-md-5 col-sn-12 d-flex align-items-end">
-                        <div className='resetForm'>
+                    <div className='resetForm' style={{position : 'relative'}}>
+                            {loader &&  <Apiloader/>}
                             <form onSubmit={reset}>
                                 <div className='heading'>
                                 <h1 className='main-he'>Enter Your Account</h1>
@@ -57,6 +65,7 @@ function Reset() {
                 </div>
             </div>
             </div>
+            <ToastContainer/>
         <Footer/>
         </>
     )
