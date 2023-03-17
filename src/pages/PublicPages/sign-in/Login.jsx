@@ -25,6 +25,9 @@ function Login() {
                     login: true,
                     token: res.data.data.user
                 }))
+                localStorage.setItem('image' , JSON.stringify({
+                    userPic : res.data.data.user.image
+                 }))
                 if (localStorage.getItem('user')) {
                     navigate('/')
                 }

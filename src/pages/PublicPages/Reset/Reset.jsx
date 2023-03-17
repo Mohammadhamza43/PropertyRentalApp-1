@@ -1,39 +1,30 @@
-import React, { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import bgOne from '../../../assets/media/images/bg_1.jpg'
-import axios from 'axios'
-import './ResetPassword.css'
 import Header from '../../../shared/Header/Header'
 import Footer from '../../../shared/Footer/Footer'
+import './Reset.css'
+import axios from 'axios'
 
-function useQuery() {
-    return new URLSearchParams(useLocation().search);
-  }
+function Reset() {
 
-function ResetPassword() {
-
-    let query = useQuery();
-    const navigate = useNavigate()
-
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConformPassword] = useState('');
     const [email, setEmail] = useState('');
-    const [token, setToken] = useState('');
 
-    useEffect(() =>{
-        setEmail(decodeURIComponent(query.get('email')))
-        setToken(query.get('token'))
-    }, [query])
-
-    const Password = async (event) => {
-        let item = { password , confirmPassword , email , token  }
+    const reset = async (event) => {
+        let item = { email }
         console.log(item);
         event.preventDefault(); // 👈️ prevent page refresh
 
-        axios.post('/user/change-password', item)
+        axios.post('/user/forgot-password', item)
             .then((res) => {
-                console.log(res);
-                navigate('/login')
+                console.log(res.data.data.user);
+                localStorage.setItem('user', JSON.stringify({
+                    login: true,
+                    token: res.data.data.user
+                }))
+                // if (localStorage.getItem('user')) {
+                //     navigate('/')
+                // }
             }).catch((error) => {
                 console.log(error);
             })
@@ -47,16 +38,17 @@ function ResetPassword() {
                 <div className="row no-gutters justify-content-center align-items-center">
                     <div className="col-lg-5 col-md-5 col-sn-12 d-flex align-items-end">
                         <div className='resetForm'>
-                            <form onSubmit={Password}>
+                            <form onSubmit={reset}>
                                 <div className='heading'>
-                                <h1 className='main-he'>Enter New Password</h1>
+                                <h1 className='main-he'>Enter Your Account</h1>
                                 </div>
                                 <div className="input">
-                                <p>Please enter your new password.</p>
-                                <input type="password" placeholder="Password" onChange={e => { setPassword(e.target.value) }} />
-                                <input type="password" placeholder="Conform Password" onChange={e => { setConformPassword(e.target.value) }} />
+                                <p>Please enter your email address and we'll send you a link to reset your password.</p>
+                                <input type="email" placeholder="Email" onChange={e => { setEmail(e.target.value) }} />
                                 </div>
                                 <div className='button'>
+                                <button>
+                                <Link to='/login'>Back To Login</Link></button>
                                 <button type='submit'>Submit</button>
                                 </div>
                             </form>
@@ -70,4 +62,4 @@ function ResetPassword() {
     )
 }
 
-export default ResetPassword
+export default Reset
