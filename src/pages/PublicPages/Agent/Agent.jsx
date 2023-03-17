@@ -9,12 +9,15 @@ import teamSeven from '../../../assets/media/images/team-7.jpg'
 import teamEight from '../../../assets/media/images/team-8.jpg'
 import bgOne from '../../../assets/media/images/bg_1.jpg'
 import {MdKeyboardArrowRight} from 'react-icons/md'
+import Header from '../../../shared/Header/Header'
+import Footer from '../../../shared/Footer/Footer'
 
 
 
 function Agent() {
   return (
     <>
+	<Header/>
     <section className="hero-wrap hero-wrap-2 ftco-degree-bg js-fullheight" style={{backgroundImage: `url(${bgOne})`}} data-stellar-background-ratio="0.5">
       <div className="overlay"></div>
       <div className="container">
@@ -122,6 +125,7 @@ function Agent() {
         </div>
     	</div>
     </section>
+	<Footer/>
     </>
   )
 }

@@ -99,6 +99,11 @@ p {
   margin-bottom: 1rem;
 }
 
+.oi-menu svg{
+  font-size: 35px;
+  color: #e86ed0;
+}
+
 abbr[title],
 abbr[data-original-title] {
   text-decoration: underline;
@@ -2213,6 +2218,19 @@ pre code {
 
 .table-dark.table-hover tbody tr:hover {
   background-color: rgba(255, 255, 255, 0.075);
+}
+
+.header-user-icon{
+  background-color: #F4F5F7;
+    color: #ADB4D2;
+    align-self: start;
+    border-radius: 50%;
+    display: grid;
+    place-content: center;
+    padding: 18px;
+}
+.header-user-icon svg{
+font-size: 24px;
 }
 
 @media (max-width: 575.98px) {
@@ -5448,6 +5466,41 @@ input[type="button"].btn-block {
   bottom: 0;
   left: 0;
   padding: 1.25rem;
+}
+
+.ftco-navbar-light .navbar-nav>.nav-item .dropdown-menu {
+  border: 1px solid #d3d3d3 !important;
+  background: #fff;
+  box-shadow: 0px 10px 34px -20px rgba(0, 0, 0, 0.41);
+  left: -107px;
+  text-align: center;
+}
+.ftco-navbar-light .navbar-nav>.nav-item .dropdown-menu ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover{
+  color: #e86ed0;
+}
+
+.ftco-navbar-light .navbar-nav>.nav-item .dropdown-menu .dropdown-item:nth-child(1) {
+  border-bottom: 1px solid #d3d3d3 !important;
+}
+.navbar-dark .navbar-nav .nav-link {
+  color: black;
+}
+
+.navbar-dark .navbar-nav .nav-link.active {
+  color: #e86ed0;
+}
+
+.dd-buttom{
+  padding: 0;
+    margin: 0;
+    border: whitesmoke;
+    background: transparent;
 }
 
 .card-img {
@@ -11595,6 +11648,14 @@ h5,
 }
 
 @media (max-width: 991.98px) {
+
+  .hero-wrap {
+    height: auto !important;
+  }
+
+  .text {
+    padding-bottom: 50px;
+  }
   .ftco-navbar-light {
     background: #000000 !important;
     position: relative;
@@ -11620,6 +11681,10 @@ h5,
   .ftco-navbar-light .navbar-nav {
     padding-bottom: 10px;
   }
+}
+
+.ftco-navbar-light .navbar-nav>.nav-item>.active{
+  color: #e86ed0 !important;
 }
 
 .ftco-navbar-light .navbar-nav>.nav-item>.nav-link {
@@ -11846,6 +11911,13 @@ h5,
   background-size: cover;
   background-repeat: no-repeat;
   background-position: top center;
+}
+
+input:-internal-autofill-selected {
+  appearance: menulist-button;
+  background-image: none !important;
+  background-color: -internal-light-dark(#fff, #fff) !important;
+  color: fieldtext !important;
 }
 
 .hero-wrap .overlay {
@@ -12420,6 +12492,27 @@ h5,
     width: 90%;
     margin-left: 10px;
   }
+
+  
+  .hero-wrap.hero-wrap-2{
+    height: auto !important;
+  }
+
+  .hero-wrap.hero-wrap-2 .slider-text {
+    height: auto !important;
+}
+
+.slider-text h1{
+  font-size: 40px;
+}
+
+.no-gutters{
+  padding: 20px;
+}
+
+  .slider-text {
+    height: auto;
+}
 }
 
 .property-wrap .text p.price span {
@@ -12711,12 +12804,7 @@ h5,
   background: #000000;
 }
 
-@media (max-width: 767.98px) {
-  .services-section .overlay {
-    width: 100%;
-    opacity: .4;
-  }
-}
+
 
 .services {
   -moz-transition: all 0.3s ease;
@@ -12931,6 +13019,25 @@ textarea.form-control {
   background: #fff;
 }
 
+.image-dd{
+  position: absolute;
+  background: #fff;
+    padding: 0.5vw;
+    border-radius: 0.5vw!important;
+    border: 1px solid #d3d3d3!important;
+    right: 10px;
+    text-align: center;
+    width: 150px;
+}
+.image-dd ul{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.image-dd li a{
+  color: #000 !important;
+}
+
 .media-custom .media-body .name {
   font-weight: 500;
   font-size: 16px;
@@ -12954,7 +13061,7 @@ textarea.form-control {
 
 @media (max-width: 767.98px) {
   .ftco-section {
-    padding: 6em 0;
+    padding: 2em 0 !important;
   }
 }
 
@@ -13128,9 +13235,25 @@ textarea.form-control {
   width: 100%;
 }
 
+.desk-hide{
+  display: none;
+}
+
+.mobile-hide{
+  display: block;
+}
+
 @media (max-width: 991.98px) {
   #map {
     height: 300px;
+  }
+
+  .desk-hide{
+    display: block;
+  }
+
+  .mobile-hide{
+    display: none;
   }
 }
 
@@ -14319,3 +14442,27 @@ textarea.form-control {
 
 
 /* animation*/
+
+@media (max-width: 767.98px) {
+
+  .block-23 ul{
+    list-style: none;
+    padding: 0px 30px;
+  }
+  .block-23 ul li{
+    display: block;
+  }
+  .block-23 ul li span{
+    padding: 0px !important;
+    text-align: left;
+  }
+  .services-section .overlay {
+    width: 100%;
+    opacity: .4;
+  }
+
+  .align-items-center{
+    justify-content: center;
+    padding: 0px;
+  }
+}

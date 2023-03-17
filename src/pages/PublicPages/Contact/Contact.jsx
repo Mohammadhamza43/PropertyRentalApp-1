@@ -5,6 +5,8 @@ import {RxEnvelopeClosed} from 'react-icons/rx'
 import {BsPhone} from 'react-icons/bs'
 import bgOne from '../../../assets/media/images/bg_1.jpg'
 import GoogleMapReact from 'google-map-react';
+import Header from '../../../shared/Header/Header'
+import Footer from '../../../shared/Footer/Footer'
 
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
@@ -22,6 +24,7 @@ function Contact() {
 
   return (
     <>
+    <Header/>
     <section className="hero-wrap hero-wrap-2 ftco-degree-bg js-fullheight" style={{backgroundImage: `url(${bgOne})`}} data-stellar-background-ratio="0.5">
       <div className="overlay"></div>
       <div className="container">
@@ -102,6 +105,7 @@ function Contact() {
         </div>
       </div>
     </section>
+    <Footer/>
     </>
   )
 }

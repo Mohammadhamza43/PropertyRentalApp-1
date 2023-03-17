@@ -10,17 +10,7 @@
     font-size: 40px !important;
     font-weight: 600 !important;
     text-transform: capitalize !important;
-	/* color: #fff !important; */
-}
-.main-hee{
-    font-size: 40px !important;
-    font-weight: 600 !important;
-    text-transform: capitalize !important;
-	color: #fff !important;
-}
-
-.main-p{
-	color: #fff !important;
+    /* color: #fff !important; */
 }
 
 .login-sigin h2 {
@@ -57,7 +47,9 @@
     letter-spacing: 1px;
     text-transform: uppercase;
     transition: transform 80ms ease-in;
-	margin-top: 10px;
+}
+.text{
+    margin-inline: auto;
 }
 
 .login-sigin button:active {
@@ -68,19 +60,9 @@
 	outline: none;
 }
 
-.login-sigin button.ghostt{
+.login-sigin button.ghost {
 	background-color: transparent;
 	border-color: #FFFFFF;
-}
-
-.text{
-    margin-inline: auto;
-}
-
-.login-sigin button.ghostt a{
-	background-color: transparent;
-	border-color: #FFFFFF;
-	color: #fff !important;
 }
 
 .login-sigin form {
@@ -98,8 +80,8 @@
 	background-color: transparent !important;
     margin: 8px 0;
     width: 100%;
-    border: 1px solid #ccd0d5;
-    outline: 1px solid transparent;
+    border: 1px solid #ccd0d5 !important;
+	outline: 1px solid transparent;
     border-radius: 6px;
     padding: 10px 0 10px 16px;
 }
@@ -121,7 +103,7 @@ input:focus{
 	min-height: 480px;
 }
 
-.login-sigin .form-container {
+.login-sigin .form-containerr {
 	position: absolute;
 	top: 0;
 	height: 100%;
@@ -278,7 +260,7 @@ footer a {
 	.login-sigin .containerr{
 		width: auto !important;
 		min-height: auto !important;
-		/* padding: 40px 0px; */
+		padding: 40px 0px;
 	}
 
 	.login-sigin input {
@@ -300,16 +282,15 @@ footer a {
 		text-align: center;
 	}
 
-	.login-sigin .form-container{
+	.login-sigin .form-containerr{
 		position: static !important;
 		width: 100% !important;
 		
 	}
 
-	.login-sigin .sign-in-container{
-		width: 100%;
-		padding: 40px 0px;
-	}
+    .login-sigin .containerr.right-panel-active .sign-up-container{
+        transform: none !important;
+    }
 
 	.login-sigin{
 		margin: 30px 0px;

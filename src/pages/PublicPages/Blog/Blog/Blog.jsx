@@ -6,6 +6,7 @@ import imageOne from '../../../../assets/media/images/image_1.jpg'
 import imageTwo from '../../../../assets/media/images/image_2.jpg'
 import imageThree from '../../../../assets/media/images/image_3.jpg'
 import imageFour from '../../../../assets/media/images/image_4.jpg'
+import Footer from '../../../../shared/Footer/Footer'
 
 function Blog() {
   return (
@@ -151,19 +152,20 @@ function Blog() {
           <div className="col text-center">
             <div className="block-27">
               <ul>
-                <li classNameName='p-1'><a href="#">&lt;</a></li>
+                <li className='p-1'><a href="#">&lt;</a></li>
                 <li className="active p-1"><span>1</span></li>
-                <li classNameName='p-1'><a href="#">2</a></li>
-                <li classNameName='p-1'><a href="#">3</a></li>
-                <li classNameName='p-1'><a href="#">4</a></li>
-                <li classNameName='p-1'><a href="#">5</a></li>
-                <li classNameName='p-1'><a href="#">&gt;</a></li>
+                <li className='p-1'><a href="#">2</a></li>
+                <li className='p-1'><a href="#">3</a></li>
+                <li className='p-1'><a href="#">4</a></li>
+                <li className='p-1'><a href="#">5</a></li>
+                <li className='p-1'><a href="#">&gt;</a></li>
               </ul>
             </div>
           </div>
         </div>
       </div>
     </section>
+    <Footer/>
     </>
   )
 }

@@ -26,6 +26,8 @@ import Propertysix from '../../../../assets/media/images/property/property-6.jpg
 import Propertyseven from '../../../../assets/media/images/property/property-7.jpg'
 import Tom from '../../../../assets/media/images/tom.webp'
 import GoogleMapReact from 'google-map-react';
+import Header from '../../../../shared/Header/Header'
+import Footer from '../../../../shared/Footer/Footer'
 // import { AiFillStar} from 'react-icons/ai'
 // import {MdKeyboardArrowRight} from 'react-icons/md'
 // import { IoArrowUndoSharp } from 'react-icons/io5'
@@ -50,6 +52,7 @@ function PropertiesDetails() {
 
 	return (
 		<>
+		<Header/>
 
 			{
 				gallery ?
@@ -68,10 +71,10 @@ function PropertiesDetails() {
 							</div>
 						</div>
 						<div className="parent">
-							<div className="one"> <img src={PropertyOne} alt="" /> </div>
-							<div className="two"> <img src={Propertytwo} alt="" />  </div>
-							<div className="three"> <img src={Propertyseven} alt="" />  </div>
-							<div className="four"> <img src={Propertyfour} alt="" />  </div>
+							<div className="one" onClick={() => { setGallery(!gallery) }}> <img src={PropertyOne} alt="" /> </div>
+							<div className="two" onClick={() => { setGallery(!gallery) }}> <img src={Propertytwo} alt="" />  </div>
+							<div className="three" onClick={() => { setGallery(!gallery) }}> <img src={Propertyseven} alt="" />  </div>
+							<div className="four" onClick={() => { setGallery(!gallery) }}> <img src={Propertyfour} alt="" />  </div>
 							<div className="five" onClick={() => { setGallery(!gallery) }}>
 								<div className="count-overlay">
 									<div className="div">
@@ -232,12 +235,12 @@ function PropertiesDetails() {
 															</button>
 															<button className="twoo" onClick={() => { setGallery(!gallery) }}>
 
-																<img src={floorplan} alt="" srcset="" />
+																<img src={floorplan} alt=""  />
 																Floor plans
 															</button>
 														</div>
 														<div className='asasas'>
-															<div classNameName='user-contact'>
+															<div className='user-contact'>
 																<div className="first">
 																	<span>heavyinside</span>
 																</div>
@@ -384,7 +387,7 @@ function PropertiesDetails() {
 						<section className='s-f'>
 							<div className="container">
 								<div className="row">
-									<div className="col-lg-6 my-auto">
+									<div className="col-lg-6 my-auto p-0">
 										<div className='wela50-3 fKmhDN'>
 											<button onClick={() => { setGallery(!gallery) }} className='sc-1lxqdjp-0 kDeHGi'><IoIosArrowBack /></button>
 											<h2 className='wela50-4 hhKdKs'>3 Gilmour Road, Camberwell VIC 3124</h2>
@@ -398,7 +401,7 @@ function PropertiesDetails() {
 												14 Photos
 											</button>
 											<button className="twoo">
-												<img src={floorplan} alt="" srcset="" />
+												<img src={floorplan} alt=""  />
 												Floor plans
 											</button>
 										</div>
@@ -409,7 +412,7 @@ function PropertiesDetails() {
 						<section className='s-s'>
 							<div>heavyside</div>
 						</section>
-						<section>
+						<section className='s-t'>
 							<div className="container">
 								<div className="row">
 									<div className="col-lg-12">
@@ -420,37 +423,37 @@ function PropertiesDetails() {
 												</div>
 												<div className='wela50-13 bsdcKL'>
 													<div className='hhxt6d-0 eOhVcc'>
-														<img src={PropertyOne} alt="" srcset="" />
+														<img src={PropertyOne} alt=""  />
 													</div>
 												</div>
 												<div className='wela50-13 bsdcKL'>
 													<div className='hhxt6d-0 eOhVcc'>
-														<img src={Propertytwo} alt="" srcset="" />
+														<img src={Propertytwo} alt=""  />
 													</div>
 												</div>
 												<div className='wela50-13 bsdcKL'>
 													<div className='hhxt6d-0 eOhVcc'>
-														<img src={Propertythree} alt="" srcset="" />
+														<img src={Propertythree} alt=""  />
 													</div>
 												</div>
 												<div className='wela50-13 bsdcKL'>
 													<div className='hhxt6d-0 eOhVcc'>
-														<img src={Propertyfour} alt="" srcset="" />
+														<img src={Propertyfour} alt=""  />
 													</div>
 												</div>
 												<div className='wela50-13 bsdcKL'>
 													<div className='hhxt6d-0 eOhVcc'>
-														<img src={Propertyfive} alt="" srcset="" />
+														<img src={Propertyfive} alt=""  />
 													</div>
 												</div>
 												<div className='wela50-13 bsdcKL'>
 													<div className='hhxt6d-0 eOhVcc'>
-														<img src={Propertysix} alt="" srcset="" />
+														<img src={Propertysix} alt=""  />
 													</div>
 												</div>
 												<div className='wela50-13 bsdcKL'>
 													<div className='hhxt6d-0 eOhVcc'>
-														<img src={Propertyseven} alt="" srcset="" />
+														<img src={Propertyseven} alt=""  />
 													</div>
 												</div>
 
@@ -464,7 +467,7 @@ function PropertiesDetails() {
 					</div>
 			}
 
-
+			        <Footer/>
 		</>
 	)
 }

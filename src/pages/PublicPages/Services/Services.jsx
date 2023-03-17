@@ -6,10 +6,12 @@ import {CiBank} from 'react-icons/ci'
 import {SlWallet} from 'react-icons/sl'
 import {TfiFiles} from 'react-icons/tfi'
 import {HiOutlineLockClosed} from 'react-icons/hi'
+import Header from '../../../shared/Header/Header'
 
 function Services() {
   return (
     <>
+    <Header/>
     <section className="hero-wrap hero-wrap-2 ftco-degree-bg js-fullheight" style={{backgroundImage: `url(${bgOne})`}} data-stellar-background-ratio="0.5">
       <div className="overlay"></div>
       <div className="container">

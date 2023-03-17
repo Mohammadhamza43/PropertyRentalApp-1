@@ -29,6 +29,8 @@ import {TbBath} from 'react-icons/tb'
 import {MdOutlineMapsHomeWork} from 'react-icons/md'
 import ClientCarousel from '../../../shared/ClientCarousel/ClientCarousel'
 import Search from '../../../shared/Search/Search'
+import Header from '../../../shared/Header/Header'
+import Footer from '../../../shared/Footer/Footer'
 
 
 function Home() {
@@ -68,6 +70,7 @@ function Home() {
 
 	return (
 		<>
+		<Header/>
 			<div className="hero-wrap ftco-degree-bg" style={{backgroundImage: `url(${bgOne})`}} data-stellar-background-ratio="0.5">
 				<div className="overlay"></div>
 				<div className="container">
@@ -478,7 +481,7 @@ function Home() {
 					</div>
 				</div>
 			</section>
-			
+			<Footer/>
 			
 		</>
 	)
