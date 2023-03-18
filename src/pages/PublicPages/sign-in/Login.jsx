@@ -6,22 +6,30 @@ import bgOne from '../../../assets/media/images/bg_1.jpg'
 import { AiOutlineEyeInvisible , AiOutlineEye } from 'react-icons/ai'
 import Footer from '../../../shared/Footer/Footer'
 import Header from '../../../shared/Header/Header'
+import { loginSchema } from '../../../schemas/index';
+
 
 // Importing toastify module
 import { toast, ToastContainer } from 'react-toastify';
 
-
 import './Login.css'
 import Apiloader from '../../../shared/ApiLoader/Apiloader'
 
+import { useFormik } from 'formik'
+
+
+const initialValues = {
+    name: '',
+    email: ''
+}
 
 
 const Login = () => {
     const navigate = useNavigate()
 
-    const [email, setEmail] = useState('');
+    // const [email, setEmail] = useState('');
     const [passwordType, setPasswordType] = useState("password");
-    const [password, setPassword] = useState('');
+    // const [password, setPassword] = useState('');
     const [loader, setLoader] = useState(false);
 
     const togglePassword = () => {
@@ -32,11 +40,39 @@ const Login = () => {
         setPasswordType("password")
     }
 
-    const login = async (event) => {
-        let item = { email, password }
-        event.preventDefault(); // 👈️ prevent page refresh
-        setLoader(true)
-        axios.post('user/login', item)
+    // const login = async (event) => {
+    //     let item = { email, password }
+    //     event.preventDefault(); // 👈️ prevent page refresh
+    //     setLoader(true)
+    //     axios.post('user/login', item)
+    //         .then((res) => {
+    //             setLoader(false)
+    //             toast.success('Successfully login',
+    //             { position: toast.POSITION.BOTTOM_RIGHT })
+    //             localStorage.setItem('user', JSON.stringify({
+    //                 login: true,
+    //                 token: res.data.data.user
+    //             }))
+    //             localStorage.setItem('image', JSON.stringify({
+    //                 userPic: res.data.data.user.image
+    //             }))
+    //             if (localStorage.getItem('user')) {
+    //                 navigate('/')
+    //             }
+    //         }).catch((error) => {
+    //             setLoader(false)
+    //             toast.error(error,
+    //                 { position: toast.POSITION.BOTTOM_RIGHT }
+    //             )
+    //         })
+    // }
+
+    const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
+        initialValues: initialValues,
+        validationSchema: loginSchema,
+        onSubmit: (values) => {
+            setLoader(true)
+        axios.post('user/login', values)
             .then((res) => {
                 setLoader(false)
                 toast.success('Successfully login',
@@ -53,11 +89,14 @@ const Login = () => {
                 }
             }).catch((error) => {
                 setLoader(false)
-                toast.error('Login Faild',
+                toast.error(error,
                     { position: toast.POSITION.BOTTOM_RIGHT }
                 )
             })
-    }
+
+        }
+    });
+
 
     return (
         <>
@@ -76,15 +115,38 @@ const Login = () => {
                                         <div className="form-container sign-up-container">
                                         </div>
                                         <div className="form-container sign-in-container">
-                                            <form onSubmit={login}>
+                                            <form onSubmit={handleSubmit}>
                                                 <h1 className='main-he'>Login In</h1>
-                                                <input type="email" placeholder="Email" onChange={e => { setEmail(e.target.value) }} />
+                                                <div style={{width:'100%'}}>
+                                                    <input
+                                                        type="email"
+                                                        autoComplete='off'
+                                                        name='email'
+                                                        id='email'
+                                                        placeholder='Enter your email'
+                                                        value={values.email}
+                                                        onChange={handleChange}
+                                                        onBlur={handleBlur}
+                                                    />
+                                                    {errors.email && touched.email && <p className='error'>{errors.email}</p>}
+                                                </div>
+
                                                 <div className='password-filed'>
-                                                <input type={passwordType} placeholder="Password" onChange={e => { setPassword(e.target.value) }} />
-                                                    <span onClick={togglePassword}>
-                                                        {passwordType === "password" ? <AiOutlineEyeInvisible/> : <AiOutlineEye/>}
+                                                    <input
+                                                        type={passwordType}
+                                                        autoComplete='off'
+                                                        name='password'
+                                                        id='password'
+                                                        placeholder='Enter your password'
+                                                        value={values.password}
+                                                        onChange={handleChange}
+                                                        onBlur={handleBlur}
+                                                    />
+                                                    <span onClick={() => togglePassword('password')}>
+                                                        {passwordType === "password" ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
                                                     </span>
                                                 </div>
+                                                    {errors.password && touched.password && <p className='error'>{errors.password}</p>}
                                                 <Link to='/reset-password'>Forgot your password?</Link>
                                                 <button type="submit">Login</button>
                                             </form>
