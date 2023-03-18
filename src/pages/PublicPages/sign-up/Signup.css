@@ -17,7 +17,7 @@
 	text-align: center;
 }
 
-.login-sigin p {
+.login-sigin .main-p {
 	font-size: 14px;
 	font-weight: 100;
 	line-height: 20px;
@@ -28,6 +28,32 @@
 .login-sigin span {
 	font-size: 12px;
 }
+
+.main-hee{	
+	font-size: 38px !important;
+    color: #000000;
+    line-height: 1.1;
+    font-weight: 700 !important;
+}
+
+.error{
+	text-align: right;
+    color: red !important;
+    font-size: 12px;
+    margin: 0;
+	width: 100%;
+	
+}
+.error-last{
+	text-align: right;
+    color: red !important;
+    font-size: 12px;
+    margin: 0;
+	margin-bottom: 5px;
+	width: 100%;
+}
+
+
 
 .login-sigin a {
 	color: #333;

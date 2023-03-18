@@ -271,6 +271,10 @@ footer a {
     text-decoration: none;
 }
 
+.error{
+	margin: 0 !important;
+}
+
 @media (max-width: 768px){
 	.overlay-container{
 		display: none;
