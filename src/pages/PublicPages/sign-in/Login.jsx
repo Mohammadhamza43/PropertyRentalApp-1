@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import bgOne from '../../../assets/media/images/bg_1.jpg'
@@ -19,17 +19,22 @@ import { useFormik } from 'formik'
 
 
 const initialValues = {
-    name: '',
-    email: ''
+    email: '',
+    password: '',
 }
 
 
 const Login = () => {
     const navigate = useNavigate()
 
-    // const [email, setEmail] = useState('');
+    useEffect(() =>{
+        if(localStorage.getItem('user')){
+            navigate('/')
+        };
+    })
+    
+
     const [passwordType, setPasswordType] = useState("password");
-    // const [password, setPassword] = useState('');
     const [loader, setLoader] = useState(false);
 
     const togglePassword = () => {
@@ -40,32 +45,6 @@ const Login = () => {
         setPasswordType("password")
     }
 
-    // const login = async (event) => {
-    //     let item = { email, password }
-    //     event.preventDefault(); // 👈️ prevent page refresh
-    //     setLoader(true)
-    //     axios.post('user/login', item)
-    //         .then((res) => {
-    //             setLoader(false)
-    //             toast.success('Successfully login',
-    //             { position: toast.POSITION.BOTTOM_RIGHT })
-    //             localStorage.setItem('user', JSON.stringify({
-    //                 login: true,
-    //                 token: res.data.data.user
-    //             }))
-    //             localStorage.setItem('image', JSON.stringify({
-    //                 userPic: res.data.data.user.image
-    //             }))
-    //             if (localStorage.getItem('user')) {
-    //                 navigate('/')
-    //             }
-    //         }).catch((error) => {
-    //             setLoader(false)
-    //             toast.error(error,
-    //                 { position: toast.POSITION.BOTTOM_RIGHT }
-    //             )
-    //         })
-    // }
 
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
@@ -89,7 +68,8 @@ const Login = () => {
                 }
             }).catch((error) => {
                 setLoader(false)
-                toast.error(error,
+                console.log(error);
+                toast.error(error.response.data.message[0],
                     { position: toast.POSITION.BOTTOM_RIGHT }
                 )
             })

@@ -5511,6 +5511,25 @@ input[type="button"].btn-block {
   color: #e86ed0;
 }
 
+.error{
+  text-align: left !important;
+  color: red !important;
+  font-size: 12px !important;
+  margin: 0 !important;
+  width: 100% !important;
+  font-weight: 500 !important;
+  font-family: sans-serif;
+}
+.error-last{
+  text-align: left !important;
+  color: red !important;
+  font-size: 12px !important;
+  margin: 0 !important;
+  width: 100% !important;
+  font-weight: 500 !important;
+  font-family: sans-serif;
+}
+
 .dd-buttom{
   padding: 0;
     margin: 0;

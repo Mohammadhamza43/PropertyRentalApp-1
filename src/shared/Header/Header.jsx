@@ -11,7 +11,6 @@ function Header() {
   if (localStorage.getItem('user')) {
     // image = JSON.parse(localStorage.getItem('user')).token.image;
     image = JSON.parse(localStorage.getItem('image'))?.userPic;
-    console.log(image);
   }
 
   const [show, setShow] = useState(false)
