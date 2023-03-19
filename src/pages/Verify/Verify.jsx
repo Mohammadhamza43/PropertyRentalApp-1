@@ -1,3 +1,4 @@
+import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import loader from '../../assets/media/loader/loader.gif'
@@ -15,7 +16,6 @@ function Verify() {
     let query = useQuery();
     const navigate = useNavigate()
 
-    // const [imageName, setImageName] = useState(userImage)
     const [email, setEmail] = useState('');
     const [token, setToken] = useState('');
 
@@ -23,25 +23,19 @@ function Verify() {
 
     useEffect(() => {
 
-        setEmail(decodeURIComponent(query.get('email')))
+        setEmail(query.get('email'))
         setToken(query.get('token'))
 
         console.log(email);
         console.log(token);
-        const verifyUser = async () => {
-            let response = fetch(`http://68.183.127.52:3000/user/verify-account/${encodeURIComponent(token)}?email=${email}`)
 
-            await response.then((res) => {
-                res.json()
-            }).then((data) => {
-                console.log(data);
-                navigate('/login')
-            }).catch((e) => {
-                alert("Error submitting form!");
-            });;
-        }
-
-        verifyUser()
+        axios.get(`user/verify-account/${token}?email=${email}`)
+                .then((res) => {
+                    navigate(`/login?message=Email verified successfully`)
+                    })
+                    .catch((error) => {
+                    console.log(`user/verify-account/${token}?email=${email}`);
+                })
 
 
     } , [query])

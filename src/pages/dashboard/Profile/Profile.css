@@ -175,10 +175,6 @@ select {
     padding-inline: 64px;
 }
 
-.switch.btn {
-    min-width: 8rem;
-    min-height: calc(1.5em + 0.75rem + 2px);
-}
 
 @media (max-width: 768px){
     .profile-section{
