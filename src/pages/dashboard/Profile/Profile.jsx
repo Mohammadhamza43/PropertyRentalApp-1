@@ -94,7 +94,8 @@ function Profile() {
     })
 
     const updateProfile = async (event) => {
-        event.preventDefault(); // 👈️ prevent page refresh
+        event.preventDefault(); // 👈️ prevent page refreslog
+        console.log(image);
 
         const formData = new FormData();
         formData.append('address', address)
@@ -139,45 +140,6 @@ function Profile() {
 
     }
 
-    // const resetPassword = (event) => {
-    //     event.preventDefault(); // 👈️ prevent page refresh
-    //     const password  = oldPassword.current.value
-    //     const newPassword = newpassword.current.value
-    //     const confirmNewPassword = newPasswordConform.current.value
-
-    //     // let items = {password , newPassword , confirmNewPassword}
-
-    //     // console.log(items)
-    //     setRSLoader(true)
-    //      fetch('https://walrus-app-ovpy2.ondigitalocean.app/user/change-password', {
-    //         method: "POST",
-    //         headers: {
-    //             "Accept": "application/json",
-    //             'Content-Type': 'application/json',
-    //             "AUTHORIZATION": `BEARER ${token}`
-    //         },
-    //         body: JSON.stringify({
-    //             "password" : password,
-    //             "newPassword" : newPassword,
-    //             "confirmNewPassword" : confirmNewPassword
-    //         })
-    //     })
-    //         .then((res) => {
-    //             if (res.ok) {
-    //                 setRSLoader(false)
-    //                 localStorage.removeItem('user')
-    //                 navigate('/login')
-    //             }
-    //         })
-    //         .catch((error) => {
-    //             if (error) {
-    //                 setRSLoader(false)
-    //                 toast.error(error, { position: toast.POSITION.BOTTOM_RIGHT })
-    //             }
-
-    //         })
-
-    // }
 
 
     const togglePassword = (e) => {
@@ -221,7 +183,7 @@ function Profile() {
             }).then((res) => {
                 setRSLoader(false)
                 localStorage.removeItem('user')
-                navigate('/login')
+                navigate(`/login?message=Password changed`)
             }).catch((error) => {
                 setRSLoader(false)
                 console.log(error);
@@ -230,23 +192,6 @@ function Profile() {
                 )
             })
 
-            // setRSLoader(true)
-            // fetch('https://walrus-app-ovpy2.ondigitalocean.app/user/change-password', {
-            //     body: JSON.stringify(values),
-            //     method: "POST",
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //         "AUTHORIZATION": `BEARER ${token}`
-            //     },
-            // }).then((res) => {
-            //     console.log(res);
-            //     if (res.ok) {
-            //         setRSLoader(false)
-            //         localStorage.removeItem('user')
-            //         navigate('/login')
-            //     }
-            // })
-            //     .catch(function (err) { console.log(err) })
         }
     });
 
@@ -333,7 +278,7 @@ function Profile() {
                                                         <div className='upload-file'>
                                                             <button>Browse and Upload</button>
                                                             <span>{image.name}</span>
-                                                            <input required type="file" id="img" name="img" accept="image/*" className='button' onChange={(e) => setImage(e.target.files[0])} />
+                                                            <input type="file" id="img" name="img" accept="image/*" className='button' onChange={(e) => setImage(e.target.files[0])} />
                                                         </div>
                                                         {/* <input required type="file" id="img" name="img" accept="image/*"  onChange={(e) =>setImage(e)}/> */}
                                                     </div>
@@ -401,7 +346,7 @@ function Profile() {
                                                                 autoComplete='off'
                                                                 name='newPassword'
                                                                 id='newPassword'
-                                                                placeholder='Enter your newPassword'
+                                                                placeholder='Enter your new password'
                                                                 value={values.newPassword}
                                                                 onChange={handleChange}
                                                                 onBlur={handleBlur}
@@ -421,7 +366,7 @@ function Profile() {
                                                                 autoComplete='off'
                                                                 name='confirmNewPassword'
                                                                 id='confirmNewPassword'
-                                                                placeholder='Enter your confirmNewPassword'
+                                                                placeholder='Enter your confirm new password'
                                                                 value={values.confirmNewPassword}
                                                                 onChange={handleChange}
                                                                 onBlur={handleBlur}

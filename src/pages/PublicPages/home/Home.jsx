@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import bgOne from '../../../assets/media/images/bg_1.jpg'
 import bgTwo from '../../../assets/media/images/bg_2.jpg'
 import workOne from '../../../assets/media/images/work-1.jpg'
@@ -31,11 +31,13 @@ import ClientCarousel from '../../../shared/ClientCarousel/ClientCarousel'
 import Search from '../../../shared/Search/Search'
 import Header from '../../../shared/Header/Header'
 import Footer from '../../../shared/Footer/Footer'
-import Loading from '../../../shared/Loading/Loading'
 
 
 function Home() {
 
+	useEffect(() =>{
+		window.scrollTo(0, 0);
+	})
 	const carouselData = [
 		{p1 : 'Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.',
 		image : PersonOne,

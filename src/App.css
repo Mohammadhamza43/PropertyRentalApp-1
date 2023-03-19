@@ -5511,6 +5511,12 @@ input[type="button"].btn-block {
   color: #e86ed0;
 }
 
+
+.switch.btn {
+  min-width: 40% !important;
+  min-height: calc(1.5em + 0.75rem + 2px);
+}
+
 .error{
   text-align: left !important;
   color: red !important;

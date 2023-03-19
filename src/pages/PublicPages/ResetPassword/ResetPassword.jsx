@@ -12,13 +12,9 @@ import { useFormik } from 'formik'
 import { resetPasswordSchema } from '../../../schemas/index';
 
 
-
-
 function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
-
-
 
 function ResetPassword() {
 
@@ -30,24 +26,11 @@ function ResetPassword() {
         token: query.get('token'),
         password: '',
         confirmPassword: '',
-
     }
 
-    // const [password, setPassword] = useState('');
-    // const [confirmPassword, setConfirmPassword] = useState('');
-    // const [email, setEmail] = useState('');
-    // const [token, setToken] = useState('');
     const [passwordType, setPasswordType] = useState("password");
     const [confirmPasswordType, setConfirmPasswordType] = useState('password');
     const [loader, setLoader] = useState(false);
-
-
-
-
-    // useEffect(() =>{
-    //     setEmail(decodeURIComponent(query.get('email')))
-    //     setToken(query.get('token'))
-    // }, [query])
 
     const togglePassword = (e) => {
         if (e === 'password') {
@@ -66,25 +49,6 @@ function ResetPassword() {
         }
 
     }
-
-    // const Password = async (event) => {
-    //     let item = { password, confirmPassword, email, token }
-    //     console.log(item);
-    //     event.preventDefault(); // 👈️ prevent page refresh
-    //     setLoader(true)
-    //     axios.post('user/reset-password', item)
-    //         .then((res) => {
-    //             setLoader(false);
-    //             navigate('/login')
-    //         }).catch((error) => {
-    //             setLoader(false);
-    //             toast.error('error', {
-    //                 position: toast.POSITION.BOTTOM_RIGHT
-    //             });
-    //         })
-    // }
-
-
 
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,

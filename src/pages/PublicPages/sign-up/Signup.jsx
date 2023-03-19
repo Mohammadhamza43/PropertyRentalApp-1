@@ -33,6 +33,7 @@ function Signup() {
 
     const [passwordType, setPasswordType] = useState("password");
     const [confirmPasswordType, setConfirmPasswordType] = useState('password');
+    const [dublicateEmail, setDublicateEmail] = useState(false);
     const [loader, setLoader] = useState(false);
 
     const togglePassword = (e) => {
@@ -61,12 +62,17 @@ function Signup() {
             delete data.confirmPassword;
 
             setLoader(true);
+            setDublicateEmail(false)
             axios.post('user/create', data)
                 .then((res) => {
                     navigate('/login')
 
                 }).catch((error) => {
                     setLoader(false);
+                    if(error.response.data.message[0] === "User with this email already exists"){
+                        setDublicateEmail(true)
+                    }
+                    console.log(error);
                     toast.error(error.response.data.message[0], {
                         position: toast.POSITION.BOTTOM_RIGHT
                     });
@@ -114,6 +120,7 @@ function Signup() {
                                                         onBlur={handleBlur}
                                                     />
                                                     {errors.email && touched.email && <p className='error'>{errors.email}</p>}
+                                                    {/* {dublicateEmail && <p className='error'>User with this email already exists</p>} */}
                                                 </div>
 
                                                 <div className='password-filed'>

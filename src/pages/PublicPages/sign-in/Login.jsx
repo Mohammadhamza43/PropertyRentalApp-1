@@ -1,12 +1,12 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import bgOne from '../../../assets/media/images/bg_1.jpg'
-import { AiOutlineEyeInvisible , AiOutlineEye } from 'react-icons/ai'
+import { AiOutlineEyeInvisible, AiOutlineEye } from 'react-icons/ai'
 import Footer from '../../../shared/Footer/Footer'
 import Header from '../../../shared/Header/Header'
 import { loginSchema } from '../../../schemas/index';
+import { useLocation, useNavigate } from 'react-router-dom'
 
 
 // Importing toastify module
@@ -18,6 +18,10 @@ import Apiloader from '../../../shared/ApiLoader/Apiloader'
 import { useFormik } from 'formik'
 
 
+function useQuery() {
+    return new URLSearchParams(useLocation().search);
+}
+
 const initialValues = {
     email: '',
     password: '',
@@ -25,14 +29,33 @@ const initialValues = {
 
 
 const Login = () => {
-    const navigate = useNavigate()
 
-    useEffect(() =>{
-        if(localStorage.getItem('user')){
+    
+    const navigate = useNavigate()
+    let query = useQuery();
+    const message = useRef()
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        console.log('called');
+        if (localStorage.getItem('user')) {
             navigate('/')
         };
-    })
+
+        
+        message.current = query.get('message')
+        if (message !== '') {
+            toast.success((message.current?.replace(/-/g, ' ')),
+                { position: toast.POSITION.BOTTOM_RIGHT })
+        }
+    }, [message])
+
     
+    // const [message, setMessage] = useState('');
+
+
+
+
 
     const [passwordType, setPasswordType] = useState("password");
     const [loader, setLoader] = useState(false);
@@ -51,28 +74,28 @@ const Login = () => {
         validationSchema: loginSchema,
         onSubmit: (values) => {
             setLoader(true)
-        axios.post('user/login', values)
-            .then((res) => {
-                setLoader(false)
-                toast.success('Successfully login',
-                { position: toast.POSITION.BOTTOM_RIGHT })
-                localStorage.setItem('user', JSON.stringify({
-                    login: true,
-                    token: res.data.data.user
-                }))
-                localStorage.setItem('image', JSON.stringify({
-                    userPic: res.data.data.user.image
-                }))
-                if (localStorage.getItem('user')) {
-                    navigate('/')
-                }
-            }).catch((error) => {
-                setLoader(false)
-                console.log(error);
-                toast.error(error.response.data.message[0],
-                    { position: toast.POSITION.BOTTOM_RIGHT }
-                )
-            })
+            axios.post('user/login', values)
+                .then((res) => {
+                    setLoader(false)
+                    toast.success('Successfully login',
+                        { position: toast.POSITION.BOTTOM_RIGHT })
+                    localStorage.setItem('user', JSON.stringify({
+                        login: true,
+                        token: res.data.data.user
+                    }))
+                    localStorage.setItem('image', JSON.stringify({
+                        userPic: res.data.data.user.image
+                    }))
+                    if (localStorage.getItem('user')) {
+                        navigate('/')
+                    }
+                }).catch((error) => {
+                    setLoader(false)
+                    console.log(error);
+                    toast.error(error.response.data.message[0],
+                        { position: toast.POSITION.BOTTOM_RIGHT }
+                    )
+                })
 
         }
     });
@@ -81,23 +104,23 @@ const Login = () => {
     return (
         <>
 
-        <Header />
+            <Header />
             <div className="hero-wrap ftco-degree-bg" style={{ backgroundImage: `url(${bgOne})` }} data-stellar-background-ratio="0.5">
                 <div className="overlay"></div>
                 <div className="container">
                     <div className="row no-gutters slider-text justify-content-center align-items-center">
                         <div className="col-lg-12 col-md-12 col-sn-12 d-flex align-items-end">
                             <div className="text text-center">
-                                <div className='login-sigin' style={{position:'relative'}}>
-                                    {loader &&  <Apiloader/>}
-                                   
+                                <div className='login-sigin' style={{ position: 'relative' }}>
+                                    {loader && <Apiloader />}
+
                                     <div className='containerr' id="containerr">
                                         <div className="form-container sign-up-container">
                                         </div>
                                         <div className="form-container sign-in-container">
                                             <form onSubmit={handleSubmit}>
                                                 <h1 className='main-he'>Login In</h1>
-                                                <div style={{width:'100%'}}>
+                                                <div style={{ width: '100%' }}>
                                                     <input
                                                         type="email"
                                                         autoComplete='off'
@@ -126,7 +149,7 @@ const Login = () => {
                                                         {passwordType === "password" ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
                                                     </span>
                                                 </div>
-                                                    {errors.password && touched.password && <p className='error'>{errors.password}</p>}
+                                                {errors.password && touched.password && <p className='error'>{errors.password}</p>}
                                                 <Link to='/reset-password'>Forgot your password?</Link>
                                                 <button type="submit">Login</button>
                                             </form>
@@ -152,7 +175,7 @@ const Login = () => {
             </div>
             <ToastContainer />
             <Footer />
-            </>
+        </>
 
     )
 }
