@@ -67,8 +67,8 @@ function Header() {
                       </button>
                       <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                       <ul>
-                        <li className='nav-item' onClick={logout}><Link className="nav-link">Logout</Link></li>
                         <li className='nav-item'><NavLink to="/profile" className="nav-link">Profile</NavLink></li>
+                        <li className='nav-item' onClick={logout}><Link className="nav-link">Logout</Link></li>
                       </ul>
                       </div>
                     </div>
