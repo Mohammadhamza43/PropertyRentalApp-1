@@ -27,6 +27,7 @@ const Verify = lazy(() => import('./pages/Verify/Verify'))
 
 
 function App() {
+   let user = localStorage.getItem('user')
   return (
     <>
       <Router>
@@ -46,10 +47,9 @@ function App() {
           <Route path="/reset-password" element={<Reset />} />
           <Route path="/reset" element={<ResetPassword />} />
           <Route path="/dashboard" element={<ProtectedRoutes Component={Dashboard}/>}/>
-          <Route path="/profile" element={<Profile/>}/>
-          {/* <Route path="/profile" element={<ProtectedRoutes Component={Profile}/>}/> */}
+          <Route path="/profile" element={<ProtectedRoutes Component={Profile}/>}/>
           <Route path="/verify" element={<Verify />} />
-          <Route path="*" element={<Error />} />
+          <Route path="*" element={<Home />} />
         </Routes>
         </Suspense>
       </Router>

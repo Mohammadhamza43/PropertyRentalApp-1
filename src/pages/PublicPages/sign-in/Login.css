@@ -32,7 +32,7 @@
 	font-weight: 100;
 	line-height: 20px;
 	letter-spacing: 0.5px;
-	margin: 20px 0 30px;
+	/* margin: 20px 0 30px; */
 }
 
 .login-sigin span {
@@ -271,9 +271,9 @@ footer a {
     text-decoration: none;
 }
 
-.error{
+/* .error{
 	margin: 0 !important;
-}
+} */
 
 @media (max-width: 768px){
 	.overlay-container{

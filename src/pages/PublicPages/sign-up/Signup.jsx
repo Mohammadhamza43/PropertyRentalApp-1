@@ -1,13 +1,13 @@
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { AiOutlineEyeInvisible, AiOutlineEye } from 'react-icons/ai'
-import { insert, useFormik } from 'formik'
 import { toast, ToastContainer } from 'react-toastify';
 import bgOne from '../../../assets/media/images/bg_1.jpg'
 import Footer from '../../../shared/Footer/Footer'
 import Header from '../../../shared/Header/Header'
 import Apiloader from '../../../shared/ApiLoader/Apiloader'
+import { useFormik } from 'formik'
 import { signUpSchema } from '../../../schemas';
 import './Signup.css'
 
@@ -17,15 +17,22 @@ const initialValues = {
     name: '',
     email: '',
     password: '',
-    conformPassword: '',
+    confirmPassword: '',
 
 }
 
 
 function Signup() {
     const navigate = useNavigate()
+
+    useEffect(() => {
+        if (localStorage.getItem('user')) {
+            navigate('/')
+        };
+    })
+
     const [passwordType, setPasswordType] = useState("password");
-    const [conformPasswordType, setConformPasswordType] = useState('password');
+    const [confirmPasswordType, setConfirmPasswordType] = useState('password');
     const [loader, setLoader] = useState(false);
 
     const togglePassword = (e) => {
@@ -36,12 +43,12 @@ function Signup() {
             }
             setPasswordType("password")
         }
-        if (e === 'conformPassword') {
-            if (conformPasswordType === "password") {
-                setConformPasswordType("text")
+        if (e === 'confirmPassword') {
+            if (confirmPasswordType === "password") {
+                setConfirmPasswordType("text")
                 return;
             }
-            setConformPasswordType("password")
+            setConfirmPasswordType("password")
         }
 
     }
@@ -51,20 +58,19 @@ function Signup() {
         validationSchema: signUpSchema,
         onSubmit: (values) => {
             let data = { ...values };
-            delete data.conformPassword;
+            delete data.confirmPassword;
 
             setLoader(true);
             axios.post('user/create', data)
-            .then((res) => {
-                navigate('/login')
+                .then((res) => {
+                    navigate('/login')
 
-            }).catch((error) => {
-                setLoader(false);
-                toast.error(error, {
-                    position: toast.POSITION.BOTTOM_RIGHT 
-                });
-            })
-
+                }).catch((error) => {
+                    setLoader(false);
+                    toast.error(error.response.data.message[0], {
+                        position: toast.POSITION.BOTTOM_RIGHT
+                    });
+                })
         }
     });
 
@@ -83,7 +89,7 @@ function Signup() {
                                         <div className="form-containerr sign-up-container">
                                             <form onSubmit={handleSubmit}>
                                                 <h1 className='main-he'>Sign up</h1>
-                                                <div style={{width:'100%'}}>
+                                                <div style={{ width: '100%' }}>
                                                     <input
                                                         type="name"
                                                         autoComplete='off'
@@ -96,7 +102,7 @@ function Signup() {
                                                     />
                                                     {errors.name && touched.name && <p className='error'>{errors.name}</p>}
                                                 </div>
-                                                <div style={{width:'100%'}}>
+                                                <div style={{ width: '100%' }}>
                                                     <input
                                                         type="email"
                                                         autoComplete='off'
@@ -125,23 +131,23 @@ function Signup() {
                                                         {passwordType === "password" ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
                                                     </span>
                                                 </div>
-                                                    {errors.password && touched.password && <p className='error'>{errors.password}</p>}
+                                                {errors.password && touched.password && <p className='error'>{errors.password}</p>}
                                                 <div className='password-filed'>
                                                     <input
-                                                        type={conformPasswordType}
+                                                        type={confirmPasswordType}
                                                         autoComplete='off'
-                                                        name='conformPassword'
-                                                        id='conformPassword'
-                                                        placeholder='Enter your conformPassword'
-                                                        value={values.conformPassword}
+                                                        name='confirmPassword'
+                                                        id='confirmPassword'
+                                                        placeholder='Enter your confirm Password'
+                                                        value={values.confirmPassword}
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
                                                     />
-                                                    <span onClick={() => togglePassword('conformPassword')}>
-                                                        {conformPasswordType === "password" ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                                                    <span onClick={() => togglePassword('confirmPassword')}>
+                                                        {confirmPasswordType === "password" ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
                                                     </span>
                                                 </div>
-                                                    {errors.conformPassword && touched.conformPassword && <p className='error-last'>{errors.conformPassword}</p>}
+                                                {errors.confirmPassword && touched.confirmPassword && <p className='error-last'>{errors.confirmPassword}</p>}
                                                 <button type="submit">Submit</button>
                                             </form>
                                         </div>
@@ -170,95 +176,5 @@ function Signup() {
     )
 }
 
-// const initialValues ={
-//     name : '',
-//     email : '',
-//     password : '',
-//     conformPassword : '',
-
-// }
-
-// const Signup = () => {
-
-//     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
-//         initialValues: initialValues,
-//         validationSchema: signUpSchema,
-//         onSubmit: (values) => {
-//             let data = { ...values };
-//             delete data.conformPassword;
-//             console.log(data);
-
-//         }
-//     });
-
-
-//     return (
-//         <>
-//             <form onSubmit={handleSubmit}>
-//                 <div className="input-block">
-//                     <label htmlFor="name" className='input-lable'>Name</label>
-
-//                     <input
-//                         type="name"
-//                         autoComplete='off'
-//                         name='name'
-//                         id='name'
-//                         placeholder='Enter your name'
-//                         value={values.name}
-//                         onChange={handleChange}
-//                         onBlur={handleBlur}
-//                     />
-//                     {errors.name && touched.name && <p>{errors.name}</p>}
-
-//                 </div>
-//                 <div className="input-block">
-//                     <label htmlFor="email" className='input-lable'>Email</label>
-//                     <input
-//                         type="email"
-//                         autoComplete='off'
-//                         name='email'
-//                         id='email'
-//                         placeholder='Enter your email'
-//                         value={values.email}
-//                         onChange={handleChange}
-//                         onBlur={handleBlur}
-//                     />
-//                     {errors.email && touched.email && <p>{errors.email}</p>}
-//                 </div>
-
-//                 <div className="input-block">
-//                     <label htmlFor="password" className='input-lable'>Password</label>
-//                     <input
-//                         type="password"
-//                         autoComplete='off'
-//                         name='password'
-//                         id='password'
-//                         placeholder='Enter your password'
-//                         value={values.password}
-//                         onChange={handleChange}
-//                         onBlur={handleBlur}
-//                     />
-//                     {errors.password && touched.password && <p>{errors.password}</p>}
-//                 </div>
-//                 <div className="input-block">
-//                     <label htmlFor="conformPassword" className='input-lable'>Conform Password</label>
-//                     <input
-//                         type="conformPassword"
-//                         autoComplete='off'
-//                         name='conformPassword'
-//                         id='conformPassword'
-//                         placeholder='Enter your conformPassword'
-//                         value={values.conformPassword}
-//                         onChange={handleChange}
-//                         onBlur={handleBlur}
-//                     />
-//                     {errors.conformPassword && touched.conformPassword && <p>{errors.conformPassword}</p>}
-//                 </div>
-//                 <button type='submit'>Submit</button>
-//             </form>
-
-//         </>
-//     )
-// }
 
 export default Signup

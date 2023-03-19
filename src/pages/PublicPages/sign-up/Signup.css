@@ -22,7 +22,7 @@
 	font-weight: 100;
 	line-height: 20px;
 	letter-spacing: 0.5px;
-	margin: 20px 0 30px;
+	/* margin: 20px 0 30px; */
 }
 
 .login-sigin span {
@@ -36,7 +36,7 @@
     font-weight: 700 !important;
 }
 
-.error{
+/* .error{
 	text-align: right;
     color: red !important;
     font-size: 12px;
@@ -51,7 +51,7 @@
     margin: 0;
 	margin-bottom: 5px;
 	width: 100%;
-}
+} */
 
 
 

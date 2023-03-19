@@ -76,7 +76,7 @@ function Home() {
 				<div className="overlay"></div>
 				<div className="container">
 					<div className="row no-gutters slider-text justify-content-center align-items-center">
-						<div className="col-lg-8 col-md-6 d-flex align-items-end">
+						<div className="col-lg-8 col-md-12 d-flex align-items-end">
 							<div className="text text-center">
 								<h1 className="mb-4">Find Your Best Property</h1>
 								<p style={{ fontSize: '18px' }}>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
