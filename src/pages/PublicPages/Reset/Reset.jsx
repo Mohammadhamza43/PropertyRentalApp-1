@@ -60,7 +60,7 @@ function Reset() {
                     }).catch((error) => {
                         setLoader(false);
                         console.log(error);
-                        toast.error(error.response.data.message, {
+                        toast.error(error.response.data.message[0], {
                             position: toast.POSITION.BOTTOM_RIGHT 
                         });
                     })
@@ -95,8 +95,7 @@ function Reset() {
                                         {errors.email && touched.email && <p className='error'>{errors.email}</p>}
                                     </div>
                                     <div className='button-reset'>
-                                        <button>
-                                            <Link to='/login'>Back To Login</Link></button>
+                                    <button type='text'><Link to='/login'>Back To Login</Link></button>
                                         <button type='submit'>Submit</button>
                                     </div>
                                 </form>

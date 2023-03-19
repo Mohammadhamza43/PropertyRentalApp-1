@@ -55,20 +55,18 @@ function Profile() {
 
     useEffect(() => {
 
-        if (getUserdata) {
+        if (getUserdata && localStorage.getItem('user')) {
             setLoader(true)
             fetch('https://walrus-app-ovpy2.ondigitalocean.app/user', {
+
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                     "Accept": "application/json",
                     "AUTHORIZATION": `BEARER ${token}`
-                }
-            })
-                .then((res) => {
+                        }})
 
-                    return res.json()
-                })
+                .then((res) => {return res.json()})
 
                 .then((data) => {
                     console.log(data);
@@ -173,13 +171,13 @@ function Profile() {
         validationSchema: changePasswordSchema,
         onSubmit: (values) => {
             setRSLoader(true)
-            axios.post('user/change-password', values , {
+            axios.post('user/change-password', values, {
                 headers: {
                     "Content-Type": "application/json",
                     "Accept": "application/json",
                     "AUTHORIZATION": `BEARER ${token}`
                 }
-                
+
             }).then((res) => {
                 setRSLoader(false)
                 localStorage.removeItem('user')
