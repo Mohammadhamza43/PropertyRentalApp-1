@@ -1080,7 +1080,7 @@ const UpdateProperty = () => {
                                                                         <div key={index}>
                                                                             <div id={index} className='add-feature'>
                                                                                 <input className='input' type="text" name='name' placeholder='Enter name' onChange={e => { updatefeature(e, index) }} />
-                                                                                <input className='input' type="text" name='value' placeholder='Enter value' onChange={e => { updatefeature(e, index) }} />
+                                                                                <input className='input  ml-3' type="text" name='value' placeholder='Enter value' onChange={e => { updatefeature(e, index) }} />
                                                                                 {otherFeatuers.length !== 1 &&
                                                                                     <button className='remove' type='text' onClick={() => { removelines(index) }}>Remove</button>
                                                                                 }
