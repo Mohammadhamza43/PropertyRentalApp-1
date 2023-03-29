@@ -1,26 +1,26 @@
 import React, { useState } from 'react'
-import {AiOutlineSearch} from 'react-icons/ai'
-import {MdKeyboardArrowDown} from 'react-icons/md'
+import { AiOutlineSearch } from 'react-icons/ai'
+import { MdKeyboardArrowDown } from 'react-icons/md'
 import './Search.css'
 
 function Search() {
 
-    const [showLocation , setShowLocation] = useState(false)
-    const [showType , setShowType] = useState(false)
-    const [showBed , setShowBed] = useState(false)
-    const [showBath , setShowBath] = useState(false)
+    const [toggle, setToggle] = useState(false)
+    const [showType, setShowType] = useState(false)
+    const [showBed, setShowBed] = useState(false)
+    const [showBath, setShowBath] = useState(false)
 
-    const [location , setLocation] = useState({value : 0 , Name : 'NewYork' })
-    const [type , setType] = useState({value : 0 , Name : 'Apartment' })
-    const [bed , setBed] = useState({value : 0 , Name : '01' })
-    const [bath , setBath] = useState({value : 0 , Name : '01' })
-  return (
-    <div className='property-search'>
-        <form>
-            <div className="row">
-                <div className="col-lg-12">
-                    <div className='d-flex'>
-                        <div className='p-locations' onClick={() =>{setShowLocation(!showLocation); setShowType(false);setShowBath(false);setShowBed(false)  }}>
+    const [location, setLocation] = useState({ value: 0, Name: 'NewYork' })
+    const [type, setType] = useState({ value: 0, Name: 'Apartment' })
+    const [bed, setBed] = useState({ value: 0, Name: '01' })
+    const [bath, setBath] = useState({ value: 0, Name: '01' })
+    return (
+        <div className='property-search'>
+            <form>
+                <div className="row">
+                    <div className="col-lg-12">
+                        <div className='d-flex'>
+                            {/* <div className='p-locations' onClick={() =>{setShowLocation(!showLocation); setShowType(false);setShowBath(false);setShowBed(false)  }}>
                             <label htmlFor="">Location</label>
                             <div className="data">
                                 <span>{location.Name}</span>
@@ -72,13 +72,47 @@ function Search() {
                         
                         <div className='s-icon'>
                             <a><AiOutlineSearch/></a>
+                            </div> */}
+                            <div className="chack-box-wrap">
+                            <div className="chack-box">
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="home-tab" data-toggle="tab" data-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Buy</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="profile-tab" data-toggle="tab" data-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Rent</button>
+                                </li>
+                            </ul>
                             </div>
+                            </div>
+                            <div className='form-typology-wrapper'>
+                                <div className={`dropdown-wrapper ${toggle ? 'active' : ''}`} onClick={() =>{setToggle(!toggle)}}>
+                                    <span className='placeholder'>Property Type</span>
+                                    <MdKeyboardArrowDown/>
+                                    <ul className='dropdown'>
+                                        <li>New Home</li>
+                                        <li>Room</li>
+                                        <li>Office</li>
+                                        <li> Land</li>
+                                        <li>Building</li>
+                                        <li>Garage</li>
+                                        <li>Commercial Properties</li>
+                                        <li>Home</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div className='form-item-block'>
+                                <input type="text" id='campoBus' placeholder='Search in Spain'/>
+                                <AiOutlineSearch className='search-icons'/>
+                            </div>
+                            <button className='btn action'>Search</button>
+
+                        </div>
                     </div>
                 </div>
-            </div>
-        </form>
-    </div>
-  )
+            </form>
+        </div>
+    )
 }
 
 export default Search
