@@ -334,6 +334,7 @@ select {
   color: #fc66cc;
   border-radius: 6px;
   border-color: #e86ed0;
+  min-height: 45px;
 }
 
 .image p{
