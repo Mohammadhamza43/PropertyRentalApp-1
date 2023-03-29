@@ -22,7 +22,10 @@ const ResetPassword = lazy(() => import('./pages/PublicPages/ResetPassword/Reset
 const Reset = lazy(() => import('./pages/PublicPages/Reset/Reset'))
 const Dashboard = lazy(() => import('./pages/dashboard/Dashboard/Dashboard'))
 const Profile = lazy(() => import('./pages/dashboard/Profile/Profile'))
-const Verify = lazy(() => import('./pages/Verify/Verify'))
+const Verify = lazy(() => import('./pages/Verify/Verify'));
+const UploadProperty = lazy(() => import('./pages/dashboard/UploadProperty/UploadProperty'))
+const UserProperty = lazy(() => import('./pages/dashboard/UserProperty/UserProperty'))
+const UpdateProperty = lazy(() => import('./pages/dashboard/UpdateProperty/UpdateProperty'))
 
 
 
@@ -48,6 +51,9 @@ function App() {
           <Route path="/reset" element={<ResetPassword />} />
           <Route path="/dashboard" element={<ProtectedRoutes Component={Dashboard}/>}/>
           <Route path="/profile" element={<ProtectedRoutes Component={Profile}/>}/>
+          <Route path="/upload-property" element={<ProtectedRoutes Component={UploadProperty}/>}/>
+          <Route path="/user-properties" element={<ProtectedRoutes Component={UserProperty}/>}/>
+          <Route path="/update-properties/" element={<ProtectedRoutes Component={UpdateProperty}/>}/>
           <Route path="/verify" element={<Verify />} />
           <Route path="*" element={<Home />} />
         </Routes>
