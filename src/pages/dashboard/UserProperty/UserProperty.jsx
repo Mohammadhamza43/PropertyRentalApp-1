@@ -10,11 +10,13 @@ import Header from '../../../shared/Header/Header'
 import Footer from '../../../shared/Footer/Footer'
 import './UserProperty.css'
 import { Link } from 'react-router-dom'
+import Loading from '../../../shared/Loading/Loading'
 
 const UserProperty = () => {
     const token = JSON.parse(localStorage.getItem('user'))?.token.token;
     const [list, setList] = useState([])
     const [data, setData] = useState('')
+    const [loader, setLoader] = useState(true)
 
     useEffect(() => {
         getPropertyList()
@@ -32,6 +34,7 @@ const UserProperty = () => {
         })
 
         const data = await response.json()
+        setLoader(false)
         setList(data.data)
         console.log(data.data);
 
@@ -51,6 +54,13 @@ const UserProperty = () => {
 
     return (
         <>
+
+{loader ?
+
+<Loading />
+
+:
+<>
             <Header />
             <section className="ftco-section">
                 <div className="container">
@@ -67,7 +77,7 @@ const UserProperty = () => {
                                         <div className="text">
                                             <p className="price">
                                                 {/* <span className="old-price">800,000</span> */}
-                                                <span className="orig-price">{x.price}<small>/mo</small></span></p>
+                                                <span className="orig-price">{x.price}<small></small></span></p>
                                             <ul className="property_list">
                                                 <li><span className="flaticon-bed three-margin-icon"><BiBed /></span>3</li>
                                                 <li><span className="flaticon-bathtub three-margin-icon"><TbBath /></span>2</li>
@@ -103,6 +113,8 @@ const UserProperty = () => {
                 </div>
             </section>
             <Footer />
+        </>
+    }
         </>
     )
 }

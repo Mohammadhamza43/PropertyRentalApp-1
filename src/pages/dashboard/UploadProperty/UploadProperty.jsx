@@ -84,10 +84,12 @@ const UploadProperty = () => {
     const [floorMap, setFloorMap] = useState('');
     const [video, setVideo] = useState('');
     const [tour, setTour] = useState([]);
+    const [formLoader, setFormLoader] = useState(false)
     // console.log(otherFeatuers);
 
     const submit = async (event) => {
         event.preventDefault()
+
         const location = { country: country, city: city, address: address, areaLocation: areaLocation, pinLocation: pinLocation, postalCode: postalCode, streetNumber: streetNumber };
         console.log(selectedImages);
         const area = { value: areaa, unit: areaUnit.value };
@@ -117,7 +119,7 @@ const UploadProperty = () => {
                     floors: totalFloors,
                     security: security.value,
                     elevator: elevetor.value,
-                    otherAmenities: {otherFeatuers}
+                    otherAmenities: { otherFeatuers }
                 }
                 console.log(newHomeAmenities);
                 break;
@@ -133,7 +135,7 @@ const UploadProperty = () => {
                     window: window.value,
                     furnished: furnished.value,
                     floorNo: floorNumber,
-                    otherAmenities: {otherFeatuers}
+                    otherAmenities: { otherFeatuers }
                 }
                 break;
             case 'office' || 'commercialProperties' || 'building':
@@ -147,14 +149,14 @@ const UploadProperty = () => {
                     window: window.value,
                     furnished: furnished.value,
                     floorNo: floorNumber,
-                    otherAmenities: {otherFeatuers}
+                    otherAmenities: { otherFeatuers }
                 }
                 break;
             case 'land':
                 landAmenities = {
                     type: type,
                     fenced: fenced.value,
-                    otherAmenities: {otherFeatuers}
+                    otherAmenities: { otherFeatuers }
                 }
                 break;
             case 'garage':
@@ -163,7 +165,7 @@ const UploadProperty = () => {
                     wide: wide,
                     long: long,
                     height: height,
-                    otherAmenities: {otherFeatuers}
+                    otherAmenities: { otherFeatuers }
                 }
                 break;
 
@@ -187,10 +189,10 @@ const UploadProperty = () => {
         formData.append('landAmenities', JSON.stringify(landAmenities))
         formData.append('price', pricee)
         for (let i = 0; i < selectedImages.length; i++) {
-            
+
             formData.append('photos', selectedImages[i])
         }
-        
+
         // formData.append('photos', selectedImages)
         formData.append('videos ', video)
         // formData.append('tours ', '[]')
@@ -198,7 +200,15 @@ const UploadProperty = () => {
             console.log(pair[0] + ' - ' + pair[1]);
         }
 
-
+        setFormLoader(true)
+        if(selectedImages === '') {
+            setFormLoader(true)
+            return(
+                toast.success('Image is required.',
+                    { position: toast.POSITION.BOTTOM_RIGHT })
+                   
+            )
+        }
         await fetch('https://walrus-app-ovpy2.ondigitalocean.app/property', {
             method: "POST",
             headers: {
@@ -209,26 +219,65 @@ const UploadProperty = () => {
             body: formData
         })
             .then((res) => {
-                if (res.ok) {
-                    // setFormLoader(false)
-                    toast.success('Property Successfully uploaded.',
-                        { position: toast.POSITION.BOTTOM_RIGHT })
-                    window.location.reload(false);
-                }
+
+                setFormLoader(false)
+                toast.success('Property Successfully uploaded.',
+                    { position: toast.POSITION.BOTTOM_RIGHT })
+
+                setAdvertising({ value: 'sale', label: 'Sale' })
+                setPropertyType({ value: 'propertytype', label: 'Property Type' })
+                setTitle('')
+                setPricee('')
+                setDate('')
+                setAreaa('')
+                setType('')
+                setAreaUnit({ value: 'mm', label: 'MM' })
+                setRoom('')
+                setWindow({ value: false, label: 'No' })
+                setFenced({ value: false, label: 'No' })
+                setKitchen('')
+                setBath('')
+                setLivingRoom('')
+                setWashrooms('')
+                setBuildingNumber('')
+                setFlatNumber('')
+                setFloorNumber('')
+                setTotalFloors('')
+                setPinLocation('')
+                setNumber('')
+                setStreetNumber('')
+                setDescription('')
+                setSecurity({ value: false, label: 'No' })
+                setDeck({ value: false, label: 'No' })
+                setElevetor({ value: false, label: 'No' })
+                setParking({ value: false, label: 'No' })
+                setAirConditioning({ value: false, label: 'No' })
+                setBalcony({ value: false, label: 'No' })
+                setFurnished({ value: false, label: 'No' })
+                setAddress('')
+                setPostalCode('')
+                setCity('')
+                setCountry('')
+                setAreaLocation('')
+                setPropertyStatus('Active')
+                setSelectedImages([]);
+                setotherFeaturs([{ name: '', value: '' }]);
+                setUnit(0);
+                setWide(0);
+                setLong(0);
+                setheight(0);
+                setFloorMap('');
+                setVideo('');
+                setTour([]);
+
             })
             .catch((error) => {
-                // setFormLoader(false),
-                if (error) {
+                setFormLoader(false)
 
-                    toast.error(error, { position: toast.POSITION.BOTTOM_RIGHT })
+                toast.error(error, { position: toast.POSITION.BOTTOM_RIGHT })
 
 
-                } else {
-                    // setFormLoader(false)
-                    toast.error('400 Error',
-                        { position: toast.POSITION.BOTTOM_RIGHT }
-                    )
-                }
+
             })
 
         // const data = [advertising, propertyType, title, area, room, window, kitchen,
@@ -285,6 +334,7 @@ const UploadProperty = () => {
                     <div className="row">
                         <div className="col-lg-9 mx-auto mt-5">
                             <div className='user-card' style={{ position: 'relative' }}>
+                                {formLoader && <Apiloader />}
                                 <div className="user-card-body">
                                     <div className="user-mete">
                                         <div className='user-card-meta-avatar'>
@@ -395,7 +445,7 @@ const UploadProperty = () => {
                                                         </div>
                                                     </div>
 
-                                                    {(propertyType.label === 'Home' ||  propertyType.label === 'New Home') &&
+                                                    {(propertyType.label === 'Home' || propertyType.label === 'New Home') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Room</label>
                                                             <div className='password-filed'>
@@ -695,7 +745,7 @@ const UploadProperty = () => {
                                                             </div>
                                                         </div>
                                                     }
-                                                   
+
                                                     {/* <div className="col-lg-4 mt-4">
                                                         <label>Contact number</label>
                                                         <div className='password-filed'>
@@ -884,7 +934,7 @@ const UploadProperty = () => {
                                                                 + Add Images
                                                                 <input
                                                                     type="file"
-                                                                    name="images"
+                                                                    name="userimages"
                                                                     onChange={onSelectFile}
                                                                     multiple
                                                                     accept="image/png , image/jpeg, image/webp"
@@ -917,7 +967,7 @@ const UploadProperty = () => {
                                                             }
 
                                                             <label>
-                                                                Add Floor Map
+                                                                Add Tour
                                                                 <input
                                                                     type="file"
                                                                     name="images"

@@ -116,6 +116,7 @@ const UpdateProperty = () => {
         const selectedProperty = data.data.find(x => x._id == id);
         console.log({ selectedProperty });
         if (selectedProperty) {
+            console.log(selectedProperty);
             setPropertyType(selectedProperty.type)
             setTitle(selectedProperty.title)
             setDate(selectedProperty.availableFrom)
@@ -133,6 +134,7 @@ const UpdateProperty = () => {
             setStreetNumber(selectedProperty.location.streetNo)
             setPinLocation(selectedProperty.location.pinLocation)
             setPostalCode(selectedProperty.location.postalCode)
+            setDescription(selectedProperty.description)
 
             if (propertyType === 'newHome') {
                 setRoom(selectedProperty.newHomeAmenities.rooms)
@@ -192,8 +194,8 @@ const UpdateProperty = () => {
                 setheight(selectedProperty.garageAmenities.height)
             }
             else if (propertyType === 'land') {
-                setPropertyType(selectedProperty.garageAmenities.type)
-                setFenced(selectedProperty.garageAmenities.fenced)
+                setPropertyType(selectedProperty.landAmenities.type)
+                setFenced(selectedProperty.landAmenities.fenced)
             }
             // patchProperty(selectedProperty);
         }
@@ -216,6 +218,7 @@ const UpdateProperty = () => {
             setCountry(x.location.country)
             setCity(x.location.city)
             setAddress(x.location.address)
+            setDescription(x.location.description)
             setAreaLocation(x.location.areaLocation)
             setStreetNumber(x.location.streetNo)
             setPinLocation(x.location.pinLocation)
@@ -439,8 +442,8 @@ const UpdateProperty = () => {
 
 
 
-        switch (propertyType.value ? propertyType.value : propertyType) {
-            case 'newHome':
+        switch (propertyType?.value ? propertyType?.value : propertyType) {
+            case 'newHome' || 'home':
                 newHomeAmenities = {
                     rooms: room,
                     kitchen: kitchen,
@@ -458,7 +461,7 @@ const UpdateProperty = () => {
                 }
                 console.log(newHomeAmenities);
                 break;
-            case 'Room':
+            case 'room':
                 roomAmenities = {
                     kitchen: kitchen,
                     bath: bath,
@@ -474,7 +477,7 @@ const UpdateProperty = () => {
                 }
                 console.log(roomAmenities);
                 break;
-            case 'Office' || 'Commercial properties':
+            case 'office' || 'commercialProperties' || 'building':
                 commercialAmenities = {
                     kitchen: kitchen,
                     bath: bath,
@@ -487,9 +490,8 @@ const UpdateProperty = () => {
                     floorNo: floorNumber,
                     otherAmenities: {}
                 }
-                console.log('Office');
                 break;
-            case 'Land':
+            case 'land':
                 landAmenities = {
                     type: type,
                     fenced: fenced?.value ? fenced?.value : fenced,
@@ -497,10 +499,7 @@ const UpdateProperty = () => {
                 }
                 console.log('Land');
                 break;
-            case 'Building':
-                console.log('Building');
-                break;
-            case 'Garage':
+            case 'garage':
                 garageAmenities = {
                     unit: unit,
                     wide: wide,
@@ -509,10 +508,6 @@ const UpdateProperty = () => {
                     otherAmenities: {}
                 }
                 console.log('Garage');
-                break;
-            case 'Home':
-                homeAmenities = {}
-                console.log('Home');
                 break;
             default:
             //   text = "Looking forward to the Weekend";
@@ -539,7 +534,7 @@ const UpdateProperty = () => {
             formData.append('photos', selectedImages[i])
         }
         formData.append('videos ', video)
-        // formData.append('tours ', '[]')
+        formData.append('tours ', '[]')
         for (var pair of formData.entries()) {
             console.log(pair[0] + ' - ' + pair[1]);
         }
@@ -559,7 +554,8 @@ const UpdateProperty = () => {
                     // setFormLoader(false)
                     toast.success('Property Successfully uploaded.',
                         { position: toast.POSITION.BOTTOM_RIGHT })
-                    window.location.reload(false);
+                    
+                        navigate('/user-properties')
                 }
             })
             .catch((error) => {
@@ -665,9 +661,9 @@ const UpdateProperty = () => {
                                                                 placeholder='Enter title'
                                                                 onChange={(e) => {
                                                                     setTitle(e.target.value)
-                                                                    console.log(title);
                                                                 }}
                                                                 defaultValue={title}
+                                                                required
                                                             />
                                                         </div>
                                                     </div>
@@ -684,7 +680,6 @@ const UpdateProperty = () => {
                                                                 onChange={(e) => { setPricee(e.target.value) }}
                                                                 defaultValue={pricee}
                                                                 required
-                                                                data-required-message="price is Required!"
                                                             />
                                                         </div>
                                                     </div>
@@ -700,6 +695,7 @@ const UpdateProperty = () => {
                                                                 placeholder='Enter area in square yard'
                                                                 onChange={(e) => { setDate(e.target.value) }}
                                                                 defaultValue={date}
+                                                                required
                                                             />
                                                         </div>
                                                     </div>
@@ -715,6 +711,7 @@ const UpdateProperty = () => {
                                                                 placeholder='Enter area in square yard'
                                                                 onChange={(e) => { setAreaa(e.target.value) }}
                                                                 defaultValue={areaa}
+                                                                required
                                                             />
                                                         </div>
                                                     </div>
@@ -735,10 +732,11 @@ const UpdateProperty = () => {
                                                                 placeholder='Enter drscription'
                                                                 onChange={(e) => { setDescription(e.target.value) }}
                                                                 defaultValue={description}
+                                                                required
                                                             />
                                                         </div>
                                                     </div>
-                                                    {(propertyType?.value === 'home' || propertyType?.value === 'newHome') &&
+                                                    {(propertyType?.value === 'home' && propertyType?.value === 'newHome') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Room</label>
                                                             <div className='password-filed'>
@@ -751,6 +749,7 @@ const UpdateProperty = () => {
                                                                     placeholder='Enter number of rooms'
                                                                     onChange={(e) => { setRoom(e.target.value) }}
                                                                     defaultValue={room}
+                                                                    required
                                                                 />
                                                             </div>
                                                         </div>
@@ -766,69 +765,64 @@ const UpdateProperty = () => {
                                                     {(propertyType?.value !== 'garage' && propertyType?.value !== 'land') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Security</label>
-                                                            <Dropdown options={securityOptions} onChange={(e) => { setSecurity(e) }} value={security?.label} placeholder="Select Security" />
+                                                            <Dropdown options={securityOptions} onChange={(e) => { setSecurity(e) }} value={security?.label ? security?.label : security} placeholder="Select Security" />
                                                         </div>
                                                     }
 
                                                     {(propertyType?.value !== 'Office' && propertyType?.value !== 'Building' && propertyType?.value !== 'Garage' && propertyType?.value !== 'Commercial properties') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Elevator</label>
-                                                            <Dropdown options={elevatorOptions} onChange={(e) => { setElevator(e) }} value={elevator?.label} placeholder="Select area unit" />
+                                                            <Dropdown options={elevatorOptions} onChange={(e) => { setElevator(e) }} value={elevator?.label ? elevator?.label : elevator} placeholder="Select area unit" />
                                                         </div>}
 
-                                                        {(propertyType?.value !== 'garage' && propertyType?.value !== 'land') &&
+                                                    {(propertyType?.value !== 'garage' && propertyType?.value !== 'land') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Parking</label>
-                                                            <Dropdown options={parkingOptions} onChange={(e) => { setParking(e) }} value={parking?.label} placeholder="Select parking" />
+                                                            <Dropdown options={parkingOptions} onChange={(e) => { setParking(e) }} value={parking?.label ? parking?.label : parking} placeholder="Select parking" />
 
                                                         </div>
                                                     }
-                                                    {(propertyType !== 'Garage' && propertyType !== 'Commercial properties' && propertyType !== 'Office' && propertyType !== 'Land') &&
+                                                    {(propertyType?.value !== 'garage' && propertyType?.value !== 'land') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Air conditioning</label>
-                                                            <Dropdown options={airConditioningOptions} onChange={(e) => { setAirConditioning(e) }} value={airConditioning?.label} placeholder="Select gerage" />
+                                                            <Dropdown options={airConditioningOptions} onChange={(e) => { setAirConditioning(e) }} value={airConditioning?.label ? airConditioning.label : airConditioning} placeholder="Select gerage" />
 
                                                         </div>
                                                     }
 
-                                                    {(propertyType === 'Garage') &&
+                                                    {(propertyType?.value !== 'garage' && propertyType?.value !== 'land') &&
+                                                        <div className="col-lg-4 mt-4">
+                                                            <label>Balcony</label>
+                                                            <Dropdown options={balconyOptions} onChange={(e) => { setBalcony(e) }} value={balcony?.label ? balcony?.label : balcony} placeholder="Select balcony" />
+
+                                                        </div>
+                                                    }
+
+                                                    {(propertyType?.value !== 'garage' && propertyType?.value !== 'land') &&
+                                                        <div className="col-lg-4 mt-4">
+                                                            <label>Furnished</label>
+                                                            <Dropdown options={furnishedOptions} onChange={(e) => { setFurnished(e) }} value={furnished?.label ? furnished?.label : furnished} placeholder="Select furnished" />
+
+                                                        </div>
+                                                    }
+
+                                                    {/* {(propertyType === 'Garage') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Deck</label>
                                                             <Dropdown options={deckrOptions} onChange={(e) => { setDeck(e) }} value={deck?.label} placeholder="Select deck" />
                                                         </div>
-                                                    }
-                                                    {(propertyType === 'Office' || propertyType === 'Building' || propertyType === 'Garage' || propertyType === 'Commercial properties') &&
-                                                        <div className="col-lg-4 mt-4">
-                                                            <label>Elevetor</label>
-                                                            <Dropdown options={elevetorOptions} onChange={(e) => { setElevetor(e) }} value={elevetor?.label} placeholder="Select elevetor" />
-                                                        </div>
-                                                    }
-                                                    
-                                                    
-                                                    {(propertyType !== 'Garage' && propertyType !== 'Commercial properties' && propertyType !== 'Office' && propertyType !== 'Land') &&
-                                                        <div className="col-lg-4 mt-4">
-                                                            <label>Balcony</label>
-                                                            <Dropdown options={balconyOptions} onChange={(e) => { setBalcony(e) }} value={balcony?.label} placeholder="Select balcony" />
+                                                    } */}
 
-                                                        </div>
-                                                    }
-                                                    {(propertyType !== 'Garage' && propertyType !== 'Commercial properties' && propertyType !== 'Land') &&
-                                                        <div className="col-lg-4 mt-4">
-                                                            <label>Furnished</label>
-                                                            <Dropdown options={furnishedOptions} onChange={(e) => { setFurnished(e) }} value={furnished?.label} placeholder="Select furnished" />
-
-                                                        </div>
-                                                    }
-                                                    {(propertyType === 'Land') &&
+                                                    {(propertyType?.value === 'land') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>fenced</label>
-                                                            <Dropdown options={fencedOptions} onChange={(e) => { setFurnished(e) }} value={fenced?.label} placeholder="Select fenced" />
+                                                            <Dropdown options={fencedOptions} onChange={(e) => { setFurnished(e) }} value={fenced?.label ? fenced?.label : fenced} placeholder="Select fenced" />
 
                                                         </div>
                                                     }
-                                                    {(propertyType === 'Land') &&
+                                                    {(propertyType?.value === 'land') &&
                                                         <div className="col-lg-4 mt-4">
-                                                            <label>Type</label>
+                                                            <label>Land Type</label>
                                                             <div className='password-filed'>
                                                                 <input
                                                                     type='text'
@@ -840,11 +834,13 @@ const UpdateProperty = () => {
                                                                     placeholder='Enter unit'
                                                                     onChange={(e) => { setType(e.target.value) }}
                                                                     defaultValue={type}
+                                                                    required
                                                                 />
                                                             </div>
                                                         </div>
                                                     }
-                                                    {(propertyType === 'Garage') &&
+
+                                                    {(propertyType?.value === 'garage') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Unit</label>
                                                             <div className='password-filed'>
@@ -858,11 +854,12 @@ const UpdateProperty = () => {
                                                                     placeholder='Enter unit'
                                                                     onChange={(e) => { setUnit(e.target.value) }}
                                                                     defaultValue={unit}
+                                                                    required
                                                                 />
                                                             </div>
                                                         </div>
                                                     }
-                                                    {(propertyType === 'Garage') &&
+                                                    {(propertyType?.value === 'garage') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Wide</label>
                                                             <div className='password-filed'>
@@ -876,11 +873,12 @@ const UpdateProperty = () => {
                                                                     placeholder='Enter unit'
                                                                     onChange={(e) => { setWide(e.target.value) }}
                                                                     defaultValue={wide}
+                                                                    required
                                                                 />
                                                             </div>
                                                         </div>
                                                     }
-                                                    {(propertyType === 'Garage') &&
+                                                    {(propertyType?.value === 'garage') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Long</label>
                                                             <div className='password-filed'>
@@ -894,11 +892,12 @@ const UpdateProperty = () => {
                                                                     placeholder='Enter unit'
                                                                     onChange={(e) => { setLong(e.target.value) }}
                                                                     defaultValue={long}
+                                                                    required
                                                                 />
                                                             </div>
                                                         </div>
                                                     }
-                                                    {(propertyType === 'Garage') &&
+                                                    {(propertyType?.value === 'garage') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Height</label>
                                                             <div className='password-filed'>
@@ -912,17 +911,14 @@ const UpdateProperty = () => {
                                                                     placeholder='Enter unit'
                                                                     onChange={(e) => { setheight(e.target.value) }}
                                                                     defaultValue={height}
+                                                                    required
                                                                 />
                                                             </div>
                                                         </div>
                                                     }
 
 
-
-
-
-
-                                                    {(propertyType !== 'Commercial properties' && propertyType !== 'Land') &&
+                                                    {(propertyType?.value !== 'garage' && propertyType?.value !== 'land') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label> kitchen</label>
                                                             <div className='password-fil'>
@@ -935,11 +931,12 @@ const UpdateProperty = () => {
                                                                     placeholder='Enter number of Kitchen'
                                                                     onChange={(e) => { setKitchen(e.target.value) }}
                                                                     defaultValue={kitchen}
+                                                                    required
                                                                 />
                                                             </div>
                                                         </div>
                                                     }
-                                                    {(propertyType === 'land') &&
+                                                    {(propertyType?.value === 'land') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label> Land Type</label>
                                                             <div className='password-fil'>
@@ -952,11 +949,12 @@ const UpdateProperty = () => {
                                                                     placeholder='Enterland type'
                                                                     onChange={(e) => { setLandType(e.target.value) }}
                                                                     defaultValue={landType}
+                                                                    required
                                                                 />
                                                             </div>
                                                         </div>
                                                     }
-                                                    {(propertyType !== 'Office' && propertyType !== 'Land' && propertyType !== 'Building' && propertyType !== 'Garage') &&
+                                                    {(propertyType?.value !== 'land' && propertyType?.value !== 'garage') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Bath</label>
                                                             <div className='password-filed'>
@@ -969,11 +967,12 @@ const UpdateProperty = () => {
                                                                     placeholder='Enter number of bath'
                                                                     onChange={(e) => { setBath(e.target.value) }}
                                                                     defaultValue={bath}
+                                                                    required
                                                                 />
                                                             </div>
                                                         </div>
                                                     }
-                                                    {(propertyType === 'Home' || propertyType === 'New home') &&
+                                                    {(propertyType?.value === 'home' || propertyType?.value === 'newHome') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Living Room</label>
                                                             <div className='password-filed'>
@@ -986,11 +985,12 @@ const UpdateProperty = () => {
                                                                     placeholder='Enter number of living rooms'
                                                                     onChange={(e) => { setLivingRoom(e.target.value) }}
                                                                     defaultValue={livingRoom}
+                                                                    required
                                                                 />
                                                             </div>
                                                         </div>
                                                     }
-                                                    {(propertyType === 'Office' || propertyType === 'Building') &&
+                                                    {/* {(propertyType === 'Office' || propertyType === 'Building') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Washrooms</label>
                                                             <div className='password-filed'>
@@ -1004,8 +1004,8 @@ const UpdateProperty = () => {
                                                                 />
                                                             </div>
                                                         </div>
-                                                    }
-                                                    {(propertyType === 'Building') &&
+                                                    } */}
+                                                    {/* {(propertyType === 'Building') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Building number</label>
                                                             <div className='password-filed'>
@@ -1019,8 +1019,8 @@ const UpdateProperty = () => {
                                                                 />
                                                             </div>
                                                         </div>
-                                                    }
-                                                    {(propertyType === 'Building') &&
+                                                    } */}
+                                                    {(propertyType?.value === 'building' || propertyType?.value === 'room' || propertyType?.value === 'commercialProperties' || propertyType?.value === 'office') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Floor number</label>
                                                             <div className='password-filed'>
@@ -1031,11 +1031,12 @@ const UpdateProperty = () => {
                                                                     placeholder='Enter floor number'
                                                                     onChange={(e) => { setFloorNumber(e.target.value) }}
                                                                     defaultValue={floorNumber}
+                                                                    required
                                                                 />
                                                             </div>
                                                         </div>
                                                     }
-                                                    {(propertyType === 'Building') &&
+                                                    {/* {(propertyType === 'Building') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Flat number</label>
                                                             <div className='password-filed'>
@@ -1049,8 +1050,8 @@ const UpdateProperty = () => {
                                                                 />
                                                             </div>
                                                         </div>
-                                                    }
-                                                    {(propertyType === 'New home' || propertyType === 'Office' || propertyType === 'Home') &&
+                                                    } */}
+                                                    {(propertyType?.value === 'newHome' || propertyType?.value === 'home') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label> Total floors</label>
                                                             <div className='password-filed'>
@@ -1063,55 +1064,11 @@ const UpdateProperty = () => {
                                                                     placeholder='Enter total numner of floors'
                                                                     onChange={(e) => { setTotalFloors(e.target.value) }}
                                                                     defaultValue={totalFloors}
+                                                                    required
                                                                 />
                                                             </div>
                                                         </div>
                                                     }
-                                                    <div className="col-lg-4 mt-4">
-                                                        <label>Location</label>
-                                                        <div className='password-filed'>
-                                                            <input
-                                                                type='Text'
-                                                                className="input"
-                                                                autoComplete='off'
-                                                                name='confirmNewPassword'
-                                                                id='confirmNewPassword'
-                                                                placeholder='Enter Location'
-                                                                onChange={(e) => { setPinLocation(e.target.value) }}
-                                                                defaultValue={pinLocation}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-4 mt-4">
-                                                        <label>Contact number</label>
-                                                        <div className='password-filed'>
-                                                            <input
-                                                                type='number'
-                                                                className="input"
-                                                                autoComplete='off'
-                                                                name='confirmNewPassword'
-                                                                id='confirmNewPassword'
-                                                                placeholder='Enter number'
-                                                                onChange={(e) => { setNumber(e.target.value) }}
-                                                                defaultValue={number}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-4 mt-4">
-                                                        <label>Street number</label>
-                                                        <div className='password-filed'>
-                                                            <input
-                                                                type='number'
-                                                                className="input"
-                                                                autoComplete='off'
-                                                                name='confirmNewPassword'
-                                                                id='confirmNewPassword'
-                                                                placeholder='Enter street number'
-                                                                onChange={(e) => { setStreetNumber(e.target.value) }}
-                                                                defaultValue={streetNumber}
-                                                            />
-                                                        </div>
-                                                    </div>
 
                                                     <div className="col-lg-12 mt-4">
                                                         <label>Other features </label>
@@ -1141,6 +1098,7 @@ const UpdateProperty = () => {
                                                     </div>
 
 
+
                                                     <div className="col-lg-12 mt-4">
                                                         <label>Address</label>
                                                         <div className='password-filed'>
@@ -1154,6 +1112,7 @@ const UpdateProperty = () => {
                                                                 placeholder='Enter address'
                                                                 onChange={(e) => { setAddress(e.target.value) }}
                                                                 defaultValue={address}
+                                                                required
                                                             />
                                                         </div>
                                                     </div>
@@ -1170,6 +1129,7 @@ const UpdateProperty = () => {
                                                                 placeholder='Enter postal code'
                                                                 onChange={(e) => { setPostalCode(e.target.value) }}
                                                                 defaultValue={postalCode}
+                                                                required
                                                             />
                                                         </div>
                                                     </div>
@@ -1186,6 +1146,7 @@ const UpdateProperty = () => {
                                                                 placeholder='Enter city'
                                                                 onChange={(e) => { setCity(e.target.value) }}
                                                                 defaultValue={city}
+                                                                required
                                                             />
                                                         </div>
                                                     </div>
@@ -1202,6 +1163,7 @@ const UpdateProperty = () => {
                                                                 placeholder='Enter country'
                                                                 onChange={(e) => { setCountry(e.target.value) }}
                                                                 defaultValue={country}
+                                                                required
                                                             />
                                                         </div>
                                                     </div>
@@ -1218,12 +1180,60 @@ const UpdateProperty = () => {
                                                                 placeholder='Enter area'
                                                                 onChange={(e) => { setAreaLocation(e.target.value) }}
                                                                 defaultValue={areaLocation}
+                                                                required
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div className="col-lg-4 mt-4">
+                                                        <label>Location</label>
+                                                        <div className='password-filed'>
+                                                            <input
+                                                                type='Text'
+                                                                className="input"
+                                                                autoComplete='off'
+                                                                name='confirmNewPassword'
+                                                                id='confirmNewPassword'
+                                                                placeholder='Enter Location'
+                                                                onChange={(e) => { setPinLocation(e.target.value) }}
+                                                                defaultValue={pinLocation}
+                                                                required
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    {/* <div className="col-lg-4 mt-4">
+                                                        <label>Contact number</label>
+                                                        <div className='password-filed'>
+                                                            <input
+                                                                type='number'
+                                                                className="input"
+                                                                autoComplete='off'
+                                                                name='confirmNewPassword'
+                                                                id='confirmNewPassword'
+                                                                placeholder='Enter number'
+                                                                onChange={(e) => { setNumber(e.target.value) }}
+                                                                defaultValue={number}
+                                                            />
+                                                        </div>
+                                                    </div> */}
+                                                    <div className="col-lg-4 mt-4">
+                                                        <label>Street number</label>
+                                                        <div className='password-filed'>
+                                                            <input
+                                                                type='number'
+                                                                className="input"
+                                                                autoComplete='off'
+                                                                name='confirmNewPassword'
+                                                                id='confirmNewPassword'
+                                                                placeholder='Enter street number'
+                                                                onChange={(e) => { setStreetNumber(e.target.value) }}
+                                                                defaultValue={streetNumber}
+                                                                required
                                                             />
                                                         </div>
                                                     </div>
                                                     <div className="col-lg-4 mt-4">
                                                         <label>Property Status</label>
-                                                        <Dropdown options={statusOptions} onChange={(e) => { setPropertyStatus(e.value) }} value={propertyStatus} />
+                                                        <Dropdown options={statusOptions} onChange={(e) => { setPropertyStatus(e.value) }} value={propertyStatus?.label ? propertyStatus.label : propertyStatus} />
 
                                                     </div>
                                                     <div className="col-lg-12 mt-4">
@@ -1286,7 +1296,7 @@ const UpdateProperty = () => {
                                                             }
 
                                                             <label>
-                                                                Add Floor Map
+                                                                Add Tour
                                                                 <input
                                                                     type="file"
                                                                     name="images"
