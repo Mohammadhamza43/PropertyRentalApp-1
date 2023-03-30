@@ -126,7 +126,7 @@ const UserProperty = () => {
                                             </div>
                                         )
                                     }))
-                                    : (<p className="mx-auto h4">No records to show</p>)
+                                    : (<p className="no-property">No records to show</p>)
                                 }
                             </div>
                             {/* <div className="row mt-5">
