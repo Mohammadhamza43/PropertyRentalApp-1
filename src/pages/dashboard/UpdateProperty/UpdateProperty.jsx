@@ -27,7 +27,7 @@ const UpdateProperty = () => {
     { value: 'land', label: 'Land' },
     { value: 'building', label: 'Building' },
     { value: 'garage', label: 'Garage' },
-    { value: 'garage', label: 'Garage' },
+    // { value: 'garage', label: 'Garage' },
     { value: 'commercialProperties', label: 'Commercial Properties' },
     { value: 'home', label: 'Home' },
     ]
@@ -97,7 +97,7 @@ const UpdateProperty = () => {
 
 
 
-    const getPropertyList = async () => {
+    /*const getPropertyList = async () => {
         const response = await fetch('https://walrus-app-ovpy2.ondigitalocean.app/property/user', {
 
             method: "GET",
@@ -124,14 +124,14 @@ const UpdateProperty = () => {
             setAdvertising(selectedProperty.purpose)
             setAreaa(selectedProperty.area.value)
             setAreaUnit(selectedProperty.area.unit)
-            setAdvertising(selectedProperty.purpose)
+            // setAdvertising(selectedProperty.purpose)
             setSelectedImages(selectedProperty.photos)
             setVideo(selectedProperty.video)
             setCountry(selectedProperty.location.country)
             setCity(selectedProperty.location.city)
             setAddress(selectedProperty.location.address)
             setAreaLocation(selectedProperty.location.areaLocation)
-            setStreetNumber(selectedProperty.location.streetNo)
+            setStreetNumber(selectedProperty.location.streetNumber)
             setPinLocation(selectedProperty.location.pinLocation)
             setPostalCode(selectedProperty.location.postalCode)
             setDescription(selectedProperty.description)
@@ -199,9 +199,9 @@ const UpdateProperty = () => {
             }
             // patchProperty(selectedProperty);
         }
-    }
+    }*/
 
-    const patchProperty = (x) => {
+    /*const patchProperty = (x) => {
         //   console.log(x);
         if (x) {
 
@@ -287,7 +287,7 @@ const UpdateProperty = () => {
             }
         }
 
-    }
+    }*/
 
     useEffect(() => {
 
@@ -335,66 +335,69 @@ const UpdateProperty = () => {
                     setAdvertising(selectedProperty.purpose)
                     setAreaa(selectedProperty.area.value)
                     setAreaUnit(selectedProperty.area.unit)
-                    setAdvertising(selectedProperty.purpose)
+                    // setAdvertising(selectedProperty.purpose)
                     setSelectedImages(selectedProperty.photos)
                     setVideo(selectedProperty.video)
                     setCountry(selectedProperty.location.country)
                     setCity(selectedProperty.location.city)
                     setAddress(selectedProperty.location.address)
                     setAreaLocation(selectedProperty.location.areaLocation)
-                    setStreetNumber(selectedProperty.location.streetNo)
+                    setStreetNumber(selectedProperty.location.streetNumber)
                     setPinLocation(selectedProperty.location.pinLocation)
                     setPostalCode(selectedProperty.location.postalCode)
+                    setDescription(selectedProperty.description)
 
                     if (selectedProperty.type === 'newHome') {
                         setRoom(selectedProperty.newHomeAmenities.rooms)
                         setKitchen(selectedProperty.newHomeAmenities.kitchen)
                         setBath(selectedProperty.newHomeAmenities.bath)
                         setLivingRoom(selectedProperty.newHomeAmenities.livingRoom)
-                        setParking(selectedProperty.newHomeAmenities.parking)
-                        setAirConditioning(selectedProperty.newHomeAmenities.airConditioning)
-                        setBalcony(selectedProperty.newHomeAmenities.balcony)
-                        setWindow(selectedProperty.newHomeAmenities.window)
-                        setFurnished(selectedProperty.newHomeAmenities.furnished)
+                        setParking(selectedProperty.newHomeAmenities.parking ? 'Yes' : 'No')
+                        setAirConditioning(selectedProperty.newHomeAmenities.airConditioning ? 'Yes' : 'No')
+                        setBalcony(selectedProperty.newHomeAmenities.balcony ? 'Yes' : 'No')
+                        setWindow(selectedProperty.newHomeAmenities.window ? 'Yes' : 'No')
+                        setFurnished(selectedProperty.newHomeAmenities.furnished ? 'Yes' : 'No')
                         setTotalFloors(selectedProperty.newHomeAmenities.floors)
-                        setSecurity(selectedProperty.newHomeAmenities.security)
-                        setElevator(selectedProperty.newHomeAmenities.elevator)
+                        setSecurity(selectedProperty.newHomeAmenities.security ? 'Yes' : 'No')
+                        setElevator(selectedProperty.newHomeAmenities.elevator ? 'Yes' : 'No')
                     }
                     if (selectedProperty.type === 'home') {
                         setRoom(selectedProperty.homeAmenities.rooms)
                         setKitchen(selectedProperty.homeAmenities.kitchen)
                         setBath(selectedProperty.homeAmenities.bath)
                         setLivingRoom(selectedProperty.homeAmenities.livingRoom)
-                        setParking(selectedProperty.homeAmenities.parking)
-                        setAirConditioning(selectedProperty.homeAmenities.airConditioning)
-                        setBalcony(selectedProperty.homeAmenities.balcony)
-                        setWindow(selectedProperty.homeAmenities.window)
-                        setFurnished(selectedProperty.homeAmenities.furnished)
+                        setParking(selectedProperty.homeAmenities.parking ? 'Yes' : 'No')
+                        setAirConditioning(selectedProperty.homeAmenities.airConditioning ? 'Yes' : 'No')
+                        setBalcony(selectedProperty.homeAmenities.balcony ? 'Yes' : 'No')
+                        setWindow(selectedProperty.homeAmenities.window ? 'Yes' : 'No')
+                        setFurnished(selectedProperty.homeAmenities.furnished ? 'Yes' : 'No')
                         setTotalFloors(selectedProperty.homeAmenities.floors)
-                        setSecurity(selectedProperty.homeAmenities.security)
-                        setElevator(selectedProperty.homeAmenities.elevator)
+                        setSecurity(selectedProperty.homeAmenities.security ? 'Yes' : 'No')
+                        setElevator(selectedProperty.homeAmenities.elevator ? 'Yes' : 'No')
+                        setotherFeaturs(selectedProperty.otherAmenities)
                     }
                     else if (selectedProperty.type === 'room') {
                         setKitchen(selectedProperty.roomAmenities.kitchen)
                         setBath(selectedProperty.roomAmenities.bath)
-                        setParking(selectedProperty.roomAmenities.parking)
-                        setAirConditioning(selectedProperty.roomAmenities.airConditioning)
-                        setBalcony(selectedProperty.roomAmenities.balcony)
-                        setSecurity(selectedProperty.roomAmenities.security)
-                        setElevator(selectedProperty.roomAmenities.elevator)
-                        setWindow(selectedProperty.roomAmenities.window)
-                        setFurnished(selectedProperty.roomAmenities.furnished)
+                        setParking(selectedProperty.roomAmenities.parking ? 'Yes' : 'No')
+                        setAirConditioning(selectedProperty.roomAmenities.airConditioning ? 'Yes' : 'No')
+                        setBalcony(selectedProperty.roomAmenities.balcony ? 'Yes' : 'No')
+                        setSecurity(selectedProperty.roomAmenities.security ? 'Yes' : 'No')
+                        setElevator(selectedProperty.roomAmenities.elevator ? 'Yes' : 'No')
+                        setWindow(selectedProperty.roomAmenities.window ? 'Yes' : 'No')
+                        setFurnished(selectedProperty.roomAmenities.furnished ? 'Yes' : 'No')
                         setFlatNumber(selectedProperty.roomAmenities.floorNo)
+                        setotherFeaturs(selectedProperty.otherAmenities && selectedProperty.otherAmenities.length > 0 ? selectedProperty.otherAmenities : [{ name: '', value: '' }])
                     }
                     else if (selectedProperty.type === 'commercialProperties' || selectedProperty.type === 'Office' || selectedProperty.type === 'building') {
                         setKitchen(selectedProperty.commercialAmenities.kitchen)
                         setBath(selectedProperty.commercialAmenities.bath)
-                        setParking(selectedProperty.commercialAmenities.parking)
-                        setAirConditioning(selectedProperty.commercialAmenities.airConditioning)
-                        setSecurity(selectedProperty.commercialAmenities.security)
-                        setBalcony(selectedProperty.commercialAmenities.balcony)
-                        setWindow(selectedProperty.commercialAmenities.window)
-                        setFurnished(selectedProperty.commercialAmenities.furnished)
+                        setParking(selectedProperty.commercialAmenities.parking ? 'Yes' : 'No')
+                        setAirConditioning(selectedProperty.commercialAmenities.airConditioning ? 'Yes' : 'No')
+                        setSecurity(selectedProperty.commercialAmenities.security ? 'Yes' : 'No')
+                        setBalcony(selectedProperty.commercialAmenities.balcony ? 'Yes' : 'No')
+                        setWindow(selectedProperty.commercialAmenities.window ? 'Yes' : 'No')
+                        setFurnished(selectedProperty.commercialAmenities.furnished ? 'Yes' : 'No')
                         setFloorNumber(selectedProperty.commercialAmenities.floorNo)
                     }
                     else if (selectedProperty.type === 'garage') {
@@ -404,8 +407,9 @@ const UpdateProperty = () => {
                         setheight(selectedProperty.garageAmenities.height)
                     }
                     else if (selectedProperty.type === 'land') {
-                        setPropertyType(selectedProperty.garageAmenities.type)
-                        setFenced(selectedProperty.garageAmenities.fenced)
+                        setPropertyType(selectedProperty.type)
+                        setFenced(selectedProperty.landAmenities.fenced ? 'Yes' : 'No')
+                        setLandType(selectedProperty.landAmenities.type)
                     }
                 }
             })
@@ -457,7 +461,7 @@ const UpdateProperty = () => {
                     floors: totalFloors,
                     security: security?.value ? security?.value : security,
                     elevator: elevetor?.value ? elevetor?.value : elevetor,
-                    otherAmenities: {}
+                    otherAmenities: otherFeatuers ? [...otherFeatuers] : []
                 }
                 console.log(newHomeAmenities);
                 break;
@@ -473,7 +477,8 @@ const UpdateProperty = () => {
                     elevator: elevetor?.value ? elevetor?.value : elevetor,
                     furnished: furnished?.value ? furnished?.value : furnished,
                     floorNo: floorNumber,
-                    otherAmenities: {}
+                    otherAmenities: otherFeatuers ? [...otherFeatuers] : []
+
                 }
                 console.log(roomAmenities);
                 break;
@@ -488,14 +493,16 @@ const UpdateProperty = () => {
                     security: security?.value ? security?.value : security,
                     furnished: furnished?.value ? furnished?.value : furnished,
                     floorNo: floorNumber,
-                    otherAmenities: {}
+                    otherAmenities: otherFeatuers ? [...otherFeatuers] : []
+
                 }
                 break;
             case 'land':
                 landAmenities = {
                     type: type,
                     fenced: fenced?.value ? fenced?.value : fenced,
-                    otherAmenities: {}
+                    otherAmenities: otherFeatuers ? [...otherFeatuers] : []
+
                 }
                 console.log('Land');
                 break;
@@ -505,7 +512,8 @@ const UpdateProperty = () => {
                     wide: wide,
                     long: long,
                     height: height,
-                    otherAmenities: {}
+                    otherAmenities: otherFeatuers ? [...otherFeatuers] : []
+
                 }
                 console.log('Garage');
                 break;
@@ -554,7 +562,7 @@ const UpdateProperty = () => {
                     // setFormLoader(false)
                     toast.success('Property Successfully uploaded.',
                         { position: toast.POSITION.BOTTOM_RIGHT })
-                    
+
                         navigate('/user-properties')
                 }
             })
@@ -684,7 +692,7 @@ const UpdateProperty = () => {
                                                         </div>
                                                     </div>
                                                     <div className="col-lg-4 mt-4">
-                                                        <label>Date</label>
+                                                        <label>Available From</label>
                                                         <div className='password-filed'>
                                                             <input
                                                                 type='date'
@@ -692,7 +700,7 @@ const UpdateProperty = () => {
                                                                 autoComplete='off'
                                                                 name='date'
                                                                 id='date'
-                                                                placeholder='Enter area in square yard'
+                                                                placeholder='Enter Date'
                                                                 onChange={(e) => { setDate(e.target.value) }}
                                                                 defaultValue={date}
                                                                 required
@@ -762,7 +770,7 @@ const UpdateProperty = () => {
                                                         </div>}
 
 
-                                                    {(propertyType?.value !== 'garage' && propertyType?.value !== 'land') &&
+                                                    {(propertyType?.value !== 'propertytype' && propertyType?.value !== 'garage' && propertyType?.value !== 'land') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Security</label>
                                                             <Dropdown options={securityOptions} onChange={(e) => { setSecurity(e) }} value={security?.label ? security?.label : security} placeholder="Select Security" />
@@ -920,7 +928,7 @@ const UpdateProperty = () => {
 
                                                     {(propertyType?.value !== 'garage' && propertyType?.value !== 'land') &&
                                                         <div className="col-lg-4 mt-4">
-                                                            <label> kitchen</label>
+                                                            <label> Kitchen</label>
                                                             <div className='password-fil'>
                                                                 <input
                                                                     type='number'
@@ -946,7 +954,7 @@ const UpdateProperty = () => {
                                                                     autoComplete='off'
                                                                     name=''
                                                                     id=''
-                                                                    placeholder='Enterland type'
+                                                                    placeholder='Enter land type'
                                                                     onChange={(e) => { setLandType(e.target.value) }}
                                                                     defaultValue={landType}
                                                                     required
@@ -1076,11 +1084,10 @@ const UpdateProperty = () => {
                                                             {
                                                                 otherFeatuers.map((value, index) => {
                                                                     return (
-
                                                                         <div key={index}>
                                                                             <div id={index} className='add-feature mb-3'>
-                                                                                <input className='input' type="text" name='name' placeholder='Enter name' onChange={e => { updatefeature(e, index) }} />
-                                                                                <input className='input  ml-3' type="text" name='value' placeholder='Enter value' onChange={e => { updatefeature(e, index) }} />
+                                                                                <input defaultValue={value.name} className='input' type="text" name='name' placeholder='Enter name' onChange={e => { updatefeature(e, index) }} />
+                                                                                <input defaultValue={value.value} className='input  ml-3' type="text" name='value' placeholder='Enter value' onChange={e => { updatefeature(e, index) }} />
                                                                                 {otherFeatuers.length !== 1 &&
                                                                                     <button className='remove' type='text' onClick={() => { removelines(index) }}>Remove</button>
                                                                                 }
@@ -1089,11 +1096,9 @@ const UpdateProperty = () => {
                                                                                 <button className='button mt-4' type='text' onClick={addlines}>Add Feature</button>
                                                                             }
                                                                         </div>
-
-
-
                                                                     )
-                                                                })}
+                                                                })
+                                                            }
                                                         </div>
                                                     </div>
 
@@ -1167,7 +1172,7 @@ const UpdateProperty = () => {
                                                             />
                                                         </div>
                                                     </div>
-                                                    <div className="col-lg-4 mt-4">
+                                                    {/*<div className="col-lg-4 mt-4">
                                                         <label>Area</label>
                                                         <div className='password-filed'>
                                                             <input
@@ -1183,8 +1188,8 @@ const UpdateProperty = () => {
                                                                 required
                                                             />
                                                         </div>
-                                                    </div>
-                                                    <div className="col-lg-4 mt-4">
+                                                    </div>*/}
+                                                    {/*<div className="col-lg-4 mt-4">
                                                         <label>Location</label>
                                                         <div className='password-filed'>
                                                             <input
@@ -1199,7 +1204,7 @@ const UpdateProperty = () => {
                                                                 required
                                                             />
                                                         </div>
-                                                    </div>
+                                                    </div>*/}
                                                     {/* <div className="col-lg-4 mt-4">
                                                         <label>Contact number</label>
                                                         <div className='password-filed'>
