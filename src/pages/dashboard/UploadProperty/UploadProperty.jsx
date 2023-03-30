@@ -119,7 +119,7 @@ const UploadProperty = () => {
                     floors: totalFloors,
                     security: security.value,
                     elevator: elevetor.value,
-                    otherAmenities: { otherFeatuers }
+                    otherAmenities: [...otherFeatuers]
                 }
                 console.log(newHomeAmenities);
                 break;
@@ -135,7 +135,7 @@ const UploadProperty = () => {
                     window: window.value,
                     furnished: furnished.value,
                     floorNo: floorNumber,
-                    otherAmenities: { otherFeatuers }
+                    otherAmenities: [...otherFeatuers]
                 }
                 break;
             case 'office' || 'commercialProperties' || 'building':
@@ -149,14 +149,14 @@ const UploadProperty = () => {
                     window: window.value,
                     furnished: furnished.value,
                     floorNo: floorNumber,
-                    otherAmenities: { otherFeatuers }
+                    otherAmenities: [...otherFeatuers]
                 }
                 break;
             case 'land':
                 landAmenities = {
                     type: type,
                     fenced: fenced.value,
-                    otherAmenities: { otherFeatuers }
+                    otherAmenities: [...otherFeatuers]
                 }
                 break;
             case 'garage':
@@ -165,7 +165,7 @@ const UploadProperty = () => {
                     wide: wide,
                     long: long,
                     height: height,
-                    otherAmenities: { otherFeatuers }
+                    otherAmenities: [...otherFeatuers]
                 }
                 break;
 
@@ -206,7 +206,7 @@ const UploadProperty = () => {
             return(
                 toast.success('Image is required.',
                     { position: toast.POSITION.BOTTOM_RIGHT })
-                   
+
             )
         }
         await fetch('https://walrus-app-ovpy2.ondigitalocean.app/property', {
@@ -393,7 +393,7 @@ const UploadProperty = () => {
                                                         </div>
                                                     </div>
                                                     <div className="col-lg-4 mt-4">
-                                                        <label>Date</label>
+                                                        <label>Available From</label>
                                                         <div className='password-filed'>
                                                             <input
                                                                 type='date'
@@ -417,7 +417,7 @@ const UploadProperty = () => {
                                                                 autoComplete='off'
                                                                 name='confirmNewPassword'
                                                                 id='confirmNewPassword'
-                                                                placeholder='Enter area in square yard'
+                                                                placeholder='Enter area'
                                                                 onChange={(e) => { setAreaa(e.target.value) }}
                                                                 value={areaa}
                                                                 required
@@ -858,7 +858,7 @@ const UploadProperty = () => {
                                                             />
                                                         </div>
                                                     </div>
-                                                    <div className="col-lg-4 mt-4">
+                                                    {/*<div className="col-lg-4 mt-4">
                                                         <label>Area</label>
                                                         <div className='password-filed'>
                                                             <input
@@ -874,7 +874,7 @@ const UploadProperty = () => {
                                                                 required
                                                             />
                                                         </div>
-                                                    </div>
+                                                    </div>*/}
                                                     <div className="col-lg-4 mt-4">
                                                         <label>Property Status</label>
                                                         <Dropdown options={statusOptions} onChange={(e) => { setPropertyStatus(e.value) }} value={propertyStatus} />
@@ -896,7 +896,7 @@ const UploadProperty = () => {
                                                             />
                                                         </div>
                                                     </div>
-                                                    <div className="col-lg-4 mt-4">
+                                                    {/*<div className="col-lg-4 mt-4">
                                                         <label>Location</label>
                                                         <div className='password-filed'>
                                                             <input
@@ -911,7 +911,7 @@ const UploadProperty = () => {
                                                                 required
                                                             />
                                                         </div>
-                                                    </div>
+                                                    </div>*/}
                                                     <div className="col-lg-12 mt-4">
                                                         <div className='uploadimage-section'>
                                                             <div className="images">
