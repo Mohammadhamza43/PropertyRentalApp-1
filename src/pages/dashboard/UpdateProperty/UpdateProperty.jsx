@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import { toast, ToastContainer } from 'react-toastify';
@@ -27,7 +27,6 @@ const UpdateProperty = () => {
     { value: 'land', label: 'Land' },
     { value: 'building', label: 'Building' },
     { value: 'garage', label: 'Garage' },
-    // { value: 'garage', label: 'Garage' },
     { value: 'commercialProperties', label: 'Commercial Properties' },
     { value: 'home', label: 'Home' },
     ]
@@ -97,198 +96,7 @@ const UpdateProperty = () => {
 
 
 
-    /*const getPropertyList = async () => {
-        const response = await fetch('https://walrus-app-ovpy2.ondigitalocean.app/property/user', {
-
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-                "AUTHORIZATION": `BEARER ${token}`
-            }
-        })
-
-        const data = await response.json()
-        console.log({ data });
-        setList(data.data)
-        setId(query.get('id'))
-        console.log({ list });
-        const selectedProperty = data.data.find(x => x._id == id);
-        console.log({ selectedProperty });
-        if (selectedProperty) {
-            console.log(selectedProperty);
-            setPropertyType(selectedProperty.type)
-            setTitle(selectedProperty.title)
-            setDate(selectedProperty.availableFrom)
-            setPricee(selectedProperty.price)
-            setAdvertising(selectedProperty.purpose)
-            setAreaa(selectedProperty.area.value)
-            setAreaUnit(selectedProperty.area.unit)
-            // setAdvertising(selectedProperty.purpose)
-            setSelectedImages(selectedProperty.photos)
-            setVideo(selectedProperty.video)
-            setCountry(selectedProperty.location.country)
-            setCity(selectedProperty.location.city)
-            setAddress(selectedProperty.location.address)
-            setAreaLocation(selectedProperty.location.areaLocation)
-            setStreetNumber(selectedProperty.location.streetNumber)
-            setPinLocation(selectedProperty.location.pinLocation)
-            setPostalCode(selectedProperty.location.postalCode)
-            setDescription(selectedProperty.description)
-
-            if (propertyType === 'newHome') {
-                setRoom(selectedProperty.newHomeAmenities.rooms)
-                setKitchen(selectedProperty.newHomeAmenities.kitchen)
-                setBath(selectedProperty.newHomeAmenities.bath)
-                setLivingRoom(selectedProperty.newHomeAmenities.livingRoom)
-                setParking(selectedProperty.newHomeAmenities.parking)
-                setAirConditioning(selectedProperty.newHomeAmenities.airConditioning)
-                setBalcony(selectedProperty.newHomeAmenities.balcony)
-                setWindow(selectedProperty.newHomeAmenities.window)
-                setFurnished(selectedProperty.newHomeAmenities.furnished)
-                setTotalFloors(selectedProperty.newHomeAmenities.floors)
-                setSecurity(selectedProperty.newHomeAmenities.security)
-                setElevator(selectedProperty.newHomeAmenities.elevator)
-            }
-            if (propertyType === 'home') {
-                setRoom(selectedProperty.homeAmenities.rooms)
-                setKitchen(selectedProperty.homeAmenities.kitchen)
-                setBath(selectedProperty.homeAmenities.bath)
-                setLivingRoom(selectedProperty.homeAmenities.livingRoom)
-                setParking(selectedProperty.homeAmenities.parking)
-                setAirConditioning(selectedProperty.homeAmenities.airConditioning)
-                setBalcony(selectedProperty.homeAmenities.balcony)
-                setWindow(selectedProperty.homeAmenities.window)
-                setFurnished(selectedProperty.homeAmenities.furnished)
-                setTotalFloors(selectedProperty.homeAmenities.floors)
-                setSecurity(selectedProperty.homeAmenities.security)
-                setElevator(selectedProperty.homeAmenities.elevator)
-            }
-            else if (propertyType === 'room') {
-                setKitchen(selectedProperty.roomAmenities.kitchen)
-                setBath(selectedProperty.roomAmenities.bath)
-                setParking(selectedProperty.roomAmenities.parking)
-                setAirConditioning(selectedProperty.roomAmenities.airConditioning)
-                setBalcony(selectedProperty.roomAmenities.balcony)
-                setSecurity(selectedProperty.roomAmenities.security)
-                setElevator(selectedProperty.roomAmenities.elevator)
-                setWindow(selectedProperty.roomAmenities.window)
-                setFurnished(selectedProperty.roomAmenities.furnished)
-                setFlatNumber(selectedProperty.roomAmenities.floorNo)
-            }
-            else if (propertyType === 'commercialProperties' || propertyType === 'Office') {
-                setKitchen(selectedProperty.commercialAmenities.kitchen)
-                setBath(selectedProperty.commercialAmenities.bath)
-                setParking(selectedProperty.commercialAmenities.parking)
-                setAirConditioning(selectedProperty.commercialAmenities.airConditioning)
-                setSecurity(selectedProperty.commercialAmenities.security)
-                setBalcony(selectedProperty.commercialAmenities.balcony)
-                setWindow(selectedProperty.commercialAmenities.window)
-                setFurnished(selectedProperty.commercialAmenities.furnished)
-                setFloorNumber(selectedProperty.commercialAmenities.floorNo)
-            }
-            else if (propertyType === 'garage') {
-                setUnit(selectedProperty.garageAmenities.unit)
-                setWide(selectedProperty.garageAmenities.wide)
-                setLong(selectedProperty.garageAmenities.long)
-                setheight(selectedProperty.garageAmenities.height)
-            }
-            else if (propertyType === 'land') {
-                setPropertyType(selectedProperty.landAmenities.type)
-                setFenced(selectedProperty.landAmenities.fenced)
-            }
-            // patchProperty(selectedProperty);
-        }
-    }*/
-
-    /*const patchProperty = (x) => {
-        //   console.log(x);
-        if (x) {
-
-            setPropertyType(x.type)
-            setTitle(x.title)
-            setDate(x.availableFrom)
-            setPricee(x.price)
-            setAdvertising(x.purpose)
-            setAreaa(x.area.value)
-            setAreaUnit(x.area.unit)
-            setAdvertising(x.purpose)
-            setSelectedImages(x.photos)
-            setVideo(x.video)
-            setCountry(x.location.country)
-            setCity(x.location.city)
-            setAddress(x.location.address)
-            setDescription(x.location.description)
-            setAreaLocation(x.location.areaLocation)
-            setStreetNumber(x.location.streetNo)
-            setPinLocation(x.location.pinLocation)
-            setPostalCode(x.location.postalCode)
-
-            if (propertyType === 'newHome') {
-                setRoom(x.newHomeAmenities.rooms)
-                setKitchen(x.newHomeAmenities.kitchen)
-                setBath(x.newHomeAmenities.bath)
-                setLivingRoom(x.newHomeAmenities.livingRoom)
-                setParking(x.newHomeAmenities.parking)
-                setAirConditioning(x.newHomeAmenities.airConditioning)
-                setBalcony(x.newHomeAmenities.balcony)
-                setWindow(x.newHomeAmenities.window)
-                setFurnished(x.newHomeAmenities.furnished)
-                setTotalFloors(x.newHomeAmenities.floors)
-                setSecurity(x.newHomeAmenities.security)
-                setElevator(x.newHomeAmenities.elevator)
-            }
-            if (propertyType === 'home') {
-                setRoom(x.homeAmenities.rooms)
-                setKitchen(x.homeAmenities.kitchen)
-                setBath(x.homeAmenities.bath)
-                setLivingRoom(x.homeAmenities.livingRoom)
-                setParking(x.homeAmenities.parking)
-                setAirConditioning(x.homeAmenities.airConditioning)
-                setBalcony(x.homeAmenities.balcony)
-                setWindow(x.homeAmenities.window)
-                setFurnished(x.homeAmenities.furnished)
-                setTotalFloors(x.homeAmenities.floors)
-                setSecurity(x.homeAmenities.security)
-                setElevator(x.homeAmenities.elevator)
-            }
-            else if (propertyType === 'room') {
-                setKitchen(x.roomAmenities.kitchen)
-                setBath(x.roomAmenities.bath)
-                setParking(x.roomAmenities.parking)
-                setAirConditioning(x.roomAmenities.airConditioning)
-                setBalcony(x.roomAmenities.balcony)
-                setSecurity(x.roomAmenities.security)
-                setElevator(x.roomAmenities.elevator)
-                setWindow(x.roomAmenities.window)
-                setFurnished(x.roomAmenities.furnished)
-                setFlatNumber(x.roomAmenities.floorNo)
-            }
-            else if (propertyType === 'commercialProperties' || propertyType === 'Office') {
-                setKitchen(x.commercialAmenities.kitchen)
-                setBath(x.commercialAmenities.bath)
-                setParking(x.commercialAmenities.parking)
-                setAirConditioning(x.commercialAmenities.airConditioning)
-                setSecurity(x.commercialAmenities.security)
-                setBalcony(x.commercialAmenities.balcony)
-                setWindow(x.commercialAmenities.window)
-                setFurnished(x.commercialAmenities.furnished)
-                setFloorNumber(x.commercialAmenities.floorNo)
-            }
-            else if (propertyType === 'garage') {
-                setUnit(x.garageAmenities.unit)
-                setWide(x.garageAmenities.wide)
-                setLong(x.garageAmenities.long)
-                setheight(x.garageAmenities.height)
-            }
-            else if (propertyType === 'land') {
-                setPropertyType(x.garageAmenities.type)
-                setFenced(x.garageAmenities.fenced)
-            }
-        }
-
-    }*/
-
+   
     useEffect(() => {
 
         fetch('https://walrus-app-ovpy2.ondigitalocean.app/property/user', {
@@ -306,11 +114,7 @@ const UpdateProperty = () => {
                 setId(query.get('id'))
                 console.log({ id });
                 console.log(result.data.find(x => x._id == query.get('id')));
-                // console.log({ result });
-                // console.log({ data });
-                // setList(data.data)
-                // setId(query.get('id'))
-                // console.log({ list });
+
                 const selectedProperty = result.data.find(x => x._id == query.get('id'));
                 console.log(selectedProperty.availableFrom);
 
@@ -318,15 +122,7 @@ const UpdateProperty = () => {
                 const [year, month, day] = input.split('T')[0].split('-')
                 const date = `${year}-${month}-${day}`
                 console.log({ date });
-                // dd/mm/yyyy
-                // console.log(`${day}/${month}/${year}`)
-
-                // const date = new Date(selectedProperty.availableFrom).toLocaleDateString("en-US", {
-                //     year: "numeric",
-                //     month: "2-digit",
-                //     day: "2-digit"
-                //   });
-                // console.log({ selectedProperty });
+               
                 if (selectedProperty) {
                     setPropertyType(selectedProperty.type)
                     setTitle(selectedProperty.title)
@@ -335,7 +131,6 @@ const UpdateProperty = () => {
                     setAdvertising(selectedProperty.purpose)
                     setAreaa(selectedProperty.area.value)
                     setAreaUnit(selectedProperty.area.unit)
-                    // setAdvertising(selectedProperty.purpose)
                     setSelectedImages(selectedProperty.photos)
                     setVideo(selectedProperty.video)
                     setCountry(selectedProperty.location.country)
@@ -360,6 +155,7 @@ const UpdateProperty = () => {
                         setTotalFloors(selectedProperty.newHomeAmenities.floors)
                         setSecurity(selectedProperty.newHomeAmenities.security ? 'Yes' : 'No')
                         setElevator(selectedProperty.newHomeAmenities.elevator ? 'Yes' : 'No')
+                        setotherFeaturs(selectedProperty.newHomeAmenities.otherAmenities)
                     }
                     if (selectedProperty.type === 'home') {
                         setRoom(selectedProperty.homeAmenities.rooms)
@@ -374,7 +170,7 @@ const UpdateProperty = () => {
                         setTotalFloors(selectedProperty.homeAmenities.floors)
                         setSecurity(selectedProperty.homeAmenities.security ? 'Yes' : 'No')
                         setElevator(selectedProperty.homeAmenities.elevator ? 'Yes' : 'No')
-                        setotherFeaturs(selectedProperty.otherAmenities)
+                        setotherFeaturs(selectedProperty.homeAmenities.otherAmenities)
                     }
                     else if (selectedProperty.type === 'room') {
                         setKitchen(selectedProperty.roomAmenities.kitchen)
@@ -387,7 +183,7 @@ const UpdateProperty = () => {
                         setWindow(selectedProperty.roomAmenities.window ? 'Yes' : 'No')
                         setFurnished(selectedProperty.roomAmenities.furnished ? 'Yes' : 'No')
                         setFlatNumber(selectedProperty.roomAmenities.floorNo)
-                        setotherFeaturs(selectedProperty.otherAmenities && selectedProperty.otherAmenities.length > 0 ? selectedProperty.otherAmenities : [{ name: '', value: '' }])
+                        setotherFeaturs(selectedProperty.roomAmenities.otherAmenities)
                     }
                     else if (selectedProperty.type === 'commercialProperties' || selectedProperty.type === 'Office' || selectedProperty.type === 'building') {
                         setKitchen(selectedProperty.commercialAmenities.kitchen)
@@ -399,41 +195,30 @@ const UpdateProperty = () => {
                         setWindow(selectedProperty.commercialAmenities.window ? 'Yes' : 'No')
                         setFurnished(selectedProperty.commercialAmenities.furnished ? 'Yes' : 'No')
                         setFloorNumber(selectedProperty.commercialAmenities.floorNo)
+                        setotherFeaturs(selectedProperty.roomAmenities.otherAmenities)
                     }
                     else if (selectedProperty.type === 'garage') {
                         setUnit(selectedProperty.garageAmenities.unit)
                         setWide(selectedProperty.garageAmenities.wide)
                         setLong(selectedProperty.garageAmenities.long)
                         setheight(selectedProperty.garageAmenities.height)
+                        setotherFeaturs(selectedProperty.roomAmenities.otherAmenities)
                     }
                     else if (selectedProperty.type === 'land') {
                         setPropertyType(selectedProperty.type)
                         setFenced(selectedProperty.landAmenities.fenced ? 'Yes' : 'No')
                         setLandType(selectedProperty.landAmenities.type)
+                        setotherFeaturs(selectedProperty.roomAmenities.otherAmenities)
                     }
                 }
             })
 
         })
-        // if (get) {
-        //     getPropertyList();
-        //     setGet(false);
-        // }
-        // setId(query.get('id'))
-        // if (get === true) {
-        // }
-        // list.map(x => {
-        //     if (x._id === id) {
-        //         property = x;
-        //         patchProperty(property)
-        //     }
-        // })
     }, [])
 
     const submit = async (event) => {
         event.preventDefault()
         const location = { country: country, city: city, address: address, areaLocation: areaLocation, pinLocation: pinLocation, postalCode: postalCode, streetNumber: streetNumber };
-        // console.log(selectedImages);
         const area = { value: areaa, unit: (areaUnit?.value ? areaUnit?.value : areaUnit) };
         const purpose = advertising.value ? advertising.value : advertising;
         const availableFrom = date;
@@ -518,7 +303,6 @@ const UpdateProperty = () => {
                 console.log('Garage');
                 break;
             default:
-            //   text = "Looking forward to the Weekend";
         }
 
         const formData = new FormData();
@@ -536,7 +320,7 @@ const UpdateProperty = () => {
         formData.append('garageAmenities', JSON.stringify(garageAmenities))
         formData.append('landAmenities', JSON.stringify(landAmenities))
         formData.append('price', pricee)
-        // formData.append('photos', selectedImages)
+
         for (let i = 0; i < selectedImages.length - 1; i++) {
 
             formData.append('photos', selectedImages[i])
@@ -552,14 +336,12 @@ const UpdateProperty = () => {
             method: "PUT",
             headers: {
                 "Accept": "application/json",
-                // 'Content-Type': 'multipart/form-data',
                 "AUTHORIZATION": `BEARER ${token}`
             },
             body: formData
         })
             .then((res) => {
                 if (res.ok) {
-                    // setFormLoader(false)
                     toast.success('Property Successfully uploaded.',
                         { position: toast.POSITION.BOTTOM_RIGHT })
 
@@ -567,14 +349,12 @@ const UpdateProperty = () => {
                 }
             })
             .catch((error) => {
-                // setFormLoader(false),
                 if (error) {
 
                     toast.error(error, { position: toast.POSITION.BOTTOM_RIGHT })
 
 
                 } else {
-                    // setFormLoader(false)
                     toast.error('400 Error',
                         { position: toast.POSITION.BOTTOM_RIGHT }
                     )
@@ -727,24 +507,15 @@ const UpdateProperty = () => {
                                                         <label>Area unit</label>
                                                         <Dropdown options={areaUnitOptions} onChange={(e) => { setAreaUnit(e) }} value={areaUnit?.label ? areaUnit.label : areaUnit} placeholder="Select area unit" />
                                                     </div>
-                                                    <div className="col-lg-8 mt-4">
-                                                        <label>Description</label>
-                                                        <div className='password-filed'>
-                                                            <input
-                                                                type='textarea'
-                                                                style={{ padding: '10px 16px' }}
-                                                                className="input"
-                                                                autoComplete='off'
-                                                                name='confirmNewPassword'
-                                                                id='confirmNewPassword'
-                                                                placeholder='Enter drscription'
-                                                                onChange={(e) => { setDescription(e.target.value) }}
-                                                                defaultValue={description}
-                                                                required
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    {(propertyType?.value === 'home' && propertyType?.value === 'newHome') &&
+                                                    <div className="col-lg-6"></div>
+                                                    
+                                                    {(propertyType?.value !== 'garage' 
+                                                        && propertyType?.value !== 'land'
+                                                        && propertyType?.value !== 'room'
+                                                        && propertyType?.value !== 'office'
+                                                        && propertyType?.value !== 'building'
+                                                        && propertyType?.value !== 'commercialProperties'
+                                                        ) &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Room</label>
                                                             <div className='password-filed'>
@@ -777,7 +548,7 @@ const UpdateProperty = () => {
                                                         </div>
                                                     }
 
-                                                    {(propertyType?.value !== 'Office' && propertyType?.value !== 'Building' && propertyType?.value !== 'Garage' && propertyType?.value !== 'Commercial properties') &&
+                                                    {(propertyType?.value !== 'office' && propertyType?.value !== 'building' && propertyType?.value !== 'garage' && propertyType?.value !== 'commercialProperties') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Elevator</label>
                                                             <Dropdown options={elevatorOptions} onChange={(e) => { setElevator(e) }} value={elevator?.label ? elevator?.label : elevator} placeholder="Select area unit" />
@@ -813,13 +584,6 @@ const UpdateProperty = () => {
 
                                                         </div>
                                                     }
-
-                                                    {/* {(propertyType === 'Garage') &&
-                                                        <div className="col-lg-4 mt-4">
-                                                            <label>Deck</label>
-                                                            <Dropdown options={deckrOptions} onChange={(e) => { setDeck(e) }} value={deck?.label} placeholder="Select deck" />
-                                                        </div>
-                                                    } */}
 
                                                     {(propertyType?.value === 'land') &&
                                                         <div className="col-lg-4 mt-4">
@@ -980,7 +744,13 @@ const UpdateProperty = () => {
                                                             </div>
                                                         </div>
                                                     }
-                                                    {(propertyType?.value === 'home' || propertyType?.value === 'newHome') &&
+                                                    {(propertyType?.value !== 'garage' 
+                                                        && propertyType?.value !== 'land'
+                                                        && propertyType?.value !== 'room'
+                                                        && propertyType?.value !== 'office'
+                                                        && propertyType?.value !== 'building'
+                                                        && propertyType?.value !== 'commercialProperties'
+                                                        ) &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Living Room</label>
                                                             <div className='password-filed'>
@@ -998,37 +768,12 @@ const UpdateProperty = () => {
                                                             </div>
                                                         </div>
                                                     }
-                                                    {/* {(propertyType === 'Office' || propertyType === 'Building') &&
-                                                        <div className="col-lg-4 mt-4">
-                                                            <label>Washrooms</label>
-                                                            <div className='password-filed'>
-                                                                <input
-                                                                    type='number'
-                                                                    className="input"
-                                                                    autoComplete='off'
-                                                                    placeholder='Number of Washrooms'
-                                                                    onChange={(e) => { setWashrooms(e.target.value) }}
-                                                                    defaultValue={washrooms}
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                    } */}
-                                                    {/* {(propertyType === 'Building') &&
-                                                        <div className="col-lg-4 mt-4">
-                                                            <label>Building number</label>
-                                                            <div className='password-filed'>
-                                                                <input
-                                                                    type='number'
-                                                                    className="input"
-                                                                    autoComplete='off'
-                                                                    placeholder='Enter building number'
-                                                                    onChange={(e) => { setBuildingNumber(e.target.value) }}
-                                                                    defaultValue={buildingNumber}
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                    } */}
-                                                    {(propertyType?.value === 'building' || propertyType?.value === 'room' || propertyType?.value === 'commercialProperties' || propertyType?.value === 'office') &&
+                                                    {(propertyType?.value !== 'newHome' 
+                                                    && propertyType?.value !== 'home'
+                                                    && propertyType?.value !== 'garage'
+                                                    && propertyType?.value !== 'land'
+                                                    )
+                                                    &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Floor number</label>
                                                             <div className='password-filed'>
@@ -1044,22 +789,13 @@ const UpdateProperty = () => {
                                                             </div>
                                                         </div>
                                                     }
-                                                    {/* {(propertyType === 'Building') &&
-                                                        <div className="col-lg-4 mt-4">
-                                                            <label>Flat number</label>
-                                                            <div className='password-filed'>
-                                                                <input
-                                                                    type='number'
-                                                                    className="input"
-                                                                    autoComplete='off'
-                                                                    placeholder='Enter flat number'
-                                                                    onChange={(e) => { setFlatNumber(e.target.value) }}
-                                                                    defaultValue={flatNumber}
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                    } */}
-                                                    {(propertyType?.value === 'newHome' || propertyType?.value === 'home') &&
+                                                    {(propertyType?.value !== 'garage' 
+                                                        && propertyType?.value !== 'land'
+                                                        && propertyType?.value !== 'room'
+                                                        && propertyType?.value !== 'office'
+                                                        && propertyType?.value !== 'building'
+                                                        && propertyType?.value !== 'commercialProperties'
+                                                        ) &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label> Total floors</label>
                                                             <div className='password-filed'>
@@ -1077,6 +813,20 @@ const UpdateProperty = () => {
                                                             </div>
                                                         </div>
                                                     }
+                                                    <div className="col-lg-12 mt-4">
+                                                        <label>Description</label>
+                                                        <textarea 
+                                                        name="textarea" 
+                                                        type="text"
+                                                        id="" 
+                                                        className='input' 
+                                                        placeholder='Enter drscription'
+                                                        rows="5"
+                                                        required
+                                                        onChange={(e) => { setDescription(e.target.value) }}
+                                                        value={description}>
+                                                        </textarea>
+                                                    </div>
 
                                                     <div className="col-lg-12 mt-4">
                                                         <label>Other features </label>
@@ -1172,54 +922,6 @@ const UpdateProperty = () => {
                                                             />
                                                         </div>
                                                     </div>
-                                                    {/*<div className="col-lg-4 mt-4">
-                                                        <label>Area</label>
-                                                        <div className='password-filed'>
-                                                            <input
-                                                                type='text'
-                                                                style={{ padding: '10px 16px' }}
-                                                                className="input"
-                                                                autoComplete='off'
-                                                                name='confirmNewPassword'
-                                                                id='confirmNewPassword'
-                                                                placeholder='Enter area'
-                                                                onChange={(e) => { setAreaLocation(e.target.value) }}
-                                                                defaultValue={areaLocation}
-                                                                required
-                                                            />
-                                                        </div>
-                                                    </div>*/}
-                                                    {/*<div className="col-lg-4 mt-4">
-                                                        <label>Location</label>
-                                                        <div className='password-filed'>
-                                                            <input
-                                                                type='Text'
-                                                                className="input"
-                                                                autoComplete='off'
-                                                                name='confirmNewPassword'
-                                                                id='confirmNewPassword'
-                                                                placeholder='Enter Location'
-                                                                onChange={(e) => { setPinLocation(e.target.value) }}
-                                                                defaultValue={pinLocation}
-                                                                required
-                                                            />
-                                                        </div>
-                                                    </div>*/}
-                                                    {/* <div className="col-lg-4 mt-4">
-                                                        <label>Contact number</label>
-                                                        <div className='password-filed'>
-                                                            <input
-                                                                type='number'
-                                                                className="input"
-                                                                autoComplete='off'
-                                                                name='confirmNewPassword'
-                                                                id='confirmNewPassword'
-                                                                placeholder='Enter number'
-                                                                onChange={(e) => { setNumber(e.target.value) }}
-                                                                defaultValue={number}
-                                                            />
-                                                        </div>
-                                                    </div> */}
                                                     <div className="col-lg-4 mt-4">
                                                         <label>Street number</label>
                                                         <div className='password-filed'>
