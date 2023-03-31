@@ -3,6 +3,7 @@ import {MdOutlineMapsHomeWork} from 'react-icons/md'
 import workOne from '../../../assets/media/images/work-1.jpg'
 import {BiBed} from 'react-icons/bi'
 import {TbBath} from 'react-icons/tb'
+import {RiArrowDownSLine} from 'react-icons/ri'
 import Header from '../../../shared/Header/Header'
 import Footer from '../../../shared/Footer/Footer'
 import './UserProperty.css'
@@ -10,6 +11,7 @@ import {Link} from 'react-router-dom'
 import Loading from '../../../shared/Loading/Loading'
 import {toast} from "react-toastify";
 import Apiloader from "../../../shared/ApiLoader/Apiloader";
+import Dropdown from 'react-dropdown';
 
 const UserProperty = () => {
     const token = JSON.parse(localStorage.getItem('user'))?.token.token;
@@ -17,6 +19,8 @@ const UserProperty = () => {
     const [data, setData] = useState('')
     const [loader, setLoader] = useState(true)
     const [formLoader, setFormLoader] = useState(false)
+    const [status , setStatus] = useState()
+    const statusOptions = ['active', 'inActive', 'sold', 'rented']
 
     useEffect(() => {
         getPropertyList()
@@ -27,7 +31,7 @@ const UserProperty = () => {
 
             method: "GET",
             headers: {
-                "Content-Type": "application/json",
+                // "Content-Type": "application/json",
                 "Accept": "application/json",
                 "AUTHORIZATION": `BEARER ${token}`
             }
@@ -36,7 +40,6 @@ const UserProperty = () => {
         const data = await response.json()
         setLoader(false)
         setList(data.data)
-        console.log(data.data);
 
         // .then((response) =>   response.json() )
         // .then((res) => {
@@ -72,6 +75,36 @@ const UserProperty = () => {
         // console.log(data.data);
     }
 
+    const changeStatus = async (status , id) =>{
+        console.log(status , id);
+
+        setFormLoader(true)
+        console.log('deleteProperty: ', id)
+        fetch(`https://walrus-app-ovpy2.ondigitalocean.app/property/status/${id}`, {
+
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "AUTHORIZATION": `BEARER ${token}`
+            },
+            body : status
+        }).then((res) =>{
+          
+                setFormLoader(false)
+                toast.success('Status Successfully updated.',
+                    { position: toast.POSITION.BOTTOM_RIGHT })
+                // window.location.reload(false);
+            
+        }) .catch((error) => {
+                    setFormLoader(false)
+                    toast.error(error, { position: toast.POSITION.BOTTOM_RIGHT })
+
+        })
+
+        
+    }
+
     return (
         <>
             {loader ?
@@ -81,19 +114,25 @@ const UserProperty = () => {
                     <Header/>
                     <section className="ftco-section">
                         <div className="container">
-                            <div className="row">
+                            <div className="row" style={{position : 'relative'}}>
                                 {formLoader && <Apiloader/>}
                                 {list && list.length > 0 ?
                                     (list.map((x, index) => {
                                         return (
                                             <div className="col-md-4">
                                                 <div className="property-wrap" style={{position: 'relative'}}>
-                                                    <span className='status'>{x.status}</span>
+                                                    {/* <span className='status'>{x.status}</span> */}
+                                                    <div className='p-s-d-d'>
+                                                        <div className='relative'>
+                                                    <Dropdown className='input' options={statusOptions} value={x.status} onChange={(e) =>{changeStatus(e.value , x._id)}}/>
+                                                    <RiArrowDownSLine/>
+                                                        </div>
+                                                    </div>
                                                     <span className='edit'><Link
                                                         to={`/update-properties/?id=${x._id}`}>Edit</Link></span>
                                                     <span onClick={() => deleteProperty(x._id)}
                                                           className='delete'>Delete</span>
-                                                    {(x.photos.length > 1) ?
+                                                    {(x.photos.length > 0) ?
                                                         <a href="properties/1" className="img"
                                                            style={{backgroundImage: `url(${x.photos[0]})`}}></a> :
                                                         <a href="properties/1" className="img"

@@ -43,3 +43,50 @@
     align-items: center;
     font-size: 25px;
 }
+
+.p-s-d-d{
+    position: absolute;
+    top: 10px;
+    width: 130px;
+    border-radius: 6px !important;
+    border: 1px solid #e86ed0;
+    left: 10px;
+}
+.p-s-d-d svg{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 10px;
+    font-size: 25px;
+    
+}
+.p-s-d-d .relative{
+    position: relative;
+}
+
+.Dropdown-control {
+    border-radius: 6px !important;
+    position: relative;
+}
+
+.Dropdown-menu{
+    position: absolute;
+    width: 100%;
+    padding: 10px;
+    background: #fff;
+    border-radius: 6px;
+}
+
+.Dropdown-control {
+    position: relative;
+    overflow: hidden;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    box-sizing: border-box;
+    color: #333;
+    cursor: default;
+    outline: none;
+    padding: 0px 35px 0px 10px !important;
+    transition: all 200ms ease;
+}

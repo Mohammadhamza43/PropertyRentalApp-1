@@ -427,9 +427,16 @@ const UploadProperty = () => {
                                                         <label>Area unit</label>
                                                         <Dropdown options={areaUniyOptions} onChange={(e) => { setAreaUnit(e) }} value={areaUnit.label} placeholder="Select area unit" />
                                                     </div>
+                                                    <div className="col-lg-6"></div>
 
 
-                                                    {(propertyType.label === 'Home' || propertyType.label === 'New Home') &&
+                                                    {(propertyType.value !== 'garage' 
+                                                        && propertyType.value !== 'land'
+                                                        && propertyType.value !== 'room'
+                                                        && propertyType.value !== 'office'
+                                                        && propertyType.value !== 'building'
+                                                        && propertyType.value !== 'commercialProperties'
+                                                        ) &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Room</label>
                                                             <div className='password-filed'>
@@ -448,60 +455,65 @@ const UploadProperty = () => {
                                                         </div>
                                                     }
 
-                                                    {(propertyType.label !== 'Garage' && propertyType.label !== 'Land') &&
+                                                    {(propertyType.value !== 'garage' && propertyType.value !== 'land') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Window</label>
                                                             <Dropdown options={windowsOptions} onChange={(e) => { setWindow(e) }} value={window.label} placeholder="Select window" />
                                                         </div>
                                                     }
-                                                    {(propertyType.label !== 'Land' && propertyType.label !== 'Garage') &&
+                                                    {(propertyType.value !== 'land' && propertyType.value !== 'garage') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Security</label>
                                                             <Dropdown options={securityOptions} onChange={(e) => { setSecurity(e) }} value={security.label} placeholder="Select Security" />
                                                         </div>
                                                     }
-                                                    {(propertyType.label === 'New Home' || propertyType.label === 'Home' || propertyType.label === 'Room') &&
+                                                    {(propertyType.value !== 'garage' 
+                                                        && propertyType.value !== 'land'
+                                                        && propertyType.value !== 'office'
+                                                        && propertyType.value !== 'building'
+                                                        && propertyType.value !== 'commercialProperties'
+                                                        ) &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Elevetor</label>
                                                             <Dropdown options={elevetorOptions} onChange={(e) => { setElevetor(e) }} value={elevetor.label} placeholder="Select elevetor" />
                                                         </div>
                                                     }
-                                                    {(propertyType.label !== 'Garage' && propertyType.label !== 'Land') &&
+                                                    {(propertyType.value !== 'garage' && propertyType.value !== 'land') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Parking</label>
                                                             <Dropdown options={parkingOptions} onChange={(e) => { setParking(e) }} value={parking.label} placeholder="Select parking" />
 
                                                         </div>
                                                     }
-                                                    {(propertyType.label !== 'Garage' && propertyType.label !== 'Land') &&
+                                                    {(propertyType.value !== 'garage' && propertyType.value !== 'land') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Air conditioning</label>
                                                             <Dropdown options={airConditioningOptions} onChange={(e) => { setAirConditioning(e) }} value={airConditioning.label} placeholder="Select gerage" />
 
                                                         </div>
                                                     }
-                                                    {(propertyType.label !== 'Garage' && propertyType.label !== 'Land') &&
+                                                    {(propertyType.value !== 'garage' && propertyType.value !== 'land') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Balcony</label>
                                                             <Dropdown options={balconyOptions} onChange={(e) => { setBalcony(e) }} value={balcony.label} placeholder="Select balcony" />
 
                                                         </div>
                                                     }
-                                                    {(propertyType.label !== 'Garage' && propertyType.label !== 'Land') &&
+                                                    {(propertyType.value !== 'garage' && propertyType.value !== 'land') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Furnished</label>
                                                             <Dropdown options={furnishedOptions} onChange={(e) => { setFurnished(e) }} value={furnished.label} placeholder="Select furnished" />
 
                                                         </div>
                                                     }
-                                                    {(propertyType.label === 'Land') &&
+                                                    {(propertyType.value === 'land') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Fenced</label>
                                                             <Dropdown options={fencedOptions} onChange={(e) => { setFurnished(e) }} value={fenced.label} placeholder="Select fenced" />
 
                                                         </div>
                                                     }
-                                                    {(propertyType.label === 'Land') &&
+                                                    {(propertyType.value === 'land') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Land Type</label>
                                                             <div className='password-filed'>
@@ -520,7 +532,7 @@ const UploadProperty = () => {
                                                             </div>
                                                         </div>
                                                     }
-                                                    {(propertyType.label === 'Garage') &&
+                                                    {(propertyType.value === 'garage') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Unit</label>
                                                             <div className='password-filed'>
@@ -539,7 +551,7 @@ const UploadProperty = () => {
                                                             </div>
                                                         </div>
                                                     }
-                                                    {(propertyType.label === 'Garage') &&
+                                                    {(propertyType.value === 'garage') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Wide</label>
                                                             <div className='password-filed'>
@@ -558,7 +570,7 @@ const UploadProperty = () => {
                                                             </div>
                                                         </div>
                                                     }
-                                                    {(propertyType.label === 'Garage') &&
+                                                    {(propertyType.value === 'garage') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Long</label>
                                                             <div className='password-filed'>
@@ -577,7 +589,7 @@ const UploadProperty = () => {
                                                             </div>
                                                         </div>
                                                     }
-                                                    {(propertyType.label === 'Garage') &&
+                                                    {(propertyType.value === 'garage') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Height</label>
                                                             <div className='password-filed'>
@@ -596,7 +608,7 @@ const UploadProperty = () => {
                                                             </div>
                                                         </div>
                                                     }
-                                                    {(propertyType.label !== 'Garage' && propertyType.label !== 'Land') &&
+                                                    {(propertyType.value !== 'garage' && propertyType.value !== 'land') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label> kitchen</label>
                                                             <div className='password-fil'>
@@ -614,7 +626,7 @@ const UploadProperty = () => {
                                                             </div>
                                                         </div>
                                                     }
-                                                    {(propertyType.label !== 'Land' && propertyType.label !== 'Garage') &&
+                                                    {(propertyType.value !== 'land' && propertyType.value !== 'garage') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Bath</label>
                                                             <div className='password-filed'>
@@ -632,7 +644,13 @@ const UploadProperty = () => {
                                                             </div>
                                                         </div>
                                                     }
-                                                    {(propertyType.label === 'Home' || propertyType.label === 'New home') &&
+                                                    {(propertyType.value !== 'garage' 
+                                                        && propertyType.value !== 'land'
+                                                        && propertyType.value !== 'room'
+                                                        && propertyType.value !== 'office'
+                                                        && propertyType.value !== 'building'
+                                                        && propertyType.value !== 'commercialProperties'
+                                                        ) &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Living Room</label>
                                                             <div className='password-filed'>
@@ -651,7 +669,11 @@ const UploadProperty = () => {
                                                         </div>
                                                     }
                                                     
-                                                    {(propertyType.label === 'Building' || propertyType.label === 'Room' || propertyType.label === 'Commercial Properties' || propertyType.label === 'Office') &&
+                                                    {(propertyType.value !== 'newHome' 
+                                                    && propertyType.value !== 'home'
+                                                    && propertyType.value !== 'garage'
+                                                    && propertyType.value !== 'land'
+                                                    ) &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Floor number</label>
                                                             <div className='password-filed'>
@@ -667,7 +689,13 @@ const UploadProperty = () => {
                                                             </div>
                                                         </div>
                                                     }
-                                                    {(propertyType.label === 'New home' || propertyType.label === 'Home') &&
+                                                    {(propertyType.value !== 'garage' 
+                                                        && propertyType.value !== 'land'
+                                                        && propertyType.value !== 'room'
+                                                        && propertyType.value !== 'office'
+                                                        && propertyType.value !== 'building'
+                                                        && propertyType.value !== 'commercialProperties'
+                                                        ) &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label> Total floors</label>
                                                             <div className='password-filed'>
