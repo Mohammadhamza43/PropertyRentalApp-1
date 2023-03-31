@@ -46,11 +46,11 @@
 
 .p-s-d-d{
     position: absolute;
-    top: 10px;
+    top: 15px;
     width: 130px;
     border-radius: 6px !important;
-    border: 1px solid #e86ed0;
-    left: 10px;
+    /* border: 1px solid #e86ed0; */
+    left: 15px;
 }
 .p-s-d-d svg{
     position: absolute;
@@ -64,12 +64,12 @@
     position: relative;
 }
 
-.Dropdown-control {
+.p-s-d-d .Dropdown-control {
     border-radius: 6px !important;
     position: relative;
 }
 
-.Dropdown-menu{
+.p-s-d-d .Dropdown-menu{
     position: absolute;
     width: 100%;
     padding: 10px;
@@ -77,16 +77,30 @@
     border-radius: 6px;
 }
 
-.Dropdown-control {
-    position: relative;
-    overflow: hidden;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 2px;
-    box-sizing: border-box;
-    color: #333;
-    cursor: default;
-    outline: none;
+.p-s-d-d .Dropdown-control {
+    position: relative !important;
+    overflow: hidden !important;
+    background-color: #e86ed0 !important;
+    border: 1px solid transparent !important;
+    border-radius: 6px !important;
+    box-sizing: border-box !important;
+    color: #333 !important;
+    cursor: default !important;
+    outline: none !important;
     padding: 0px 35px 0px 10px !important;
-    transition: all 200ms ease;
+    transition: all 200ms ease !important;
+    
+}
+
+.p-s-d-d .Dropdown-menu{
+    overflow-y: hidden !important;
+}
+
+.p-s-d-d .Dropdown-arrow {
+    border-color: #ffffff transparent transparent !important;
+}
+
+.p-s-d-d .Dropdown-placeholder{
+    color: #fff !important;
+    font-weight: 800;
 }
