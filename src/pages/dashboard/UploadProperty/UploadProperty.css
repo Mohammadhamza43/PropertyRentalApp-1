@@ -15,7 +15,7 @@
     font-family: cursive;
 }
 
-.Dropdown-control {
+.upload-property .Dropdown-control {
     position: relative;
     overflow: hidden;
     background-color: white;
@@ -324,7 +324,7 @@ select {
   margin-top: 20px
 }
 
-.Dropdown-control{
+.upload-property .Dropdown-control{
   border-radius: 6px;
 }
 

@@ -35,7 +35,7 @@ const UploadProperty = () => {
     const balconyOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
     const windowsOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
     const fencedOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
-    const statusOptions = ['Active', 'Inactive', 'Sold', 'Rented']
+    const statusOptions = [{ value: 'active', label: 'Active' },{ value: 'inactive', label: 'Inactive' },{ value: 'sold', label: 'Sold' },{ value: 'rented', label: 'Rented' }]
     const areaUniyOptions = [{ value: 'mm', label: 'MM' }, { value: 'cm', label: 'CM' }, { value: 'm', label: 'M' }, { value: 'km', label: 'KM' }]
 
     const [advertising, setAdvertising] = useState({ value: 'sale', label: 'Sale' })
@@ -73,7 +73,7 @@ const UploadProperty = () => {
     const [city, setCity] = useState('')
     const [country, setCountry] = useState('')
     const [areaLocation, setAreaLocation] = useState('')
-    const [propertyStatus, setPropertyStatus] = useState('Active')
+    const [propertyStatus, setPropertyStatus] = useState({ value: 'active', label: 'Active' })
     const [selectedImages, setSelectedImages] = useState([]);
     const [otherFeatuers, setotherFeaturs] = useState([{ name: '', value: '' }]);
     const [unit, setUnit] = useState(0);
@@ -90,7 +90,6 @@ const UploadProperty = () => {
         event.preventDefault()
 
         const location = { country: country, city: city, address: address, areaLocation: areaLocation, pinLocation: pinLocation, postalCode: postalCode, streetNumber: streetNumber };
-        console.log(selectedImages);
         const area = { value: areaa, unit: areaUnit.value };
         const purpose = advertising.value;
         const availableFrom = date;
@@ -188,13 +187,10 @@ const UploadProperty = () => {
         formData.append('landAmenities', JSON.stringify(landAmenities))
         formData.append('price', pricee)
         for (let i = 0; i < selectedImages.length; i++) {
-
             formData.append('photos', selectedImages[i])
         }
 
-        // formData.append('photos', selectedImages)
         formData.append('videos ', video)
-        // formData.append('tours ', '[]')
         for (var pair of formData.entries()) {
             console.log(pair[0] + ' - ' + pair[1]);
         }
@@ -212,7 +208,6 @@ const UploadProperty = () => {
             method: "POST",
             headers: {
                 "Accept": "application/json",
-                // 'Content-Type': 'multipart/form-data',
                 "AUTHORIZATION": `BEARER ${token}`
             },
             body: formData
@@ -221,54 +216,7 @@ const UploadProperty = () => {
 
                 setFormLoader(false)
                 toast.success('Property Successfully uploaded.',
-                    { position: toast.POSITION.BOTTOM_RIGHT })
-
-                setAdvertising({ value: 'sale', label: 'Sale' })
-                setPropertyType({ value: 'propertytype', label: 'Property Type' })
-                setTitle('')
-                setPricee('')
-                setDate('')
-                setAreaa('')
-                setType('')
-                setAreaUnit({ value: 'mm', label: 'MM' })
-                setRoom('')
-                setWindow({ value: false, label: 'No' })
-                setFenced({ value: false, label: 'No' })
-                setKitchen('')
-                setBath('')
-                setLivingRoom('')
-                setWashrooms('')
-                setBuildingNumber('')
-                setFlatNumber('')
-                setFloorNumber('')
-                setTotalFloors('')
-                setPinLocation('')
-                setNumber('')
-                setStreetNumber('')
-                setDescription('')
-                setSecurity({ value: false, label: 'No' })
-                setDeck({ value: false, label: 'No' })
-                setElevetor({ value: false, label: 'No' })
-                setParking({ value: false, label: 'No' })
-                setAirConditioning({ value: false, label: 'No' })
-                setBalcony({ value: false, label: 'No' })
-                setFurnished({ value: false, label: 'No' })
-                setAddress('')
-                setPostalCode('')
-                setCity('')
-                setCountry('')
-                setAreaLocation('')
-                setPropertyStatus('Active')
-                setSelectedImages([]);
-                setotherFeaturs([{ name: '', value: '' }]);
-                setUnit(0);
-                setWide(0);
-                setLong(0);
-                setheight(0);
-                setFloorMap('');
-                setVideo('');
-                setTour([]);
-
+                    { position: toast.POSITION.BOTTOM_RIGHT }) 
             })
             .catch((error) => {
                 setFormLoader(false)
@@ -278,18 +226,11 @@ const UploadProperty = () => {
 
 
             })
-
-        // const data = [advertising, propertyType, title, area, room, window, kitchen,
-        //     bath, livingRoom, washrooms, buildingNumber, flatNumber, totalFloors, location, number, streetNumber, description, security, deck, elevetor,
-        //     parking, airConditioning, furnished, address, postalCode, city, country, propertyStatus, selectedImages, otherFeatuers, video]
-        //    console.log(data);
+    
     }
 
 
-    const addlines = () => {
-
-        setotherFeaturs([...otherFeatuers, { name: '', value: '' }])
-    }
+    const addlines = () => { setotherFeaturs([...otherFeatuers, { name: '', value: '' }]) }
 
     const updatefeature = (e, index) => {
         const { name, value } = e.target;
@@ -328,7 +269,7 @@ const UploadProperty = () => {
         // <Dropdown options={securityOptions} value={defaultSecurityOptions} placeholder="Select an option" />
         <>
             <Header />
-            <section className='profile-section'>
+            <section className='profile-section upload-property'>
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-9 mx-auto mt-5">
@@ -842,11 +783,11 @@ const UploadProperty = () => {
                                                             />
                                                         </div>
                                                     </div>*/}
-                                                    <div className="col-lg-4 mt-4">
+                                                    {/* <div className="col-lg-4 mt-4">
                                                         <label>Property Status</label>
-                                                        <Dropdown options={statusOptions} onChange={(e) => { setPropertyStatus(e.value) }} value={propertyStatus} />
+                                                        <Dropdown options={statusOptions} onChange={(e) => { setPropertyStatus(e.value) }} value={propertyStatus.label} />
 
-                                                    </div>
+                                                    </div> */}
                                                     <div className="col-lg-4 mt-4">
                                                         <label>Street number</label>
                                                         <div className='password-filed'>

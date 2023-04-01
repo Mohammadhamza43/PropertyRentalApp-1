@@ -4,12 +4,12 @@ import workOne from '../../../assets/media/images/work-1.jpg'
 import {BiBed} from 'react-icons/bi'
 import {TbBath} from 'react-icons/tb'
 import {RiArrowDownSLine} from 'react-icons/ri'
+import { toast, ToastContainer } from 'react-toastify';
 import Header from '../../../shared/Header/Header'
 import Footer from '../../../shared/Footer/Footer'
 import './UserProperty.css'
 import {Link} from 'react-router-dom'
-import Loading from '../../../shared/Loading/Loading'
-import {toast} from "react-toastify";
+import Loading from '../../../shared/Loading/Loading';
 import Apiloader from "../../../shared/ApiLoader/Apiloader";
 import Dropdown from 'react-dropdown';
 
@@ -88,13 +88,14 @@ const UserProperty = () => {
                 "Accept": "application/json",
                 "AUTHORIZATION": `BEARER ${token}`
             },
-            body : status
+            body :JSON.stringify({status : status})
         }).then((res) =>{
-          
-                setFormLoader(false)
-                toast.success('Status Successfully updated.',
-                    { position: toast.POSITION.BOTTOM_RIGHT })
-                // window.location.reload(false);
+          if(res.ok){
+
+              setFormLoader(false)
+              toast.success('Status Successfully updated.',
+                  { position: toast.POSITION.BOTTOM_RIGHT })
+          }
             
         }) .catch((error) => {
                     setFormLoader(false)
@@ -124,8 +125,8 @@ const UserProperty = () => {
                                                     {/* <span className='status'>{x.status}</span> */}
                                                     <div className='p-s-d-d'>
                                                         <div className='relative'>
-                                                    <Dropdown className='input' options={statusOptions} value={x.status} onChange={(e) =>{changeStatus(e.value , x._id)}}/>
-                                                    <RiArrowDownSLine/>
+                                                    <Dropdown className='inputt' options={statusOptions} value={x.status} onChange={(e) =>{changeStatus(e.value , x._id)}}/>
+                                                    {/* <RiArrowDownSLine/> */}
                                                         </div>
                                                     </div>
                                                     <span className='edit'><Link
@@ -185,6 +186,7 @@ const UserProperty = () => {
         </div> */}
                         </div>
                     </section>
+                    <ToastContainer />
                     <Footer/>
                 </>
             }
