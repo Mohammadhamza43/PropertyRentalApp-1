@@ -131,12 +131,13 @@ const UserProperty = () => {
                                                     </div>
                                                     <span className='edit'><Link
                                                         to={`/update-properties/?id=${x._id}`}>Edit</Link></span>
+                                                        {/* to={`/update-properties/?id=${x._id}`}>Edit</Link></span> */}
                                                     <span onClick={() => deleteProperty(x._id)}
                                                           className='delete'>Delete</span>
                                                     {(x.photos.length > 0) ?
-                                                        <a href="properties/1" className="img"
+                                                        <a  className="img"
                                                            style={{backgroundImage: `url(${x.photos[0]})`}}></a> :
-                                                        <a href="properties/1" className="img"
+                                                        <a  className="img"
                                                            style={{backgroundImage: `url(${workOne})`}}></a>}
                                                     <div className="text">
                                                         <p className="price">

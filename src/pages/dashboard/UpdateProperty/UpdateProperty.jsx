@@ -4,7 +4,7 @@ import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import { toast, ToastContainer } from 'react-toastify';
 import { MdDelete } from 'react-icons/md';
-
+import  DeleteImage  from '../../../shared/Methods/DeleteImage';
 import Footer from '../../../shared/Footer/Footer';
 import Header from '../../../shared/Header/Header';
 import '../UploadProperty/UploadProperty.css';
@@ -40,7 +40,7 @@ const UpdateProperty = () => {
     const windowsOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
     const fencedOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
     const elevatorOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
-    const statusOptions = [{ value: 'active', label: 'Active' },{ value: 'inactive', label: 'Inactive' },{ value: 'sold', label: 'Sold' },{ value: 'rented', label: 'Rented' }]
+    const statusOptions = [{ value: 'active', label: 'Active' }, { value: 'inactive', label: 'Inactive' }, { value: 'sold', label: 'Sold' }, { value: 'rented', label: 'Rented' }]
     const areaUnitOptions = [{ value: 'mm', label: 'MM' }, { value: 'cm', label: 'CM' }, { value: 'm', label: 'M' }, { value: 'km', label: 'KM' }]
 
     const [advertising, setAdvertising] = useState({ value: 'sale', label: 'Sale' })
@@ -89,6 +89,8 @@ const UpdateProperty = () => {
     const [height, setheight] = useState(0);
     const [landType, setLandType] = useState('');
     const [floorMap, setFloorMap] = useState('');
+    const [oldImages, setOldImages] = useState('');
+    const [imageId, setImageId] = useState('');
     const [video, setVideo] = useState('');
     const [tour, setTour] = useState([]);
     let property;
@@ -96,7 +98,7 @@ const UpdateProperty = () => {
 
 
 
-   
+
     useEffect(() => {
 
         fetch('https://walrus-app-ovpy2.ondigitalocean.app/property/user', {
@@ -122,7 +124,7 @@ const UpdateProperty = () => {
                 const [year, month, day] = input.split('T')[0].split('-')
                 const date = `${year}-${month}-${day}`
                 console.log({ date });
-               
+
                 if (selectedProperty) {
                     setPropertyType({ value: selectedProperty.type, label: selectedProperty.type })
                     setTitle(selectedProperty.title)
@@ -132,7 +134,9 @@ const UpdateProperty = () => {
                     setAdvertising(selectedProperty.purpose)
                     setAreaa(selectedProperty.area.value)
                     setAreaUnit(selectedProperty.area.unit)
-                    setSelectedImages(selectedProperty.photos)
+                    setOldImages(selectedProperty.photos)
+                    setImageId(selectedProperty._id)
+                    // setSelectedImages(selectedProperty.photos)
                     setVideo(selectedProperty.video)
                     setCountry(selectedProperty.location.country)
                     setCity(selectedProperty.location.city)
@@ -415,7 +419,7 @@ const UpdateProperty = () => {
                     toast.success('Property Successfully uploaded.',
                         { position: toast.POSITION.BOTTOM_RIGHT })
 
-                        navigate('/user-properties')
+                    navigate('/user-properties')
                 }
             })
             .catch((error) => {
@@ -452,9 +456,11 @@ const UpdateProperty = () => {
     }
 
     const onSelectFile = (event) => {
+        console.log(event.target.files);
         const selectedFiles = event.target.files;
         const selectedFilesArray = Array.from(selectedFiles);
-        setSelectedImages(selectedFilesArray);
+        // const selectedFilesArray = Array.from(selectedFiles);
+        setSelectedImages((pre) => [...pre, ...selectedFilesArray]);
         console.log(selectedImages);
         event.target.value = "";
     };
@@ -473,6 +479,46 @@ const UpdateProperty = () => {
         setSelectedImages(deletimage)
     }
 
+    // const deleteOldImages = (url , index) =>{
+    //     console.log(url);
+    //     console.log(index);
+    // }
+    const deleteimage = async (url, index) => {
+        // e.preventDefault()
+        await fetch(`https://walrus-app-ovpy2.ondigitalocean.app/property/delete/image/${id}`, {
+            method: "PUT",
+            headers: {
+                "Accept": "application/json",
+                "AUTHORIZATION": `BEARER ${token}`
+            },
+            body: JSON.stringify({ url: url })
+        })
+            .then((res) => {
+                if (res.ok) {
+                    toast.success('Property Successfully uploaded.',
+                        { position: toast.POSITION.BOTTOM_RIGHT })
+
+                    navigate('/user-properties')
+                }
+            })
+            .catch((error) => {
+                if (error) {
+
+                    toast.error(error, { position: toast.POSITION.BOTTOM_RIGHT })
+
+
+                } else {
+                    toast.error('400 Error',
+                        { position: toast.POSITION.BOTTOM_RIGHT }
+                    )
+                }
+            })
+
+        const deletimage = [...selectedImages];
+        deletimage.splice(index, 1)
+        setSelectedImages(deletimage)
+    }
+
 
 
     return (
@@ -486,7 +532,7 @@ const UpdateProperty = () => {
                                 <div className="user-card-body">
                                     <div className="user-mete">
                                         <div className='user-card-meta-avatar'>
-                                            <h1> Add your listing</h1>
+                                            <h1> Update Property</h1>
                                         </div>
                                     </div>
                                     <div className='divider'></div>
@@ -514,7 +560,7 @@ const UpdateProperty = () => {
                                                                 type='text'
                                                                 className="input"
                                                                 placeholder='Enter title'
-                                                                onChange={(e) => {setTitle(e.target.value) }}
+                                                                onChange={(e) => { setTitle(e.target.value) }}
                                                                 defaultValue={title}
                                                                 required
                                                             />
@@ -564,108 +610,630 @@ const UpdateProperty = () => {
                                                         <Dropdown options={areaUnitOptions} onChange={(e) => { setAreaUnit(e) }} value={areaUnit?.label ? areaUnit.label : areaUnit} placeholder="Select area unit" />
                                                     </div>
                                                     <div className="col-lg-6"></div>
-                                                    
-                                                    {((propertyType?.value !== 'garage')
-                                                        && (propertyType?.value !== 'land')
-                                                        && (propertyType?.value !== 'room')
-                                                        && (propertyType?.value !== 'office')
-                                                        &&( propertyType?.value !== 'building')
-                                                        && (propertyType?.value !== 'commercialProperties'))
-                                                         ?
-                                                        <div className="col-lg-4 mt-4">
-                                                            <label>Room</label>
-                                                            <div className='password-filed'>
-                                                                <input
-                                                                    type='number'
-                                                                    className="input"
-                                                                    placeholder='Enter number of rooms'
-                                                                    onChange={(e) => { setRoom(e.target.value) }}
-                                                                    defaultValue={room}
-                                                                    required
-                                                                />
+
+                                                    {(propertyType?.value === 'newHome') &&
+                                                        <>
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Room</label>
+                                                                <div className='password-filed'>
+                                                                    <input
+                                                                        type='number'
+                                                                        className="input"
+                                                                        placeholder='Enter number of rooms'
+                                                                        onChange={(e) => { setRoom(e.target.value) }}
+                                                                        defaultValue={room}
+                                                                        required
+                                                                    />
+                                                                </div>
                                                             </div>
-                                                        </div> : ''
-                                                    }
 
-                                                    {(propertyType?.value !== 'garage' && propertyType?.value !== 'land') &&
-                                                        <div className="col-lg-4 mt-4">
-                                                            <label>Window</label>
-                                                            <Dropdown options={windowsOptions} onChange={(e) => { setWindow(e) }} value={window?.label ? window?.label : window} placeholder="Select window" />
-                                                        </div>}
-
-
-                                                    {(propertyType?.value !== 'propertytype' && propertyType?.value !== 'garage' && propertyType?.value !== 'land') &&
-                                                        <div className="col-lg-4 mt-4">
-                                                            <label>Security</label>
-                                                            <Dropdown options={securityOptions} onChange={(e) => { setSecurity(e) }} value={security?.label ? security?.label : security} placeholder="Select Security" />
-                                                        </div>
-                                                    }
-
-                                                    {(propertyType?.value !== 'office' && propertyType?.value !== 'building' && propertyType?.value !== 'garage' && propertyType?.value !== 'land' && propertyType?.value !== 'commercialProperties') &&
-                                                        <div className="col-lg-4 mt-4">
-                                                            <label>Elevator</label>
-                                                            <Dropdown options={elevatorOptions} onChange={(e) => { setElevator(e) }} value={elevator?.label ? elevator?.label : elevator} placeholder="Select area unit" />
-                                                        </div>}
-
-                                                    {(propertyType?.value !== 'garage' && propertyType?.value !== 'land') &&
-                                                        <div className="col-lg-4 mt-4">
-                                                            <label>Parking</label>
-                                                            <Dropdown options={parkingOptions} onChange={(e) => { setParking(e) }} value={parking?.label ? parking?.label : parking} placeholder="Select parking" />
-
-                                                        </div>
-                                                    }
-                                                    {(propertyType?.value !== 'garage' && propertyType?.value !== 'land') && 
-                                                        <div className="col-lg-4 mt-4">
-                                                            <label>Air conditioning</label>
-                                                            <Dropdown options={airConditioningOptions} onChange={(e) => { setAirConditioning(e) }} value={airConditioning?.label ? airConditioning.label : airConditioning} placeholder="Select gerage" />
-
-                                                        </div>
-                                                    }
-
-                                                    {(propertyType?.value !== 'garage' && propertyType?.value !== 'land') &&
-                                                        <div className="col-lg-4 mt-4">
-                                                            <label>Balcony</label>
-                                                            <Dropdown options={balconyOptions} onChange={(e) => { setBalcony(e) }} value={balcony?.label ? balcony?.label : balcony} placeholder="Select balcony" />
-
-                                                        </div>
-                                                    }
-
-                                                    {(propertyType?.value !== 'garage' && propertyType?.value !== 'land') &&
-                                                        <div className="col-lg-4 mt-4">
-                                                            <label>Furnished</label>
-                                                            <Dropdown options={furnishedOptions} onChange={(e) => { setFurnished(e) }} value={furnished?.label ? furnished?.label : furnished} placeholder="Select furnished" />
-
-                                                        </div>
-                                                    }
-
-                                                    {(propertyType?.value === 'land') &&
-                                                        <div className="col-lg-4 mt-4">
-                                                            <label>fenced</label>
-                                                            <Dropdown options={fencedOptions} onChange={(e) => { setFurnished(e) }} value={fenced?.label ? fenced?.label : fenced} placeholder="Select fenced" />
-
-                                                        </div>
-                                                    }
-                                                    {(propertyType?.value === 'land') &&
-                                                        <div className="col-lg-4 mt-4">
-                                                            <label>Land Type</label>
-                                                            <div className='password-filed'>
-                                                                <input
-                                                                    type='text'
-                                                                    style={{ padding: '10px 16px' }}
-                                                                    className="input"
-                                                                    autoComplete='off'
-                                                                    name='confirmNewPassword'
-                                                                    id='confirmNewPassword'
-                                                                    placeholder='Enter unit'
-                                                                    onChange={(e) => { setType(e.target.value) }}
-                                                                    defaultValue={type}
-                                                                    required
-                                                                />
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label> Kitchen</label>
+                                                                <div className='password-fil'>
+                                                                    <input
+                                                                        type='number'
+                                                                        className="input"
+                                                                        autoComplete='off'
+                                                                        name='confirmNewPassword'
+                                                                        id='confirmNewPassword'
+                                                                        placeholder='Enter number of Kitchen'
+                                                                        onChange={(e) => { setKitchen(e.target.value) }}
+                                                                        defaultValue={kitchen}
+                                                                        required
+                                                                    />
+                                                                </div>
                                                             </div>
-                                                        </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Bath</label>
+                                                                <div className='password-filed'>
+                                                                    <input
+                                                                        type='number'
+                                                                        className="input"
+                                                                        autoComplete='off'
+                                                                        name='confirmNewPassword'
+                                                                        id='confirmNewPassword'
+                                                                        placeholder='Enter number of bath'
+                                                                        onChange={(e) => { setBath(e.target.value) }}
+                                                                        defaultValue={bath}
+                                                                        required
+                                                                    />
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Living Room</label>
+                                                                <div className='password-filed'>
+                                                                    <input
+                                                                        type='number'
+                                                                        className="input"
+                                                                        autoComplete='off'
+                                                                        name='confirmNewPassword'
+                                                                        id='confirmNewPassword'
+                                                                        placeholder='Enter number of living rooms'
+                                                                        onChange={(e) => { setLivingRoom(e.target.value) }}
+                                                                        defaultValue={livingRoom}
+                                                                        required
+                                                                    />
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Parking</label>
+                                                                <Dropdown options={parkingOptions} onChange={(e) => { setParking(e) }} value={parking?.label ? parking?.label : parking} placeholder="Select parking" />
+
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Air conditioning</label>
+                                                                <Dropdown options={airConditioningOptions} onChange={(e) => { setAirConditioning(e) }} value={airConditioning?.label ? airConditioning.label : airConditioning} placeholder="Select gerage" />
+
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Balcony</label>
+                                                                <Dropdown options={balconyOptions} onChange={(e) => { setBalcony(e) }} value={balcony?.label ? balcony?.label : balcony} placeholder="Select balcony" />
+
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Window</label>
+                                                                <Dropdown options={windowsOptions} onChange={(e) => { setWindow(e) }} value={window?.label ? window?.label : window} placeholder="Select window" />
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Furnished</label>
+                                                                <Dropdown options={furnishedOptions} onChange={(e) => { setFurnished(e) }} value={furnished?.label ? furnished?.label : furnished} placeholder="Select furnished" />
+
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label> Total floors</label>
+                                                                <div className='password-filed'>
+                                                                    <input
+                                                                        type='number'
+                                                                        className="input"
+                                                                        autoComplete='off'
+                                                                        name='confirmNewPassword'
+                                                                        id='confirmNewPassword'
+                                                                        placeholder='Enter total numner of floors'
+                                                                        onChange={(e) => { setTotalFloors(e.target.value) }}
+                                                                        defaultValue={totalFloors}
+                                                                        required
+                                                                    />
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Security</label>
+                                                                <Dropdown options={securityOptions} onChange={(e) => { setSecurity(e) }} value={security?.label ? security?.label : security} placeholder="Select Security" />
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Elevator</label>
+                                                                <Dropdown options={elevatorOptions} onChange={(e) => { setElevator(e) }} value={elevator?.label ? elevator?.label : elevator} placeholder="Select area unit" />
+                                                            </div>
+
+                                                        </>
+
+                                                    }
+                                                    {(propertyType?.value === 'home') &&
+                                                        <>
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Room</label>
+                                                                <div className='password-filed'>
+                                                                    <input
+                                                                        type='number'
+                                                                        className="input"
+                                                                        placeholder='Enter number of rooms'
+                                                                        onChange={(e) => { setRoom(e.target.value) }}
+                                                                        defaultValue={room}
+                                                                        required
+                                                                    />
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label> Kitchen</label>
+                                                                <div className='password-fil'>
+                                                                    <input
+                                                                        type='number'
+                                                                        className="input"
+                                                                        autoComplete='off'
+                                                                        name='confirmNewPassword'
+                                                                        id='confirmNewPassword'
+                                                                        placeholder='Enter number of Kitchen'
+                                                                        onChange={(e) => { setKitchen(e.target.value) }}
+                                                                        defaultValue={kitchen}
+                                                                        required
+                                                                    />
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Bath</label>
+                                                                <div className='password-filed'>
+                                                                    <input
+                                                                        type='number'
+                                                                        className="input"
+                                                                        autoComplete='off'
+                                                                        name='confirmNewPassword'
+                                                                        id='confirmNewPassword'
+                                                                        placeholder='Enter number of bath'
+                                                                        onChange={(e) => { setBath(e.target.value) }}
+                                                                        defaultValue={bath}
+                                                                        required
+                                                                    />
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Living Room</label>
+                                                                <div className='password-filed'>
+                                                                    <input
+                                                                        type='number'
+                                                                        className="input"
+                                                                        autoComplete='off'
+                                                                        name='confirmNewPassword'
+                                                                        id='confirmNewPassword'
+                                                                        placeholder='Enter number of living rooms'
+                                                                        onChange={(e) => { setLivingRoom(e.target.value) }}
+                                                                        defaultValue={livingRoom}
+                                                                        required
+                                                                    />
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Parking</label>
+                                                                <Dropdown options={parkingOptions} onChange={(e) => { setParking(e) }} value={parking?.label ? parking?.label : parking} placeholder="Select parking" />
+
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Air conditioning</label>
+                                                                <Dropdown options={airConditioningOptions} onChange={(e) => { setAirConditioning(e) }} value={airConditioning?.label ? airConditioning.label : airConditioning} placeholder="Select gerage" />
+
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Balcony</label>
+                                                                <Dropdown options={balconyOptions} onChange={(e) => { setBalcony(e) }} value={balcony?.label ? balcony?.label : balcony} placeholder="Select balcony" />
+
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Window</label>
+                                                                <Dropdown options={windowsOptions} onChange={(e) => { setWindow(e) }} value={window?.label ? window?.label : window} placeholder="Select window" />
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Furnished</label>
+                                                                <Dropdown options={furnishedOptions} onChange={(e) => { setFurnished(e) }} value={furnished?.label ? furnished?.label : furnished} placeholder="Select furnished" />
+
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label> Total floors</label>
+                                                                <div className='password-filed'>
+                                                                    <input
+                                                                        type='number'
+                                                                        className="input"
+                                                                        autoComplete='off'
+                                                                        name='confirmNewPassword'
+                                                                        id='confirmNewPassword'
+                                                                        placeholder='Enter total numner of floors'
+                                                                        onChange={(e) => { setTotalFloors(e.target.value) }}
+                                                                        defaultValue={totalFloors}
+                                                                        required
+                                                                    />
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Security</label>
+                                                                <Dropdown options={securityOptions} onChange={(e) => { setSecurity(e) }} value={security?.label ? security?.label : security} placeholder="Select Security" />
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Elevator</label>
+                                                                <Dropdown options={elevatorOptions} onChange={(e) => { setElevator(e) }} value={elevator?.label ? elevator?.label : elevator} placeholder="Select area unit" />
+                                                            </div>
+
+                                                        </>
+
+                                                    }
+                                                    {(propertyType?.value === 'room') &&
+                                                        <>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label> Kitchen</label>
+                                                                <div className='password-fil'>
+                                                                    <input
+                                                                        type='number'
+                                                                        className="input"
+                                                                        autoComplete='off'
+                                                                        name='confirmNewPassword'
+                                                                        id='confirmNewPassword'
+                                                                        placeholder='Enter number of Kitchen'
+                                                                        onChange={(e) => { setKitchen(e.target.value) }}
+                                                                        defaultValue={kitchen}
+                                                                        required
+                                                                    />
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Bath</label>
+                                                                <div className='password-filed'>
+                                                                    <input
+                                                                        type='number'
+                                                                        className="input"
+                                                                        autoComplete='off'
+                                                                        name='confirmNewPassword'
+                                                                        id='confirmNewPassword'
+                                                                        placeholder='Enter number of bath'
+                                                                        onChange={(e) => { setBath(e.target.value) }}
+                                                                        defaultValue={bath}
+                                                                        required
+                                                                    />
+                                                                </div>
+                                                            </div>
+
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Parking</label>
+                                                                <Dropdown options={parkingOptions} onChange={(e) => { setParking(e) }} value={parking?.label ? parking?.label : parking} placeholder="Select parking" />
+
+                                                            </div>
+
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Air conditioning</label>
+                                                                <Dropdown options={airConditioningOptions} onChange={(e) => { setAirConditioning(e) }} value={airConditioning?.label ? airConditioning.label : airConditioning} placeholder="Select gerage" />
+
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Balcony</label>
+                                                                <Dropdown options={balconyOptions} onChange={(e) => { setBalcony(e) }} value={balcony?.label ? balcony?.label : balcony} placeholder="Select balcony" />
+
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Security</label>
+                                                                <Dropdown options={securityOptions} onChange={(e) => { setSecurity(e) }} value={security?.label ? security?.label : security} placeholder="Select Security" />
+                                                            </div>
+
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Elevator</label>
+                                                                <Dropdown options={elevatorOptions} onChange={(e) => { setElevator(e) }} value={elevator?.label ? elevator?.label : elevator} placeholder="Select area unit" />
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Window</label>
+                                                                <Dropdown options={windowsOptions} onChange={(e) => { setWindow(e) }} value={window?.label ? window?.label : window} placeholder="Select window" />
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Furnished</label>
+                                                                <Dropdown options={furnishedOptions} onChange={(e) => { setFurnished(e) }} value={furnished?.label ? furnished?.label : furnished} placeholder="Select furnished" />
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Floor number</label>
+                                                                <div className='password-filed'>
+                                                                    <input
+                                                                        type='number'
+                                                                        className="input"
+                                                                        autoComplete='off'
+                                                                        placeholder='Enter floor number'
+                                                                        onChange={(e) => { setFloorNumber(e.target.value) }}
+                                                                        defaultValue={floorNumber}
+                                                                        required
+                                                                    />
+                                                                </div>
+                                                            </div>
+
+                                                        </>
+
+                                                    }
+                                                    {(propertyType?.value === 'commercialProperties') &&
+                                                        <>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label> Kitchen</label>
+                                                                <div className='password-fil'>
+                                                                    <input
+                                                                        type='number'
+                                                                        className="input"
+                                                                        autoComplete='off'
+                                                                        name='confirmNewPassword'
+                                                                        id='confirmNewPassword'
+                                                                        placeholder='Enter number of Kitchen'
+                                                                        onChange={(e) => { setKitchen(e.target.value) }}
+                                                                        defaultValue={kitchen}
+                                                                        required
+                                                                    />
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Bath</label>
+                                                                <div className='password-filed'>
+                                                                    <input
+                                                                        type='number'
+                                                                        className="input"
+                                                                        autoComplete='off'
+                                                                        name='confirmNewPassword'
+                                                                        id='confirmNewPassword'
+                                                                        placeholder='Enter number of bath'
+                                                                        onChange={(e) => { setBath(e.target.value) }}
+                                                                        defaultValue={bath}
+                                                                        required
+                                                                    />
+                                                                </div>
+                                                            </div>
+
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Parking</label>
+                                                                <Dropdown options={parkingOptions} onChange={(e) => { setParking(e) }} value={parking?.label ? parking?.label : parking} placeholder="Select parking" />
+
+                                                            </div>
+
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Air conditioning</label>
+                                                                <Dropdown options={airConditioningOptions} onChange={(e) => { setAirConditioning(e) }} value={airConditioning?.label ? airConditioning.label : airConditioning} placeholder="Select gerage" />
+
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Balcony</label>
+                                                                <Dropdown options={balconyOptions} onChange={(e) => { setBalcony(e) }} value={balcony?.label ? balcony?.label : balcony} placeholder="Select balcony" />
+
+                                                            </div>
+
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Window</label>
+                                                                <Dropdown options={windowsOptions} onChange={(e) => { setWindow(e) }} value={window?.label ? window?.label : window} placeholder="Select window" />
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Security</label>
+                                                                <Dropdown options={securityOptions} onChange={(e) => { setSecurity(e) }} value={security?.label ? security?.label : security} placeholder="Select Security" />
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Furnished</label>
+                                                                <Dropdown options={furnishedOptions} onChange={(e) => { setFurnished(e) }} value={furnished?.label ? furnished?.label : furnished} placeholder="Select furnished" />
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Floor number</label>
+                                                                <div className='password-filed'>
+                                                                    <input
+                                                                        type='number'
+                                                                        className="input"
+                                                                        autoComplete='off'
+                                                                        placeholder='Enter floor number'
+                                                                        onChange={(e) => { setFloorNumber(e.target.value) }}
+                                                                        defaultValue={floorNumber}
+                                                                        required
+                                                                    />
+                                                                </div>
+                                                            </div>
+
+                                                        </>
+                                                    }
+                                                    {(propertyType?.value === 'building') &&
+                                                        <>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label> Kitchen</label>
+                                                                <div className='password-fil'>
+                                                                    <input
+                                                                        type='number'
+                                                                        className="input"
+                                                                        autoComplete='off'
+                                                                        name='confirmNewPassword'
+                                                                        id='confirmNewPassword'
+                                                                        placeholder='Enter number of Kitchen'
+                                                                        onChange={(e) => { setKitchen(e.target.value) }}
+                                                                        defaultValue={kitchen}
+                                                                        required
+                                                                    />
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Bath</label>
+                                                                <div className='password-filed'>
+                                                                    <input
+                                                                        type='number'
+                                                                        className="input"
+                                                                        autoComplete='off'
+                                                                        name='confirmNewPassword'
+                                                                        id='confirmNewPassword'
+                                                                        placeholder='Enter number of bath'
+                                                                        onChange={(e) => { setBath(e.target.value) }}
+                                                                        defaultValue={bath}
+                                                                        required
+                                                                    />
+                                                                </div>
+                                                            </div>
+
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Parking</label>
+                                                                <Dropdown options={parkingOptions} onChange={(e) => { setParking(e) }} value={parking?.label ? parking?.label : parking} placeholder="Select parking" />
+
+                                                            </div>
+
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Air conditioning</label>
+                                                                <Dropdown options={airConditioningOptions} onChange={(e) => { setAirConditioning(e) }} value={airConditioning?.label ? airConditioning.label : airConditioning} placeholder="Select gerage" />
+
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Balcony</label>
+                                                                <Dropdown options={balconyOptions} onChange={(e) => { setBalcony(e) }} value={balcony?.label ? balcony?.label : balcony} placeholder="Select balcony" />
+
+                                                            </div>
+
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Window</label>
+                                                                <Dropdown options={windowsOptions} onChange={(e) => { setWindow(e) }} value={window?.label ? window?.label : window} placeholder="Select window" />
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Security</label>
+                                                                <Dropdown options={securityOptions} onChange={(e) => { setSecurity(e) }} value={security?.label ? security?.label : security} placeholder="Select Security" />
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Furnished</label>
+                                                                <Dropdown options={furnishedOptions} onChange={(e) => { setFurnished(e) }} value={furnished?.label ? furnished?.label : furnished} placeholder="Select furnished" />
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Floor number</label>
+                                                                <div className='password-filed'>
+                                                                    <input
+                                                                        type='number'
+                                                                        className="input"
+                                                                        autoComplete='off'
+                                                                        placeholder='Enter floor number'
+                                                                        onChange={(e) => { setFloorNumber(e.target.value) }}
+                                                                        defaultValue={floorNumber}
+                                                                        required
+                                                                    />
+                                                                </div>
+                                                            </div>
+
+                                                        </>
+                                                    }
+                                                    {(propertyType?.value === 'office') &&
+                                                        <>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label> Kitchen</label>
+                                                                <div className='password-fil'>
+                                                                    <input
+                                                                        type='number'
+                                                                        className="input"
+                                                                        autoComplete='off'
+                                                                        name='confirmNewPassword'
+                                                                        id='confirmNewPassword'
+                                                                        placeholder='Enter number of Kitchen'
+                                                                        onChange={(e) => { setKitchen(e.target.value) }}
+                                                                        defaultValue={kitchen}
+                                                                        required
+                                                                    />
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Bath</label>
+                                                                <div className='password-filed'>
+                                                                    <input
+                                                                        type='number'
+                                                                        className="input"
+                                                                        autoComplete='off'
+                                                                        name='confirmNewPassword'
+                                                                        id='confirmNewPassword'
+                                                                        placeholder='Enter number of bath'
+                                                                        onChange={(e) => { setBath(e.target.value) }}
+                                                                        defaultValue={bath}
+                                                                        required
+                                                                    />
+                                                                </div>
+                                                            </div>
+
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Parking</label>
+                                                                <Dropdown options={parkingOptions} onChange={(e) => { setParking(e) }} value={parking?.label ? parking?.label : parking} placeholder="Select parking" />
+
+                                                            </div>
+
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Air conditioning</label>
+                                                                <Dropdown options={airConditioningOptions} onChange={(e) => { setAirConditioning(e) }} value={airConditioning?.label ? airConditioning.label : airConditioning} placeholder="Select gerage" />
+
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Balcony</label>
+                                                                <Dropdown options={balconyOptions} onChange={(e) => { setBalcony(e) }} value={balcony?.label ? balcony?.label : balcony} placeholder="Select balcony" />
+
+                                                            </div>
+
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Window</label>
+                                                                <Dropdown options={windowsOptions} onChange={(e) => { setWindow(e) }} value={window?.label ? window?.label : window} placeholder="Select window" />
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Security</label>
+                                                                <Dropdown options={securityOptions} onChange={(e) => { setSecurity(e) }} value={security?.label ? security?.label : security} placeholder="Select Security" />
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Furnished</label>
+                                                                <Dropdown options={furnishedOptions} onChange={(e) => { setFurnished(e) }} value={furnished?.label ? furnished?.label : furnished} placeholder="Select furnished" />
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Floor number</label>
+                                                                <div className='password-filed'>
+                                                                    <input
+                                                                        type='number'
+                                                                        className="input"
+                                                                        autoComplete='off'
+                                                                        placeholder='Enter floor number'
+                                                                        onChange={(e) => { setFloorNumber(e.target.value) }}
+                                                                        defaultValue={floorNumber}
+                                                                        required
+                                                                    />
+                                                                </div>
+                                                            </div>
+
+                                                        </>
                                                     }
 
                                                     {(propertyType?.value === 'garage') &&
+                                                    
+                                                    <>
+                                                  
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Unit</label>
                                                             <div className='password-filed'>
@@ -683,8 +1251,6 @@ const UpdateProperty = () => {
                                                                 />
                                                             </div>
                                                         </div>
-                                                    }
-                                                      {(propertyType?.value === 'garage') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Wide</label>
                                                             <div className='password-filed'>
@@ -702,8 +1268,6 @@ const UpdateProperty = () => {
                                                                 />
                                                             </div>
                                                         </div>
-                                                    }
-                                                      {(propertyType?.value === 'garage') &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Long</label>
                                                             <div className='password-filed'>
@@ -721,8 +1285,6 @@ const UpdateProperty = () => {
                                                                 />
                                                             </div>
                                                         </div>
-                                                    }
-                                                      {(propertyType?.value === 'garage' )&&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Height</label>
                                                             <div className='password-filed'>
@@ -740,141 +1302,47 @@ const UpdateProperty = () => {
                                                                 />
                                                             </div>
                                                         </div>
-                                                    }
 
+                                                    </>}
 
-                                                    {(propertyType?.value !== 'garage' && propertyType?.value !== 'land') &&
-                                                        <div className="col-lg-4 mt-4">
-                                                            <label> Kitchen</label>
-                                                            <div className='password-fil'>
-                                                                <input
-                                                                    type='number'
-                                                                    className="input"
-                                                                    autoComplete='off'
-                                                                    name='confirmNewPassword'
-                                                                    id='confirmNewPassword'
-                                                                    placeholder='Enter number of Kitchen'
-                                                                    onChange={(e) => { setKitchen(e.target.value) }}
-                                                                    defaultValue={kitchen}
-                                                                    required
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                    }
-                                                    {(propertyType?.value === 'land') &&
-                                                        <div className="col-lg-4 mt-4">
-                                                            <label> Land Type</label>
-                                                            <div className='password-fil'>
+                                                    {(propertyType?.value === 'land') && 
+                                                    <>
+                                                    <div className="col-lg-4 mt-4">
+                                                            <label>Land Type</label>
+                                                            <div className='password-filed'>
                                                                 <input
                                                                     type='text'
-                                                                    className="input"
-                                                                    autoComplete='off'
-                                                                    name=''
-                                                                    id=''
-                                                                    placeholder='Enter land type'
-                                                                    onChange={(e) => { setLandType(e.target.value) }}
-                                                                    defaultValue={landType}
-                                                                    required
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                    }
-                                                    {(propertyType?.value !== 'land' && propertyType?.value !== 'garage') &&
-                                                        <div className="col-lg-4 mt-4">
-                                                            <label>Bath</label>
-                                                            <div className='password-filed'>
-                                                                <input
-                                                                    type='number'
+                                                                    style={{ padding: '10px 16px' }}
                                                                     className="input"
                                                                     autoComplete='off'
                                                                     name='confirmNewPassword'
                                                                     id='confirmNewPassword'
-                                                                    placeholder='Enter number of bath'
-                                                                    onChange={(e) => { setBath(e.target.value) }}
-                                                                    defaultValue={bath}
+                                                                    placeholder='Enter unit'
+                                                                    onChange={(e) => { setType(e.target.value) }}
+                                                                    defaultValue={type}
                                                                     required
                                                                 />
                                                             </div>
                                                         </div>
-                                                    }
-                                                    {(propertyType?.value !== 'garage' 
-                                                        && propertyType?.value !== 'land'
-                                                        && propertyType?.value !== 'room'
-                                                        && propertyType?.value !== 'office'
-                                                        && propertyType?.value !== 'building'
-                                                        && propertyType?.value !== 'commercialProperties')
-                                                        &&
+
                                                         <div className="col-lg-4 mt-4">
-                                                            <label>Living Room</label>
-                                                            <div className='password-filed'>
-                                                                <input
-                                                                    type='number'
-                                                                    className="input"
-                                                                    autoComplete='off'
-                                                                    name='confirmNewPassword'
-                                                                    id='confirmNewPassword'
-                                                                    placeholder='Enter number of living rooms'
-                                                                    onChange={(e) => { setLivingRoom(e.target.value) }}
-                                                                    defaultValue={livingRoom}
-                                                                    required
-                                                                />
-                                                            </div>
+                                                            <label>fenced</label>
+                                                            <Dropdown options={fencedOptions} onChange={(e) => { setFurnished(e) }} value={fenced?.label ? fenced?.label : fenced} placeholder="Select fenced" />
+
                                                         </div>
+                                                    </>
                                                     }
-                                                    {(propertyType?.value !== 'newHome' 
-                                                    && propertyType?.value !== 'home'
-                                                    && propertyType?.value !== 'garage'
-                                                    && propertyType?.value !== 'land')
-                                                    &&
-                                                        <div className="col-lg-4 mt-4">
-                                                            <label>Floor number</label>
-                                                            <div className='password-filed'>
-                                                                <input
-                                                                    type='number'
-                                                                    className="input"
-                                                                    autoComplete='off'
-                                                                    placeholder='Enter floor number'
-                                                                    onChange={(e) => { setFloorNumber(e.target.value) }}
-                                                                    defaultValue={floorNumber}
-                                                                    required
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                    }
-                                                    {(propertyType?.value !== 'garage' 
-                                                        && propertyType?.value !== 'land'
-                                                        && propertyType?.value !== 'room'
-                                                        && propertyType?.value !== 'office'
-                                                        && propertyType?.value !== 'building'
-                                                        && propertyType?.value !== 'commercialProperties')
-                                                        &&
-                                                        <div className="col-lg-4 mt-4">
-                                                            <label> Total floors</label>
-                                                            <div className='password-filed'>
-                                                                <input
-                                                                    type='number'
-                                                                    className="input"
-                                                                    autoComplete='off'
-                                                                    name='confirmNewPassword'
-                                                                    id='confirmNewPassword'
-                                                                    placeholder='Enter total numner of floors'
-                                                                    onChange={(e) => { setTotalFloors(e.target.value) }}
-                                                                    defaultValue={totalFloors}
-                                                                    required
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                    }
+
                                                     <div className="col-lg-12 mt-4">
                                                         <label>Description</label>
-                                                        <textarea  
-                                                        type="text"
-                                                        className='input' 
-                                                        placeholder='Enter drscription'
-                                                        rows="5"
-                                                        required
-                                                        onChange={(e) => { setDescription(e.target.value) }}
-                                                        value={description}>
+                                                        <textarea
+                                                            type="text"
+                                                            className='input'
+                                                            placeholder='Enter drscription'
+                                                            rows="5"
+                                                            required
+                                                            onChange={(e) => { setDescription(e.target.value) }}
+                                                            value={description}>
                                                         </textarea>
                                                     </div>
 
@@ -979,39 +1447,38 @@ const UpdateProperty = () => {
 
                                                     </div>
                                                     <div className="col-lg-12 mt-4">
-                                                        <div className='uploadimage-section'>
-                                                            <div className="images">
-                                                                {selectedImages &&
-                                                                    selectedImages.map((image, index) => {
-                                                                        let imagesArray;
-                                                                        if (image.type) {
+                                                        <div>
+                                                            <h1 className='form-sec-heading'>New Media</h1>
+                                                            <div className='uploadimage-section'>
+                                                                <div className="images">
+                                                                    {selectedImages &&
+                                                                        selectedImages.map((image, index) => {
+                                                                            let imagesArray;
                                                                             imagesArray = URL.createObjectURL(image)
-                                                                        } else {
-                                                                            imagesArray = image
-                                                                        }
-                                                                        return (
-                                                                            <div key={index} className="image">
-                                                                                <img src={imagesArray} height="150" alt="upload" />
-                                                                                <button onClick={() => deleteHandler(index)}>
-                                                                                    <MdDelete />
-                                                                                </button>
-                                                                                <p>{index + 1}</p>
-                                                                            </div>
-                                                                        );
-                                                                    })}
-                                                            </div>
 
-                                                            <label>
-                                                                + Add Images
-                                                                <input
-                                                                    type="file"
-                                                                    name="images"
-                                                                    onChange={onSelectFile}
-                                                                    multiple
-                                                                    accept="image/png , image/jpeg, image/webp"
-                                                                />
-                                                            </label>
-                                                            <br />
+                                                                            return (
+                                                                                <div key={index} className="image">
+                                                                                    <img src={imagesArray} height="150" alt="upload" />
+                                                                                    <button onClick={() => deleteHandler(index)}>
+                                                                                        <MdDelete />
+                                                                                    </button>
+                                                                                    {/* <p>{index + 1}</p> */}
+                                                                                </div>
+                                                                            );
+                                                                        })}
+                                                                </div>
+
+                                                                <label>
+                                                                    + Add Images
+                                                                    <input
+                                                                        type="file"
+                                                                        name="images"
+                                                                        onChange={onSelectFile}
+                                                                        multiple
+                                                                        accept="image/png , image/jpeg, image/webp"
+                                                                    />
+                                                                </label>
+                                                                {/* <br />
 
                                                             {selectedImages.length > 0 &&
                                                                 (selectedImages.length > 10 &&
@@ -1021,8 +1488,55 @@ const UpdateProperty = () => {
                                                                             please delete <b> {selectedImages.length - 10} </b> of them{" "}
                                                                         </span>
                                                                     </p>
-                                                                )}
+                                                                )} */}
+                                                            </div>
                                                         </div>
+
+                                                    </div>
+                                                    <div className="col-lg-12 mt-4">
+                                                        <div>
+                                                            <h1 className='form-sec-heading'>Old Media</h1>
+                                                            <div className='uploadimage-section'>
+                                                                <div className="images">
+                                                                    {selectedImages &&
+                                                                        oldImages.map((image, index) => {
+
+                                                                            return (
+                                                                                <div key={index} className="image">
+                                                                                    <img src={image} height="150" alt="upload" />
+                                                                                    <button onClick={() => deleteimage(image , index)}>
+                                                                                        <MdDelete />
+                                                                                    </button>
+                                                                                    {/* <p>{index + 1}</p> */}
+                                                                                </div>
+                                                                            );
+                                                                        })}
+                                                                </div>
+
+                                                                {/* <label>
+                                                                    + Add Images
+                                                                    <input
+                                                                        type="file"
+                                                                        name="images"
+                                                                        // onChange={onSelectFile}
+                                                                        multiple
+                                                                        accept="image/png , image/jpeg, image/webp"
+                                                                    />
+                                                                </label> */}
+                                                                {/* <br />
+
+                                                            {selectedImages.length > 0 &&
+                                                                (selectedImages.length > 10 &&
+                                                                    <p className="error-upload">
+                                                                        You can't upload more than 10 images! <br />
+                                                                        <span>
+                                                                            please delete <b> {selectedImages.length - 10} </b> of them{" "}
+                                                                        </span>
+                                                                    </p>
+                                                                )} */}
+                                                            </div>
+                                                        </div>
+
                                                     </div>
                                                     <div className="col-lg-12">
                                                         <div className='uploadimage-section'>
@@ -1037,7 +1551,7 @@ const UpdateProperty = () => {
                                                                 </div>
                                                             }
 
-                                                            <label>
+                                                            {/* <label>
                                                                 Add Tour
                                                                 <input
                                                                     type="file"
@@ -1045,20 +1559,21 @@ const UpdateProperty = () => {
                                                                     onChange={(e) => onfloorMapSelected(e.target.files[0])}
                                                                     accept="image/png , image/jpeg, image/webp"
                                                                 />
-                                                            </label>
+                                                            </label> */}
                                                         </div>
                                                     </div>
-                                                    <div className="col-lg-12 mt-4">
+                                                    <div className="col-lg-12">
                                                         <div className='uploadimage-section'>
-                                                            <label>
+                                                            {/* <label>
                                                                 Upload Video
-                                                                <span>{video?.name}</span>
+                                                                {video?.name ? <span>{video?.name}</span> : ''}
+
                                                                 <input
                                                                     type="file"
                                                                     name="" id=""
                                                                     onChange={(e) => onVideoSelected(e.target.files[0])}
                                                                     accept="video/mp4,video/x-m4v,video/*" />
-                                                            </label>
+                                                            </label> */}
                                                         </div>
                                                     </div>
 
