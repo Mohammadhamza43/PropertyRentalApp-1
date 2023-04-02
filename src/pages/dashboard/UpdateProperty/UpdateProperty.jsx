@@ -4,7 +4,7 @@ import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import { toast, ToastContainer } from 'react-toastify';
 import { MdDelete } from 'react-icons/md';
-import  DeleteImage  from '../../../shared/Methods/DeleteImage';
+import DeleteImage from '../../../shared/Methods/DeleteImage';
 import Footer from '../../../shared/Footer/Footer';
 import Header from '../../../shared/Header/Header';
 import '../UploadProperty/UploadProperty.css';
@@ -13,12 +13,13 @@ function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 
+
+
 const UpdateProperty = () => {
     const token = JSON.parse(localStorage.getItem('user'))?.token.token;
     const query = useQuery();
     const navigate = useNavigate()
     const [id, setId] = useState('');
-    const [list, setList] = useState([])
     const advertisingOptions = [{ value: 'sale', label: 'Sale' }, { value: 'rent', label: 'Rent' }]
     const propertytypeOptions = [{ value: 'propertytype', label: 'Property Type' },
     { value: 'newHome', label: 'New Home' },
@@ -112,18 +113,12 @@ const UpdateProperty = () => {
         }).then((res) => {
             res.json().then((result) => {
                 const data = result;
-                console.log(query.get('id'));
                 setId(query.get('id'))
-                console.log({ id });
-                console.log(result.data.find(x => x._id == query.get('id')));
-
                 const selectedProperty = result.data.find(x => x._id == query.get('id'));
-                console.log(selectedProperty.availableFrom);
 
                 const input = selectedProperty.availableFrom
                 const [year, month, day] = input.split('T')[0].split('-')
                 const date = `${year}-${month}-${day}`
-                console.log({ date });
 
                 if (selectedProperty) {
                     setPropertyType({ value: selectedProperty.type, label: selectedProperty.type })
@@ -187,7 +182,7 @@ const UpdateProperty = () => {
                         setElevator(selectedProperty.roomAmenities.elevator ? 'Yes' : 'No')
                         setWindow(selectedProperty.roomAmenities.window ? 'Yes' : 'No')
                         setFurnished(selectedProperty.roomAmenities.furnished ? 'Yes' : 'No')
-                        setFlatNumber(selectedProperty.roomAmenities.floorNo)
+                        setFloorNumber(selectedProperty.roomAmenities.floorNo)
                         setotherFeaturs(selectedProperty.roomAmenities.otherAmenities)
                     }
                     else if (selectedProperty.type === 'building') {
@@ -243,6 +238,38 @@ const UpdateProperty = () => {
 
         })
     }, [])
+
+    const DeleteOldImages = async (url, index) => {
+        // console.log(url , index , id );
+
+        await fetch(`https://walrus-app-ovpy2.ondigitalocean.app/property/delete/image/${id}`, {
+            method: "PUT",
+            headers: {
+                "Accept": "application/json",
+                'Content-Type': 'application/json',
+                "AUTHORIZATION": `BEARER ${token}`
+            },
+            body: JSON.stringify({ url: url })
+
+        }).then((res) => {
+            const  deletimage = [...oldImages]
+                deletimage.splice(index, 1)
+                setOldImages(deletimage)
+            if (res.ok) (
+                
+                toast.success('Image deleted succesfully.',
+                    { position: toast.POSITION.BOTTOM_RIGHT }))
+
+        }).catch((error) => {
+            console.log(error);
+            toast.error('error.message', { position: toast.POSITION.BOTTOM_RIGHT })
+        }
+        )
+
+        // const deletimage = [...selectedImages];
+        // deletimage.splice(index, 1)
+        // setSelectedImages(deletimage)
+    }
 
     const submit = async (event) => {
         event.preventDefault()
@@ -309,7 +336,6 @@ const UpdateProperty = () => {
                     otherAmenities: otherFeatuers ? [...otherFeatuers] : []
 
                 }
-                console.log(roomAmenities);
                 break;
             case 'building':
                 commercialAmenities = {
@@ -363,7 +389,6 @@ const UpdateProperty = () => {
                     otherAmenities: otherFeatuers ? [...otherFeatuers] : []
 
                 }
-                console.log('Land');
                 break;
             case 'garage':
                 garageAmenities = {
@@ -374,7 +399,6 @@ const UpdateProperty = () => {
                     otherAmenities: otherFeatuers ? [...otherFeatuers] : []
 
                 }
-                console.log('Garage');
                 break;
             default:
         }
@@ -401,9 +425,9 @@ const UpdateProperty = () => {
         }
         formData.append('videos ', video)
         formData.append('tours ', '[]')
-        for (var pair of formData.entries()) {
-            console.log(pair[0] + ' - ' + pair[1]);
-        }
+        // for (var pair of formData.entries()) {
+        //     console.log(pair[0] + ' - ' + pair[1]);
+        // }
 
 
         await fetch(`https://walrus-app-ovpy2.ondigitalocean.app/property/${id}`, {
@@ -419,7 +443,7 @@ const UpdateProperty = () => {
                     toast.success('Property Successfully uploaded.',
                         { position: toast.POSITION.BOTTOM_RIGHT })
 
-                    navigate('/user-properties')
+                    // navigate('/user-properties')
                 }
             })
             .catch((error) => {
@@ -456,21 +480,17 @@ const UpdateProperty = () => {
     }
 
     const onSelectFile = (event) => {
-        console.log(event.target.files);
         const selectedFiles = event.target.files;
         const selectedFilesArray = Array.from(selectedFiles);
         // const selectedFilesArray = Array.from(selectedFiles);
         setSelectedImages((pre) => [...pre, ...selectedFilesArray]);
-        console.log(selectedImages);
         event.target.value = "";
     };
     const onfloorMapSelected = (event) => {
         setFloorMap(event)
-        console.log(event);
     };
     const onVideoSelected = (event) => {
         setVideo(event)
-        console.log(event);
     };
 
     const deleteHandler = (index) => {
@@ -478,47 +498,6 @@ const UpdateProperty = () => {
         deletimage.splice(index, 1)
         setSelectedImages(deletimage)
     }
-
-    // const deleteOldImages = (url , index) =>{
-    //     console.log(url);
-    //     console.log(index);
-    // }
-    const deleteimage = async (url, index) => {
-        // e.preventDefault()
-        await fetch(`https://walrus-app-ovpy2.ondigitalocean.app/property/delete/image/${id}`, {
-            method: "PUT",
-            headers: {
-                "Accept": "application/json",
-                "AUTHORIZATION": `BEARER ${token}`
-            },
-            body: JSON.stringify({ url: url })
-        })
-            .then((res) => {
-                if (res.ok) {
-                    toast.success('Property Successfully uploaded.',
-                        { position: toast.POSITION.BOTTOM_RIGHT })
-
-                    navigate('/user-properties')
-                }
-            })
-            .catch((error) => {
-                if (error) {
-
-                    toast.error(error, { position: toast.POSITION.BOTTOM_RIGHT })
-
-
-                } else {
-                    toast.error('400 Error',
-                        { position: toast.POSITION.BOTTOM_RIGHT }
-                    )
-                }
-            })
-
-        const deletimage = [...selectedImages];
-        deletimage.splice(index, 1)
-        setSelectedImages(deletimage)
-    }
-
 
 
     return (
@@ -1231,106 +1210,106 @@ const UpdateProperty = () => {
                                                     }
 
                                                     {(propertyType?.value === 'garage') &&
-                                                    
-                                                    <>
-                                                  
-                                                        <div className="col-lg-4 mt-4">
-                                                            <label>Unit</label>
-                                                            <div className='password-filed'>
-                                                                <input
-                                                                    type='number'
-                                                                    style={{ padding: '10px 16px' }}
-                                                                    className="input"
-                                                                    autoComplete='off'
-                                                                    name='confirmNewPassword'
-                                                                    id='confirmNewPassword'
-                                                                    placeholder='Enter unit'
-                                                                    onChange={(e) => { setUnit(e.target.value) }}
-                                                                    defaultValue={unit}
-                                                                    required
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-lg-4 mt-4">
-                                                            <label>Wide</label>
-                                                            <div className='password-filed'>
-                                                                <input
-                                                                    type='number'
-                                                                    style={{ padding: '10px 16px' }}
-                                                                    className="input"
-                                                                    autoComplete='off'
-                                                                    name='confirmNewPassword'
-                                                                    id='confirmNewPassword'
-                                                                    placeholder='Enter unit'
-                                                                    onChange={(e) => { setWide(e.target.value) }}
-                                                                    defaultValue={wide}
-                                                                    required
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-lg-4 mt-4">
-                                                            <label>Long</label>
-                                                            <div className='password-filed'>
-                                                                <input
-                                                                    type='number'
-                                                                    style={{ padding: '10px 16px' }}
-                                                                    className="input"
-                                                                    autoComplete='off'
-                                                                    name='confirmNewPassword'
-                                                                    id='confirmNewPassword'
-                                                                    placeholder='Enter unit'
-                                                                    onChange={(e) => { setLong(e.target.value) }}
-                                                                    defaultValue={long}
-                                                                    required
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-lg-4 mt-4">
-                                                            <label>Height</label>
-                                                            <div className='password-filed'>
-                                                                <input
-                                                                    type='number'
-                                                                    style={{ padding: '10px 16px' }}
-                                                                    className="input"
-                                                                    autoComplete='off'
-                                                                    name='confirmNewPassword'
-                                                                    id='confirmNewPassword'
-                                                                    placeholder='Enter unit'
-                                                                    onChange={(e) => { setheight(e.target.value) }}
-                                                                    defaultValue={height}
-                                                                    required
-                                                                />
-                                                            </div>
-                                                        </div>
 
-                                                    </>}
+                                                        <>
 
-                                                    {(propertyType?.value === 'land') && 
-                                                    <>
-                                                    <div className="col-lg-4 mt-4">
-                                                            <label>Land Type</label>
-                                                            <div className='password-filed'>
-                                                                <input
-                                                                    type='text'
-                                                                    style={{ padding: '10px 16px' }}
-                                                                    className="input"
-                                                                    autoComplete='off'
-                                                                    name='confirmNewPassword'
-                                                                    id='confirmNewPassword'
-                                                                    placeholder='Enter unit'
-                                                                    onChange={(e) => { setType(e.target.value) }}
-                                                                    defaultValue={type}
-                                                                    required
-                                                                />
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Unit</label>
+                                                                <div className='password-filed'>
+                                                                    <input
+                                                                        type='number'
+                                                                        style={{ padding: '10px 16px' }}
+                                                                        className="input"
+                                                                        autoComplete='off'
+                                                                        name='confirmNewPassword'
+                                                                        id='confirmNewPassword'
+                                                                        placeholder='Enter unit'
+                                                                        onChange={(e) => { setUnit(e.target.value) }}
+                                                                        defaultValue={unit}
+                                                                        required
+                                                                    />
+                                                                </div>
                                                             </div>
-                                                        </div>
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Wide</label>
+                                                                <div className='password-filed'>
+                                                                    <input
+                                                                        type='number'
+                                                                        style={{ padding: '10px 16px' }}
+                                                                        className="input"
+                                                                        autoComplete='off'
+                                                                        name='confirmNewPassword'
+                                                                        id='confirmNewPassword'
+                                                                        placeholder='Enter unit'
+                                                                        onChange={(e) => { setWide(e.target.value) }}
+                                                                        defaultValue={wide}
+                                                                        required
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Long</label>
+                                                                <div className='password-filed'>
+                                                                    <input
+                                                                        type='number'
+                                                                        style={{ padding: '10px 16px' }}
+                                                                        className="input"
+                                                                        autoComplete='off'
+                                                                        name='confirmNewPassword'
+                                                                        id='confirmNewPassword'
+                                                                        placeholder='Enter unit'
+                                                                        onChange={(e) => { setLong(e.target.value) }}
+                                                                        defaultValue={long}
+                                                                        required
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Height</label>
+                                                                <div className='password-filed'>
+                                                                    <input
+                                                                        type='number'
+                                                                        style={{ padding: '10px 16px' }}
+                                                                        className="input"
+                                                                        autoComplete='off'
+                                                                        name='confirmNewPassword'
+                                                                        id='confirmNewPassword'
+                                                                        placeholder='Enter unit'
+                                                                        onChange={(e) => { setheight(e.target.value) }}
+                                                                        defaultValue={height}
+                                                                        required
+                                                                    />
+                                                                </div>
+                                                            </div>
 
-                                                        <div className="col-lg-4 mt-4">
-                                                            <label>fenced</label>
-                                                            <Dropdown options={fencedOptions} onChange={(e) => { setFurnished(e) }} value={fenced?.label ? fenced?.label : fenced} placeholder="Select fenced" />
+                                                        </>}
 
-                                                        </div>
-                                                    </>
+                                                    {(propertyType?.value === 'land') &&
+                                                        <>
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Land Type</label>
+                                                                <div className='password-filed'>
+                                                                    <input
+                                                                        type='text'
+                                                                        style={{ padding: '10px 16px' }}
+                                                                        className="input"
+                                                                        autoComplete='off'
+                                                                        name='confirmNewPassword'
+                                                                        id='confirmNewPassword'
+                                                                        placeholder='Enter unit'
+                                                                        onChange={(e) => { setType(e.target.value) }}
+                                                                        defaultValue={type}
+                                                                        required
+                                                                    />
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>fenced</label>
+                                                                <Dropdown options={fencedOptions} onChange={(e) => { setFurnished(e) }} value={fenced?.label ? fenced?.label : fenced} placeholder="Select fenced" />
+
+                                                            </div>
+                                                        </>
                                                     }
 
                                                     <div className="col-lg-12 mt-4">
@@ -1459,7 +1438,7 @@ const UpdateProperty = () => {
                                                                             return (
                                                                                 <div key={index} className="image">
                                                                                     <img src={imagesArray} height="150" alt="upload" />
-                                                                                    <button onClick={() => deleteHandler(index)}>
+                                                                                    <button type='text' onClick={() => deleteHandler(index)}>
                                                                                         <MdDelete />
                                                                                     </button>
                                                                                     {/* <p>{index + 1}</p> */}
@@ -1504,10 +1483,9 @@ const UpdateProperty = () => {
                                                                             return (
                                                                                 <div key={index} className="image">
                                                                                     <img src={image} height="150" alt="upload" />
-                                                                                    <button onClick={() => deleteimage(image , index)}>
+                                                                                    <button type='reset' onClick={() => DeleteOldImages(image, index)}>
                                                                                         <MdDelete />
                                                                                     </button>
-                                                                                    {/* <p>{index + 1}</p> */}
                                                                                 </div>
                                                                             );
                                                                         })}
@@ -1578,7 +1556,7 @@ const UpdateProperty = () => {
                                                     </div>
 
                                                     <div className="col-lg-12 mt-4">
-                                                        <button type="submit" className='button'>Upload Property</button>
+                                                        <button type="submit" value="submit" className='button'>Update Property</button>
                                                     </div>
                                                 </>
                                             }
