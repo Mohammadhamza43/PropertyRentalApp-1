@@ -228,16 +228,14 @@ select {
 }
 
 .uploadimage-section label {
-  /* margin: 0 auto; */
+  padding: 8px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   border: 1px dotted #e86ed0 ;
-  border-radius: 20px;
+  border-radius: 6px;
   color: #e86ed0 ;
-  /* width: 10rem; */
-  /* height: 10rem; */
   cursor: pointer;
   font-size: large;
 }
@@ -279,6 +277,30 @@ select {
   border: none;
   color: white;
   background-color: lightcoral;
+}
+.uploadTour-section .tour,
+.uploadVideo-section .video {
+  position: relative;
+  width: 100% !important;
+}
+.uploadTour-section .tour iframe,
+.uploadVideo-section .video iframe {
+  width: 100% !important;
+}
+.uploadTour-section .tour button,
+.uploadVideo-section .video button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+  border: none;
+  color: white;
+  background-color: lightcoral;
+  padding: 5px 5px;
+}
+.uploadVideo-section .video button svg ,
+.uploadTour-section .tour button svg {
+  font-size: 24px;
 }
 
 .uploadimage-section .image button:hover {
@@ -354,4 +376,23 @@ select {
   width: 100% !important;
   font-weight: 500 !important;
   font-family: sans-serif;
+}
+
+.table .thead-dark th {
+  color: #000;
+  background-color: #e86ed0;
+  border-color: transparent;
+}
+.table .thead-dark th:first-child {
+ border-radius: 6px 0px 0px 6px;
+}
+.table .thead-dark th:last-child {
+ border-radius: 0px 6px 6px 0px;
+}
+
+.table td:last-child{
+  padding: 0.55rem;
+}
+.table td:last-child svg{
+  font-size: 24px;
 }

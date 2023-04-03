@@ -31,7 +31,6 @@ const UserProperty = () => {
 
             method: "GET",
             headers: {
-                // "Content-Type": "application/json",
                 "Accept": "application/json",
                 "AUTHORIZATION": `BEARER ${token}`
             }
@@ -40,15 +39,6 @@ const UserProperty = () => {
         const data = await response.json()
         setLoader(false)
         setList(data.data)
-
-        // .then((response) =>   response.json() )
-        // .then((res) => {
-        //     // console.log(res.data);
-        //     setList(res.data); })
-
-        // .catch((error) => {
-        //     console.log(error);
-        // });
     }
 
     const deleteProperty = async (id) => {

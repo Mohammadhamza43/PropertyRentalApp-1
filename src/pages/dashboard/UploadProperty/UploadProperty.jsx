@@ -1,17 +1,19 @@
 import React, { useState } from 'react'
-import Dropdown from 'react-dropdown';
-import 'react-dropdown/style.css';
+import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
+import Dropdown from 'react-dropdown';
 import Apiloader from '../../../shared/ApiLoader/Apiloader';
 import { MdDelete } from 'react-icons/md';
 import Footer from '../../../shared/Footer/Footer';
 import Header from '../../../shared/Header/Header';
+import 'react-dropdown/style.css';
 import './UploadProperty.css';
 
 
 const UploadProperty = () => {
 
     const token = JSON.parse(localStorage.getItem('user'))?.token.token;
+    const navigate = useNavigate()
 
 
     const advertisingOptions = [{ value: 'sale', label: 'Sale' }, { value: 'rent', label: 'Rent' }]
@@ -35,7 +37,7 @@ const UploadProperty = () => {
     const balconyOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
     const windowsOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
     const fencedOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
-    const statusOptions = [{ value: 'active', label: 'Active' },{ value: 'inactive', label: 'Inactive' },{ value: 'sold', label: 'Sold' },{ value: 'rented', label: 'Rented' }]
+    const statusOptions = [{ value: 'active', label: 'Active' }, { value: 'inactive', label: 'Inactive' }, { value: 'sold', label: 'Sold' }, { value: 'rented', label: 'Rented' }]
     const areaUniyOptions = [{ value: 'mm', label: 'MM' }, { value: 'cm', label: 'CM' }, { value: 'm', label: 'M' }, { value: 'km', label: 'KM' }]
 
     const [advertising, setAdvertising] = useState({ value: 'sale', label: 'Sale' })
@@ -82,7 +84,7 @@ const UploadProperty = () => {
     const [height, setheight] = useState(0);
     const [floorMap, setFloorMap] = useState('');
     const [video, setVideo] = useState('');
-    const [tour, setTour] = useState([]);
+    const [tour, setTour] = useState('');
     const [formLoader, setFormLoader] = useState(false)
     // console.log(otherFeatuers);
 
@@ -190,7 +192,8 @@ const UploadProperty = () => {
             formData.append('photos', selectedImages[i])
         }
 
-        formData.append('videos ', video)
+        formData.append('videos', video)
+        formData.append('tours', tour)
         for (var pair of formData.entries()) {
             console.log(pair[0] + ' - ' + pair[1]);
         }
@@ -215,8 +218,9 @@ const UploadProperty = () => {
             .then((res) => {
 
                 setFormLoader(false)
-                toast.success('Property Successfully uploaded.',
-                    { position: toast.POSITION.BOTTOM_RIGHT }) 
+                navigate('/user-properties')
+                // toast.success('Property Successfully uploaded.',
+                //     { position: toast.POSITION.BOTTOM_RIGHT })
             })
             .catch((error) => {
                 setFormLoader(false)
@@ -226,7 +230,7 @@ const UploadProperty = () => {
 
 
             })
-    
+
     }
 
 
@@ -254,6 +258,9 @@ const UploadProperty = () => {
     const onfloorMapSelected = (event) => {
         setFloorMap(event)
         console.log(event);
+    };
+    const onToueSelected = (event) => {
+        setTour(event)
     };
     const onVideoSelected = (event) => {
         setVideo(event)
@@ -371,13 +378,13 @@ const UploadProperty = () => {
                                                     <div className="col-lg-6"></div>
 
 
-                                                    {(propertyType.value !== 'garage' 
+                                                    {(propertyType.value !== 'garage'
                                                         && propertyType.value !== 'land'
                                                         && propertyType.value !== 'room'
                                                         && propertyType.value !== 'office'
                                                         && propertyType.value !== 'building'
                                                         && propertyType.value !== 'commercialProperties'
-                                                        ) &&
+                                                    ) &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Room</label>
                                                             <div className='password-filed'>
@@ -408,12 +415,12 @@ const UploadProperty = () => {
                                                             <Dropdown options={securityOptions} onChange={(e) => { setSecurity(e) }} value={security.label} placeholder="Select Security" />
                                                         </div>
                                                     }
-                                                    {(propertyType.value !== 'garage' 
+                                                    {(propertyType.value !== 'garage'
                                                         && propertyType.value !== 'land'
                                                         && propertyType.value !== 'office'
                                                         && propertyType.value !== 'building'
                                                         && propertyType.value !== 'commercialProperties'
-                                                        ) &&
+                                                    ) &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Elevetor</label>
                                                             <Dropdown options={elevetorOptions} onChange={(e) => { setElevetor(e) }} value={elevetor.label} placeholder="Select elevetor" />
@@ -585,13 +592,13 @@ const UploadProperty = () => {
                                                             </div>
                                                         </div>
                                                     }
-                                                    {(propertyType.value !== 'garage' 
+                                                    {(propertyType.value !== 'garage'
                                                         && propertyType.value !== 'land'
                                                         && propertyType.value !== 'room'
                                                         && propertyType.value !== 'office'
                                                         && propertyType.value !== 'building'
                                                         && propertyType.value !== 'commercialProperties'
-                                                        ) &&
+                                                    ) &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Living Room</label>
                                                             <div className='password-filed'>
@@ -609,11 +616,11 @@ const UploadProperty = () => {
                                                             </div>
                                                         </div>
                                                     }
-                                                    
-                                                    {(propertyType.value !== 'newHome' 
-                                                    && propertyType.value !== 'home'
-                                                    && propertyType.value !== 'garage'
-                                                    && propertyType.value !== 'land'
+
+                                                    {(propertyType.value !== 'newHome'
+                                                        && propertyType.value !== 'home'
+                                                        && propertyType.value !== 'garage'
+                                                        && propertyType.value !== 'land'
                                                     ) &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label>Floor number</label>
@@ -630,13 +637,13 @@ const UploadProperty = () => {
                                                             </div>
                                                         </div>
                                                     }
-                                                    {(propertyType.value !== 'garage' 
+                                                    {(propertyType.value !== 'garage'
                                                         && propertyType.value !== 'land'
                                                         && propertyType.value !== 'room'
                                                         && propertyType.value !== 'office'
                                                         && propertyType.value !== 'building'
                                                         && propertyType.value !== 'commercialProperties'
-                                                        ) &&
+                                                    ) &&
                                                         <div className="col-lg-4 mt-4">
                                                             <label> Total floors</label>
                                                             <div className='password-filed'>
@@ -657,16 +664,16 @@ const UploadProperty = () => {
 
                                                     <div className="col-lg-12 mt-4">
                                                         <label>Description</label>
-                                                        <textarea 
-                                                        name="textarea" 
-                                                        type="text"
-                                                        id="" 
-                                                        className='input' 
-                                                        placeholder='Enter drscription'
-                                                        rows="5"
-                                                        required
-                                                        onChange={(e) => { setDescription(e.target.value) }}
-                                                        value={description}>
+                                                        <textarea
+                                                            name="textarea"
+                                                            type="text"
+                                                            id=""
+                                                            className='input'
+                                                            placeholder='Enter drscription'
+                                                            rows="5"
+                                                            required
+                                                            onChange={(e) => { setDescription(e.target.value) }}
+                                                            value={description}>
                                                         </textarea>
                                                     </div>
 
@@ -863,7 +870,7 @@ const UploadProperty = () => {
                                                     </div>
                                                     <div className="col-lg-12">
                                                         <div className='uploadimage-section'>
-                                                            {floorMap !== '' &&
+                                                            {/* {floorMap !== '' &&
                                                                 <div className="images">
                                                                     <div className="image">
 
@@ -872,24 +879,43 @@ const UploadProperty = () => {
 
                                                                     </div>
                                                                 </div>
-                                                            }
+                                                            } */}
 
                                                             <label>
                                                                 Add Tour
                                                                 <input
                                                                     type="file"
                                                                     name="images"
-                                                                    onChange={(e) => onfloorMapSelected(e.target.files[0])}
-                                                                    accept="image/png , image/jpeg, image/webp"
+                                                                    onChange={(e) => onToueSelected(e.target.files[0])}
+                                                                    accept="video/mp4,video/x-m4v,video/*" 
                                                                 />
                                                             </label>
                                                         </div>
+                                                        {tour &&
+                                                            <table class="table">
+                                                                <thead class="thead-dark">
+                                                                    <tr>
+                                                                        <th scope="col">Video type</th>
+                                                                        <th scope="col">Viddeo name</th>
+                                                                        <th scope="col">Video size</th>
+                                                                        <th scope="col">Action</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>{tour.type}</td>
+                                                                        <td>{tour.name}</td>
+                                                                        <td>{(tour.size / (1024 * 1024)).toFixed(2)}MB</td>
+                                                                        <td onClick={() => { setVideo('') }}> <MdDelete /></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        }
                                                     </div>
                                                     <div className="col-lg-12 mt-4">
                                                         <div className='uploadimage-section'>
                                                             <label>
                                                                 Upload Video
-                                                                <span>{video.name}</span>
                                                                 <input
                                                                     type="file"
                                                                     name="" id=""
@@ -897,6 +923,26 @@ const UploadProperty = () => {
                                                                     accept="video/mp4,video/x-m4v,video/*" />
                                                             </label>
                                                         </div>
+                                                        {video &&
+                                                            <table class="table">
+                                                                <thead class="thead-dark">
+                                                                    <tr>
+                                                                        <th scope="col">Video type</th>
+                                                                        <th scope="col">Viddeo name</th>
+                                                                        <th scope="col">Video size</th>
+                                                                        <th scope="col">Action</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>{video.type}</td>
+                                                                        <td>{video.name}</td>
+                                                                        <td>{(video.size / (1024 * 1024)).toFixed(2)}MB</td>
+                                                                        <td onClick={() => { setVideo('') }}> <MdDelete /></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        }
                                                     </div>
 
                                                     <div className="col-lg-12 mt-4">
