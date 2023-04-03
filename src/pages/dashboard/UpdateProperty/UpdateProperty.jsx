@@ -8,6 +8,7 @@ import DeleteImage from '../../../shared/Methods/DeleteImage';
 import Footer from '../../../shared/Footer/Footer';
 import Header from '../../../shared/Header/Header';
 import '../UploadProperty/UploadProperty.css';
+import Apiloader from '../../../shared/ApiLoader/Apiloader';
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -43,7 +44,7 @@ const UpdateProperty = () => {
     const elevatorOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
     const statusOptions = [{ value: 'active', label: 'Active' }, { value: 'inactive', label: 'Inactive' }, { value: 'sold', label: 'Sold' }, { value: 'rented', label: 'Rented' }]
     const areaUnitOptions = [{ value: 'mm', label: 'MM' }, { value: 'cm', label: 'CM' }, { value: 'm', label: 'M' }, { value: 'km', label: 'KM' }]
-
+    const [formLoader, setFormLoader] = useState(false)
     const [advertising, setAdvertising] = useState({ value: 'sale', label: 'Sale' })
     const [get, setGet] = useState(true)
     const [propertyType, setPropertyType] = useState({ value: 'propertytype', label: 'Property Type' })
@@ -91,14 +92,11 @@ const UpdateProperty = () => {
     const [landType, setLandType] = useState('');
     const [floorMap, setFloorMap] = useState('');
     const [oldImages, setOldImages] = useState('');
+    const [oldTour, setOldTour] = useState('');
+    const [oldVideo, setOldVideo] = useState('');
     const [imageId, setImageId] = useState('');
     const [video, setVideo] = useState('');
-    const [tour, setTour] = useState([]);
-    let property;
-
-
-
-
+    const [tour, setTour] = useState('');
 
     useEffect(() => {
 
@@ -131,8 +129,8 @@ const UpdateProperty = () => {
                     setAreaUnit(selectedProperty.area.unit)
                     setOldImages(selectedProperty.photos)
                     setImageId(selectedProperty._id)
-                    // setSelectedImages(selectedProperty.photos)
-                    setVideo(selectedProperty.video)
+                    setOldTour(selectedProperty.tours)
+                    setOldVideo(selectedProperty.videos)
                     setCountry(selectedProperty.location.country)
                     setCity(selectedProperty.location.city)
                     setAddress(selectedProperty.location.address)
@@ -195,7 +193,7 @@ const UpdateProperty = () => {
                         setWindow(selectedProperty.commercialAmenities.window ? 'Yes' : 'No')
                         setFurnished(selectedProperty.commercialAmenities.furnished ? 'Yes' : 'No')
                         setFloorNumber(selectedProperty.commercialAmenities.floorNo)
-                        setotherFeaturs(selectedProperty.roomAmenities.otherAmenities)
+                        setotherFeaturs(selectedProperty.commercialAmenities.otherAmenities)
                     }
                     else if (selectedProperty.type === 'commercialProperties') {
                         setKitchen(selectedProperty.commercialAmenities.kitchen)
@@ -207,7 +205,7 @@ const UpdateProperty = () => {
                         setWindow(selectedProperty.commercialAmenities.window ? 'Yes' : 'No')
                         setFurnished(selectedProperty.commercialAmenities.furnished ? 'Yes' : 'No')
                         setFloorNumber(selectedProperty.commercialAmenities.floorNo)
-                        setotherFeaturs(selectedProperty.roomAmenities.otherAmenities)
+                        setotherFeaturs(selectedProperty.commercialAmenities.otherAmenities)
                     }
                     else if (selectedProperty.type === 'Office') {
                         setKitchen(selectedProperty.commercialAmenities.kitchen)
@@ -219,29 +217,29 @@ const UpdateProperty = () => {
                         setWindow(selectedProperty.commercialAmenities.window ? 'Yes' : 'No')
                         setFurnished(selectedProperty.commercialAmenities.furnished ? 'Yes' : 'No')
                         setFloorNumber(selectedProperty.commercialAmenities.floorNo)
-                        setotherFeaturs(selectedProperty.roomAmenities.otherAmenities)
+                        setotherFeaturs(selectedProperty.commercialAmenities.otherAmenities)
                     }
                     else if (selectedProperty.type === 'garage') {
                         setUnit(selectedProperty.garageAmenities.unit)
                         setWide(selectedProperty.garageAmenities.wide)
                         setLong(selectedProperty.garageAmenities.long)
                         setheight(selectedProperty.garageAmenities.height)
-                        setotherFeaturs(selectedProperty.roomAmenities.otherAmenities)
+                        setotherFeaturs(selectedProperty.garageAmenities.otherAmenities)
                     }
                     else if (selectedProperty.type === 'land') {
-                        setFenced(selectedProperty.landAmenities.fenced ? 'Yes' : 'No')
+                        setFenced(selectedProperty.landAmenities.fenced ==='Yes' ? 'Yes' : 'No')
                         setLandType(selectedProperty.landAmenities.type)
-                        setotherFeaturs(selectedProperty.roomAmenities.otherAmenities)
+                        setotherFeaturs(selectedProperty.landAmenities.otherAmenities)
                     }
                 }
             })
 
         })
-    }, [])
+    }, [formLoader])
 
     const DeleteOldImages = async (url, index) => {
         // console.log(url , index , id );
-
+        setFormLoader(true)
         await fetch(`https://walrus-app-ovpy2.ondigitalocean.app/property/delete/image/${id}`, {
             method: "PUT",
             headers: {
@@ -252,23 +250,69 @@ const UpdateProperty = () => {
             body: JSON.stringify({ url: url })
 
         }).then((res) => {
-            const  deletimage = [...oldImages]
-                deletimage.splice(index, 1)
-                setOldImages(deletimage)
+            const deletimage = [...oldImages]
+            deletimage.splice(index, 1)
+            setOldImages(deletimage)
+            setFormLoader(false)
             if (res.ok) (
-                
                 toast.success('Image deleted succesfully.',
                     { position: toast.POSITION.BOTTOM_RIGHT }))
 
         }).catch((error) => {
-            console.log(error);
+            setFormLoader(false)
             toast.error('error.message', { position: toast.POSITION.BOTTOM_RIGHT })
         }
         )
+    }
+    const DeleteOldTour = async (url) => {
 
-        // const deletimage = [...selectedImages];
-        // deletimage.splice(index, 1)
-        // setSelectedImages(deletimage)
+        setFormLoader(true)
+        await fetch(`https://walrus-app-ovpy2.ondigitalocean.app/property/delete/tour/${id}`, {
+            method: "PUT",
+            headers: {
+                "Accept": "application/json",
+                'Content-Type': 'application/json',
+                "AUTHORIZATION": `BEARER ${token}`
+            },
+            body: JSON.stringify({ url: url })
+
+        }).then((res) => {
+            setOldTour('')
+            setFormLoader(false)
+            if (res.ok) (
+                toast.success('Tour deleted succesfully.',
+                    { position: toast.POSITION.BOTTOM_RIGHT })
+                    )
+
+        }).catch((error) => {
+            setFormLoader(false)
+            if(error){
+                toast.error('error.message', { position: toast.POSITION.BOTTOM_RIGHT })
+            }
+        }
+        )
+    }
+    const DeleteOldVideo = async (url) => {
+
+        await fetch(`https://walrus-app-ovpy2.ondigitalocean.app/property/delete/video/${id}`, {
+            method: "PUT",
+            headers: {
+                "Accept": "application/json",
+                'Content-Type': 'application/json',
+                "AUTHORIZATION": `BEARER ${token}`
+            },
+            body: JSON.stringify({ url: url })
+
+        }).then((res) => {
+            setOldVideo('')
+            if (res.ok) (
+                toast.success('Video deleted succesfully.',
+                    { position: toast.POSITION.BOTTOM_RIGHT }))
+
+        }).catch((error) => {
+            toast.error('error.message', { position: toast.POSITION.BOTTOM_RIGHT })
+        }
+        )
     }
 
     const submit = async (event) => {
@@ -384,7 +428,7 @@ const UpdateProperty = () => {
                 break;
             case 'land':
                 landAmenities = {
-                    type: type,
+                    type: landType,
                     fenced: fenced?.value ? fenced.value : fenced,
                     otherAmenities: otherFeatuers ? [...otherFeatuers] : []
 
@@ -418,18 +462,17 @@ const UpdateProperty = () => {
         formData.append('garageAmenities', JSON.stringify(garageAmenities))
         formData.append('landAmenities', JSON.stringify(landAmenities))
         formData.append('price', pricee)
+        formData.append('videos', video)
+        formData.append('tours', tour)
 
         for (let i = 0; i < selectedImages.length - 1; i++) {
-
             formData.append('photos', selectedImages[i])
         }
-        formData.append('videos ', video)
-        formData.append('tours ', '[]')
-        // for (var pair of formData.entries()) {
-        //     console.log(pair[0] + ' - ' + pair[1]);
-        // }
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ' - ' + pair[1]);
+        }
 
-
+        setFormLoader(true)
         await fetch(`https://walrus-app-ovpy2.ondigitalocean.app/property/${id}`, {
             method: "PUT",
             headers: {
@@ -440,15 +483,20 @@ const UpdateProperty = () => {
         })
             .then((res) => {
                 if (res.ok) {
+                    setFormLoader(false)
+                    setVideo('')
+                    setSelectedImages('')
+                    setTour('')
+                    window.location.reload(false);
                     toast.success('Property Successfully uploaded.',
-                        { position: toast.POSITION.BOTTOM_RIGHT })
-
+                    { position: toast.POSITION.BOTTOM_RIGHT })
                     // navigate('/user-properties')
                 }
+                
             })
             .catch((error) => {
                 if (error) {
-
+                    setFormLoader(false)
                     toast.error(error, { position: toast.POSITION.BOTTOM_RIGHT })
 
 
@@ -493,6 +541,10 @@ const UpdateProperty = () => {
         setVideo(event)
     };
 
+    const onToueSelected = (event) => {
+        setTour(event)
+    };
+
     const deleteHandler = (index) => {
         const deletimage = [...selectedImages];
         deletimage.splice(index, 1)
@@ -508,6 +560,7 @@ const UpdateProperty = () => {
                     <div className="row">
                         <div className="col-lg-9 mx-auto mt-5">
                             <div className='user-card' style={{ position: 'relative' }}>
+                            {formLoader && <Apiloader />}
                                 <div className="user-card-body">
                                     <div className="user-mete">
                                         <div className='user-card-meta-avatar'>
@@ -1293,12 +1346,9 @@ const UpdateProperty = () => {
                                                                         type='text'
                                                                         style={{ padding: '10px 16px' }}
                                                                         className="input"
-                                                                        autoComplete='off'
-                                                                        name='confirmNewPassword'
-                                                                        id='confirmNewPassword'
-                                                                        placeholder='Enter unit'
-                                                                        onChange={(e) => { setType(e.target.value) }}
-                                                                        defaultValue={type}
+                                                                        placeholder='Enter land type'
+                                                                        onChange={(e) => { setLandType(e.target.value) }}
+                                                                        defaultValue={landType}
                                                                         required
                                                                     />
                                                                 </div>
@@ -1457,29 +1507,81 @@ const UpdateProperty = () => {
                                                                         accept="image/png , image/jpeg, image/webp"
                                                                     />
                                                                 </label>
-                                                                {/* <br />
-
-                                                            {selectedImages.length > 0 &&
-                                                                (selectedImages.length > 10 &&
-                                                                    <p className="error-upload">
-                                                                        You can't upload more than 10 images! <br />
-                                                                        <span>
-                                                                            please delete <b> {selectedImages.length - 10} </b> of them{" "}
-                                                                        </span>
-                                                                    </p>
-                                                                )} */}
                                                             </div>
                                                         </div>
-
                                                     </div>
+                                                    <div className="col-lg-12">
+                                                        <div className='uploadimage-section'>
+                                                            <label>
+                                                                Add Tour
+                                                                <input
+                                                                    type="file"
+                                                                    onChange={(e) => onToueSelected(e.target.files[0])}
+                                                                    accept="video/mp4,video/x-m4v,video/*"
+                                                                />
+                                                            </label>
+                                                        </div>
+                                                        {tour &&
+                                                            <table class="table">
+                                                                <thead class="thead-dark">
+                                                                    <tr>
+                                                                        <th scope="col">Tour type</th>
+                                                                        <th scope="col">Tour name</th>
+                                                                        <th scope="col">Video size</th>
+                                                                        <th scope="col">Action</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>{tour.type}</td>
+                                                                        <td>{tour.name}</td>
+                                                                        <td>{(tour.size / (1024 * 1024)).toFixed(2)}MB</td>
+                                                                        <td onClick={() => { setTour('') }}> <MdDelete /></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        }
+                                                    </div>
+                                                    <div className="col-lg-12">
+                                                        <div className='uploadimage-section'>
+                                                            <label>
+                                                                Upload Video
+                                                                <input
+                                                                    type="file"
+                                                                    name="" id=""
+                                                                    onChange={(e) => onVideoSelected(e.target.files[0])}
+                                                                    accept="video/mp4,video/x-m4v,video/*" />
+                                                            </label>
+                                                        </div>
+                                                        {video &&
+                                                            <table class="table">
+                                                                <thead class="thead-dark">
+                                                                    <tr>
+                                                                        <th scope="col">Video type</th>
+                                                                        <th scope="col">Viddeo name</th>
+                                                                        <th scope="col">Video size</th>
+                                                                        <th scope="col">Action</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>{video.type}</td>
+                                                                        <td>{video.name}</td>
+                                                                        <td>{(video.size / (1024 * 1024)).toFixed(2)}MB</td>
+                                                                        <td onClick={() => { setVideo('') }}> <MdDelete /></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        }
+                                                    </div>
+                                                    <h1 className='form-sec-heading' style={{ width: '100%' }}>All Media</h1>
                                                     <div className="col-lg-12 mt-4">
-                                                        <div>
-                                                            <h1 className='form-sec-heading'>Old Media</h1>
+                                                        <div className=''>
+                                                            <h1>Photos</h1>
                                                             <div className='uploadimage-section'>
                                                                 <div className="images">
                                                                     {selectedImages &&
                                                                         oldImages.map((image, index) => {
-
                                                                             return (
                                                                                 <div key={index} className="image">
                                                                                     <img src={image} height="150" alt="upload" />
@@ -1490,70 +1592,46 @@ const UpdateProperty = () => {
                                                                             );
                                                                         })}
                                                                 </div>
-
-                                                                {/* <label>
-                                                                    + Add Images
-                                                                    <input
-                                                                        type="file"
-                                                                        name="images"
-                                                                        // onChange={onSelectFile}
-                                                                        multiple
-                                                                        accept="image/png , image/jpeg, image/webp"
-                                                                    />
-                                                                </label> */}
-                                                                {/* <br />
-
-                                                            {selectedImages.length > 0 &&
-                                                                (selectedImages.length > 10 &&
-                                                                    <p className="error-upload">
-                                                                        You can't upload more than 10 images! <br />
-                                                                        <span>
-                                                                            please delete <b> {selectedImages.length - 10} </b> of them{" "}
-                                                                        </span>
-                                                                    </p>
-                                                                )} */}
                                                             </div>
                                                         </div>
 
                                                     </div>
-                                                    <div className="col-lg-12">
-                                                        <div className='uploadimage-section'>
-                                                            {floorMap !== '' &&
-                                                                <div className="images">
-                                                                    <div className="image">
+                                                    {(oldTour && oldImages[0] !== '') &&
+                                                    <div className="col-lg-6 mt-3">
+                                                        <h1>Tour</h1>
+                                                        <div className='uploadTour-section'>
+                                                            
+                                                                <div className="tour">
 
-                                                                        <img src={URL.createObjectURL(floorMap)} width={'100%'} alt="upload" />
+                                                                        <iframe width="420" height="315"
+                                                                            src={oldTour[0]}>
+                                                                        </iframe>
 
-
-                                                                    </div>
+                                                                        <button type='reset' onClick={() => DeleteOldTour(oldTour[0])}>
+                                                                            <MdDelete />
+                                                                        </button>
                                                                 </div>
+
+                                                        </div>
+                                                    </div>
                                                             }
 
-                                                            {/* <label>
-                                                                Add Tour
-                                                                <input
-                                                                    type="file"
-                                                                    name="images"
-                                                                    onChange={(e) => onfloorMapSelected(e.target.files[0])}
-                                                                    accept="image/png , image/jpeg, image/webp"
-                                                                />
-                                                            </label> */}
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-12">
-                                                        <div className='uploadimage-section'>
-                                                            {/* <label>
-                                                                Upload Video
-                                                                {video?.name ? <span>{video?.name}</span> : ''}
+                                                            {oldVideo &&
+                                                    <div className="col-lg-6 mt-3">
+                                                        <h1>Video</h1>
+                                                        <div className='uploadVideo-section'>
+                                                                <div className="video">
 
-                                                                <input
-                                                                    type="file"
-                                                                    name="" id=""
-                                                                    onChange={(e) => onVideoSelected(e.target.files[0])}
-                                                                    accept="video/mp4,video/x-m4v,video/*" />
-                                                            </label> */}
+                                                                        <iframe width="420" height="315"
+                                                                            src={oldVideo[0]}>
+                                                                        </iframe>
+                                                                        <button type='reset' onClick={() => DeleteOldVideo(oldVideo[0])}>
+                                                                            <MdDelete />
+                                                                        </button>
+                                                                </div>
                                                         </div>
                                                     </div>
+                                                            }
 
                                                     <div className="col-lg-12 mt-4">
                                                         <button type="submit" value="submit" className='button'>Update Property</button>
