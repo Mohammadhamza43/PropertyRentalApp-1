@@ -3,7 +3,6 @@ import {MdOutlineMapsHomeWork} from 'react-icons/md'
 import workOne from '../../../assets/media/images/work-1.jpg'
 import {BiBed} from 'react-icons/bi'
 import {TbBath} from 'react-icons/tb'
-import {RiArrowDownSLine} from 'react-icons/ri'
 import { toast, ToastContainer } from 'react-toastify';
 import Header from '../../../shared/Header/Header'
 import Footer from '../../../shared/Footer/Footer'
@@ -12,9 +11,12 @@ import {Link} from 'react-router-dom'
 import Loading from '../../../shared/Loading/Loading';
 import Apiloader from "../../../shared/ApiLoader/Apiloader";
 import Dropdown from 'react-dropdown';
+import 'react-dropdown/style.css';
+import axiosInstance from "../../../shared/HttpClient/axiosInstance";
+
 
 const UserProperty = () => {
-    const token = JSON.parse(localStorage.getItem('user'))?.token.token;
+    // const token = JSON.parse(localStorage.getItem('user'))?.token.token;
     const [list, setList] = useState([])
     const [data, setData] = useState('')
     const [loader, setLoader] = useState(true)
@@ -27,7 +29,9 @@ const UserProperty = () => {
     }, [])
 
     const getPropertyList = async () => {
-        const response = await fetch('https://walrus-app-ovpy2.ondigitalocean.app/property/user', {
+        const response = await axiosInstance.get('property/user')
+        const data = await response.data
+        /*const response = await fetch('https://walrus-app-ovpy2.ondigitalocean.app/property/user', {
 
             method: "GET",
             headers: {
@@ -35,16 +39,18 @@ const UserProperty = () => {
                 "AUTHORIZATION": `BEARER ${token}`
             }
         })
+        console.log('axiosInstance', response.json())
+        const data = await response.json()*/
 
-        const data = await response.json()
         setLoader(false)
         setList(data.data)
     }
 
     const deleteProperty = async (id) => {
         setFormLoader(true)
-        console.log('deleteProperty: ', id)
-        const response = await fetch(`https://walrus-app-ovpy2.ondigitalocean.app/property/delete/${id}`, {
+        const response = await axiosInstance.put(`property/delete/${id}`)
+        const data = await response.data
+        /*const response = await fetch(`https://walrus-app-ovpy2.ondigitalocean.app/property/delete/${id}`, {
 
             method: "PUT",
             headers: {
@@ -53,25 +59,30 @@ const UserProperty = () => {
                 "AUTHORIZATION": `BEARER ${token}`
             },
         })
+        const data = await response.json()*/
 
-        const data = await response.json()
         const updatedItems = list.filter((item) => item._id !== id);
         setList(updatedItems);
-        console.log({data})
         setFormLoader(false)
         toast.success(data.message || 'Property Deleted.',
             {position: toast.POSITION.BOTTOM_RIGHT})
-        // setList(data.data)
-        // console.log(data.data);
     }
 
     const changeStatus = async (status , id) =>{
-        console.log(status , id);
-
         setFormLoader(true)
-        console.log('deleteProperty: ', id)
-        fetch(`https://walrus-app-ovpy2.ondigitalocean.app/property/status/${id}`, {
-
+        axiosInstance.put(`property/status/${id}`, {status})
+            .then((res) => {
+                if(res.data){
+                    setFormLoader(false)
+                    toast.success('Status Successfully updated.',
+                        { position: toast.POSITION.BOTTOM_RIGHT })
+                }
+            })
+            .catch((error) => {
+                setFormLoader(false)
+                toast.error(error, { position: toast.POSITION.BOTTOM_RIGHT })
+            })
+        /*fetch(`https://walrus-app-ovpy2.ondigitalocean.app/property/status/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -81,19 +92,14 @@ const UserProperty = () => {
             body :JSON.stringify({status : status})
         }).then((res) =>{
           if(res.ok){
-
               setFormLoader(false)
               toast.success('Status Successfully updated.',
                   { position: toast.POSITION.BOTTOM_RIGHT })
           }
-            
         }) .catch((error) => {
                     setFormLoader(false)
                     toast.error(error, { position: toast.POSITION.BOTTOM_RIGHT })
-
-        })
-
-        
+        })*/
     }
 
     return (
@@ -115,7 +121,7 @@ const UserProperty = () => {
                                                     {/* <span className='status'>{x.status}</span> */}
                                                     <div className='p-s-d-d'>
                                                         <div className='relative'>
-                                                    <Dropdown className='inputt' options={statusOptions} value={x.status} onChange={(e) =>{changeStatus(e.value , x._id)}}/>
+                                                    <Dropdown className='dropdown' options={statusOptions} value={x.status} onChange={(e) =>{changeStatus(e.value , x._id)}}/>
                                                     {/* <RiArrowDownSLine/> */}
                                                         </div>
                                                     </div>

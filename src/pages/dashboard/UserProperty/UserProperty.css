@@ -47,7 +47,7 @@
 .p-s-d-d{
     position: absolute;
     top: 15px;
-    width: 130px;
+    width: 95px;
     border-radius: 6px !important;
     /* border: 1px solid #e86ed0; */
     left: 15px;
@@ -58,7 +58,7 @@
     transform: translateY(-50%);
     right: 10px;
     font-size: 25px;
-    
+
 }
 .p-s-d-d .relative{
     position: relative;
@@ -85,11 +85,11 @@
     border-radius: 6px !important;
     box-sizing: border-box !important;
     color: #333 !important;
-    cursor: default !important;
+    cursor: pointer !important;
     outline: none !important;
-    padding: 0px 35px 0px 10px !important;
+    padding: 0 35px 0 10px !important;
     transition: all 200ms ease !important;
-    
+
 }
 
 .p-s-d-d .Dropdown-menu{
@@ -98,6 +98,7 @@
 
 .p-s-d-d .Dropdown-arrow {
     border-color: #ffffff transparent transparent !important;
+    top: 12px !important;
 }
 
 .p-s-d-d .Dropdown-placeholder{
