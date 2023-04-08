@@ -1,19 +1,159 @@
-import React, { useState } from 'react'
-import { AiOutlineSearch } from 'react-icons/ai'
+import React, { useState, useEffect, useRef } from 'react'
+import { MdGpsFixed } from 'react-icons/md'
 import { MdKeyboardArrowDown } from 'react-icons/md'
+import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
+import { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
 import './Search.css'
 
-function Search() {
+const apiKey = process.env.REACT_APP_API_KEY;
+const mapApiJs = process.env.REACT_APP_MAP_API_JS;
+const geocodeJson = process.env.REACT_APP_GEOCODE_JSON;
+
+function loadAsyncScript (src) {
+return new Promise( resolve =>{
+const script = document.createElement('script');
+Object.assign(script ,  {
+ type : 'text/javascript',
+ async : true,
+ src
+})
+script.addEventListener( "load" , () => resolve(script));
+document.head.appendChild(script);
+})
+}
+
+const extractAddress = (place) => {
+    console.log(place);
+    const address = {
+      city: "",
+      state: "",
+      zip: "",
+      country: "",
+      plain() {
+        const city = this.city ? this.city + ", " : "";
+        const zip = this.zip ? this.zip + ", " : "";
+        const state = this.state ? this.state + ", " : "";
+        return city + zip + state + this.country;
+      }
+    }
+
+    if (!Array.isArray(place?.address_components)) {
+      return address;
+    }
+
+    place.address_components.forEach(component => {
+      const types = component.types;
+    //   console.log(component.types);
+      const value = component.long_name;
+    //   console.log(component.long_name);
+
+      if (types.includes("locality")) {
+        address.city = value;
+      }
+
+      if (types.includes("administrative_area_level_2")) {
+        address.state = value;
+      }
+
+      if (types.includes("postal_code")) {
+        address.zip = value;
+      }
+
+      if (types.includes("country")) {
+        address.country = value;
+      }
+
+    });
+
+    return address;
+  }
+
+const Search = () => {
 
     const [toggle, setToggle] = useState(false)
     const [showType, setShowType] = useState(false)
     const [showBed, setShowBed] = useState(false)
     const [showBath, setShowBath] = useState(false)
-
     const [location, setLocation] = useState({ value: 0, Name: 'NewYork' })
     const [type, setType] = useState({ value: 0, Name: 'Apartment' })
     const [bed, setBed] = useState({ value: 0, Name: '01' })
     const [bath, setBath] = useState({ value: 0, Name: '01' })
+    // const [value, setValue] = useState(null);
+    // console.log(value);
+
+//     geocodeByAddress(value.value.description)
+//   .then(results => getLatLng(results[0]))
+//   .then(({ lat, lng }) =>
+//     console.log('Successfully got latitude and longitude', { lat, lng })
+//   );
+
+    const searchInput = useRef(null);
+    const [address, setAddress] = useState({});
+
+    // init gmap script
+      const initMapScript = () => {
+        // if script already loaded
+        if(window.google) {
+          return Promise.resolve();
+        }
+        const src = `${mapApiJs}?key=${apiKey}&libraries=places&v=weekly`;
+        return loadAsyncScript(src);
+      }
+
+    // do something on address change
+      const onChangeAddress = (autocomplete) => {
+        const place = autocomplete.getPlace();
+        const lat = place.geometry.location.lat();
+        const lng = place.geometry.location.lng();
+        const address = place.formatted_address;
+        console.log('Latitude: ' + lat + ', Longitude: ' + lng);
+        console.log('Address: ' + address);
+        setAddress(extractAddress(place));
+      }
+
+    //init autocomplete
+      const initAutocomplete = () => {
+        if (!searchInput.current) return;
+
+        const autocomplete = new window.google.maps.places.Autocomplete(searchInput.current);
+        autocomplete.setFields(["address_component", "geometry" , "formatted_address"]);
+        autocomplete.addListener("place_changed", () => onChangeAddress(autocomplete));
+
+      }
+
+
+      const reverseGeocode = ({ latitude: lat, longitude: lng}) => {
+        const url = `${geocodeJson}?key=${apiKey}&latlng=${lat},${lng}`;
+        searchInput.current.value = "Getting your location...";
+        fetch(url)
+            .then(response => response.json())
+            .then(location => {
+              const place = location.results[0];
+              const _address = extractAddress(place);
+              setAddress(_address);
+              searchInput.current.value = _address.plain();
+            })
+      }
+
+
+      const findMyLocation = () => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(position => {
+            reverseGeocode(position.coords)
+          })
+        }
+      }
+
+
+
+
+
+    //load map script after mounted
+    useEffect(() => {
+        initMapScript().then(() => initAutocomplete())
+    }, []);
+
+
     return (
         <div className='property-search'>
             <form>
@@ -74,21 +214,21 @@ function Search() {
                             <a><AiOutlineSearch/></a>
                             </div> */}
                             <div className="chack-box-wrap">
-                            <div className="chack-box">
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="home-tab" data-toggle="tab" data-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Buy</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="profile-tab" data-toggle="tab" data-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Rent</button>
-                                </li>
-                            </ul>
-                            </div>
+                                <div className="chack-box">
+                                    <ul className="nav nav-tabs" id="myTab" role="tablist">
+                                        <li className="nav-item" role="presentation">
+                                            <button className="nav-link active" id="home-tab" data-toggle="tab" data-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Buy</button>
+                                        </li>
+                                        <li className="nav-item" role="presentation">
+                                            <button className="nav-link" id="profile-tab" data-toggle="tab" data-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Rent</button>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                             <div className='form-typology-wrapper'>
-                                <div className={`dropdown-wrapper ${toggle ? 'active' : ''}`} onClick={() =>{setToggle(!toggle)}}>
+                                <div className={`dropdown-wrapper ${toggle ? 'active' : ''}`} onClick={() => { setToggle(!toggle) }}>
                                     <span className='placeholder'>Property Type</span>
-                                    <MdKeyboardArrowDown/>
+                                    <MdKeyboardArrowDown />
                                     <ul className='dropdown'>
                                         <li>New Home</li>
                                         <li>Room</li>
@@ -102,12 +242,23 @@ function Search() {
                                 </div>
                             </div>
                             <div className='form-item-block'>
-                                <input type="text" id='campoBus' placeholder='Search in Spain'/>
-                                <AiOutlineSearch className='search-icons'/>
+                                <input type="text" ref={searchInput} id='campoBus' placeholder='Search in Spain' />
+                                <MdGpsFixed className='search-icons' onClick={findMyLocation}/>
                             </div>
                             <button className='btn action'>Search</button>
 
                         </div>
+
+                        <div className="address">
+                            <p>City: <span>{address.city}</span></p>
+                            <p>State: <span>{address.state}</span></p>
+                            <p>Zip: <span>{address.zip}</span></p>
+                            <p>Country: <span>{address.country}</span></p>
+                        </div>
+                        <div>
+
+    </div>
+
                     </div>
                 </div>
             </form>

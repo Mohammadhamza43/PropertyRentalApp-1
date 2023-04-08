@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { MdGpsFixed } from 'react-icons/md'
 import { toast, ToastContainer } from 'react-toastify';
 import Dropdown from 'react-dropdown';
 import Apiloader from '../../../shared/ApiLoader/Apiloader';
@@ -10,7 +11,81 @@ import 'react-dropdown/style.css';
 import './UploadProperty.css';
 
 
+const apiKey = process.env.REACT_APP_API_KEY;
+const mapApiJs = process.env.REACT_APP_MAP_API_JS;
+const geocodeJson = process.env.REACT_APP_GEOCODE_JSON;
+
+const loadAsyncScript =(src)=> {
+return new Promise( resolve =>{
+const script = document.createElement('script');
+Object.assign(script ,  {
+ type : 'text/javascript',
+ async : true,
+ src
+})
+script.addEventListener( "load" , () => resolve(script));
+document.head.appendChild(script);
+})
+}
+
+const extractAddress = (place) => {
+    console.log(place);
+    const address = {
+      city: "",
+      state: "",
+      zip: "",
+      country: "",
+      plain() {
+        const city = this.city ? this.city + ", " : "";
+        const zip = this.zip ? this.zip + ", " : "";
+        const state = this.state ? this.state + ", " : "";
+        return city + zip + state + this.country;
+      }
+    }
+
+    if (!Array.isArray(place?.address_components)) {
+      return address;
+    }
+
+    place.address_components.forEach(component => {
+      const types = component.types;
+    //   console.log(component.types);
+      const value = component.long_name;
+    //   console.log(component.long_name);
+
+      if (types.includes("locality")) {
+        address.city = value;
+      }
+
+      if (types.includes("administrative_area_level_2")) {
+        address.state = value;
+      }
+
+      if (types.includes("postal_code")) {
+        address.zip = value;
+      }
+
+      if (types.includes("country")) {
+        address.country = value;
+      }
+
+    });
+
+    return address;
+  }
+
+
+
 const UploadProperty = () => {
+
+    const searchInput = useRef(null);
+    const [address, setAddress] = useState({});
+    
+
+   
+
+    
+    // const [address, setAddress] = useState({});
 
     const token = JSON.parse(localStorage.getItem('user'))?.token.token;
     const navigate = useNavigate()
@@ -70,7 +145,7 @@ const UploadProperty = () => {
     const [airConditioning, setAirConditioning] = useState({ value: false, label: 'No' })
     const [balcony, setBalcony] = useState({ value: false, label: 'No' })
     const [furnished, setFurnished] = useState({ value: false, label: 'No' })
-    const [address, setAddress] = useState('')
+    // const [address, setAddress] = useState('')
     const [postalCode, setPostalCode] = useState('')
     const [city, setCity] = useState('')
     const [country, setCountry] = useState('')
@@ -272,6 +347,69 @@ const UploadProperty = () => {
         deletimage.splice(index, 1)
         setSelectedImages(deletimage)
     }
+
+     // init gmap script
+    const initMapScript = () => {
+        // if script already loaded
+        if(window.google) {
+          return Promise.resolve();
+        }
+        const src = `${mapApiJs}?key=${apiKey}&libraries=places&v=weekly`;
+        return loadAsyncScript(src);
+      }
+
+    // do something on address change
+      const onChangeAddress = (autocomplete) => {
+        const place = autocomplete.getPlace();
+        const lat = place.geometry.location.lat();
+        const lng = place.geometry.location.lng();
+        const address = place.formatted_address;
+        console.log('Latitude: ' + lat + ', Longitude: ' + lng);
+        console.log('Address: ' + address);
+        setAddress(extractAddress(place));
+      }
+
+    //init autocomplete
+      const initAutocomplete = () => {
+        if (!searchInput.current) return;
+
+        let autocomplete = new window.google.maps.places.Autocomplete(searchInput.current);
+        autocomplete.setFields(["address_component", "geometry" , "formatted_address"]);
+        autocomplete.addListener("place_changed", () => onChangeAddress(autocomplete));
+
+      }
+
+
+      const reverseGeocode = ({ latitude: lat, longitude: lng}) => {
+        const url = `${geocodeJson}?key=${apiKey}&latlng=${lat},${lng}`;
+        searchInput.current.value = "Getting your location...";
+        fetch(url)
+            .then(response => response.json())
+            .then(location => {
+              const place = location.results[0];
+              const _address = extractAddress(place);
+              setAddress(_address);
+              searchInput.current.value = _address.plain();
+            })
+      }
+
+
+      const findMyLocation = () => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(position => {
+            reverseGeocode(position.coords)
+          })
+        }
+      }
+   
+    
+
+    //load map script after mounted
+    useEffect(() => {
+        initMapScript().then(() => initAutocomplete())
+    });
+
+
     return (
         // <Dropdown options={securityOptions} value={defaultSecurityOptions} placeholder="Select an option" />
         <>
@@ -303,7 +441,7 @@ const UploadProperty = () => {
                                                     <Dropdown options={propertytypeOptions} onChange={(e) => { setPropertyType(e) }} value={propertyType.value} placeholder="Select property type" />
                                                 </div>
                                             </div>
-                                            {propertyType.label !== 'Property Type' && propertyType.value !== ''
+                                            {2 === 2
                                                 &&
                                                 <>
                                                     <div className="col-lg-4">
@@ -773,7 +911,7 @@ const UploadProperty = () => {
                                                             />
                                                         </div>
                                                     </div>
-                                                    {/*<div className="col-lg-4 mt-4">
+                                                    <div className="col-lg-4 mt-4">
                                                         <label>Area</label>
                                                         <div className='password-filed'>
                                                             <input
@@ -789,7 +927,7 @@ const UploadProperty = () => {
                                                                 required
                                                             />
                                                         </div>
-                                                    </div>*/}
+                                                    </div>
                                                     {/* <div className="col-lg-4 mt-4">
                                                         <label>Property Status</label>
                                                         <Dropdown options={statusOptions} onChange={(e) => { setPropertyStatus(e.value) }} value={propertyStatus.label} />
@@ -811,22 +949,21 @@ const UploadProperty = () => {
                                                             />
                                                         </div>
                                                     </div>
-                                                    {/*<div className="col-lg-4 mt-4">
+                                                    <div className="col-lg-4 mt-4">
                                                         <label>Location</label>
                                                         <div className='password-filed'>
                                                             <input
-                                                                type='Text'
+                                                                ttype="text" 
+                                                                ref={searchInput}
                                                                 className="input"
-                                                                autoComplete='off'
-                                                                name='confirmNewPassword'
-                                                                id='confirmNewPassword'
                                                                 placeholder='Enter Location'
-                                                                onChange={(e) => { setPinLocation(e.target.value) }}
-                                                                value={pinLocation}
-                                                                required
+                                                                // onChange={(e) => { setPinLocation(e.target.value) }}
+                                                                // value={pinLocation}
+                                                                // required
                                                             />
+                                                            <MdGpsFixed className='search-icons' onClick={findMyLocation}/>
                                                         </div>
-                                                    </div>*/}
+                                                    </div>
                                                     <div className="col-lg-12 mt-4">
                                                         <div className='uploadimage-section'>
                                                             <div className="images">
@@ -892,8 +1029,8 @@ const UploadProperty = () => {
                                                             </label>
                                                         </div>
                                                         {tour &&
-                                                            <table class="table">
-                                                                <thead class="thead-dark">
+                                                            <table className="table">
+                                                                <thead className="thead-dark">
                                                                     <tr>
                                                                         <th scope="col">Video type</th>
                                                                         <th scope="col">Viddeo name</th>
@@ -924,8 +1061,8 @@ const UploadProperty = () => {
                                                             </label>
                                                         </div>
                                                         {video &&
-                                                            <table class="table">
-                                                                <thead class="thead-dark">
+                                                            <table className="table">
+                                                                <thead className="thead-dark">
                                                                     <tr>
                                                                         <th scope="col">Video type</th>
                                                                         <th scope="col">Viddeo name</th>
