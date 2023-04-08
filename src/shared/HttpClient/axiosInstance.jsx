@@ -11,6 +11,10 @@ axiosInstance.interceptors.request.use(
     (config) => {
         // Add any custom headers or request configurations here
         console.log({userAccessToken})
+        if (!userAccessToken) {
+            localStorage.clear()
+            window.location.reload(false);
+        }
         if (userAccessToken) {
             config.headers.Authorization = `Bearer ${userAccessToken}`;
         }
