@@ -30,7 +30,7 @@ const initialValues = {
 
 const Login = () => {
 
-    
+
     const navigate = useNavigate()
     let query = useQuery();
     const message = useRef()
@@ -42,7 +42,7 @@ const Login = () => {
             navigate('/')
         };
 
-        
+
         message.current = query.get('message')
         if (message !== '') {
             toast.success((message.current?.replace(/-/g, ' ')),
@@ -50,7 +50,7 @@ const Login = () => {
         }
     }, [message])
 
-    
+
     // const [message, setMessage] = useState('');
 
 
@@ -83,6 +83,7 @@ const Login = () => {
                         login: true,
                         token: res.data.data.user
                     }))
+                    localStorage.setItem('token', res.data.data.user.token)
                     localStorage.setItem('image', JSON.stringify({
                         userPic: res.data.data.user.image
                     }))
