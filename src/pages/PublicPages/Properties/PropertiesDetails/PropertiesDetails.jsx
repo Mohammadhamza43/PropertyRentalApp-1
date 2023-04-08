@@ -194,8 +194,8 @@ function PropertiesDetails() {
 													<div className='sc-1x2lobo-0 loEOQp'>
 														<div className='sc-14jy2p3-0 bmuAKP'>
 															<div className='sc-14jy2p3-1 dSBSDA' style={{ height: "224px" }}>
-																<div class="sc-14jy2p3-2 MEgea">
-																	<p class="b1avnw-0 jRyFhN">
+																<div className="sc-14jy2p3-2 MEgea">
+																	<p className="b1avnw-0 jRyFhN">
 																		THE PROPERTY <br />Poised in a leafy Camberwell location, this three-bedroom
 																		weatherboard residence represents a versatile opportunity for those looking
 																		to invest in a tightly held pocket. With a remarkable almost 17-metre street

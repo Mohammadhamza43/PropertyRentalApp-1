@@ -1,10 +1,11 @@
-import React , {lazy , Suspense} from "react";
+import React , {lazy , Suspense, useEffect} from "react";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Loading from "./shared/Loading/Loading";
 
 // Import toastify css file
 import 'react-toastify/dist/ReactToastify.css';
 import ProtectedRoutes from "./ProtectedRoutes";
+import GoogleMapApi from "./GoogleMapApi";
 
 const Home = lazy(() => import('./pages/PublicPages/home/Home'))
 const About = lazy(() => import('./pages/PublicPages/About/About'))
@@ -30,7 +31,10 @@ const UpdateProperty = lazy(() => import('./pages/dashboard/UpdateProperty/Updat
 
 
 function App() {
-   let user = localStorage.getItem('user')
+  let user = localStorage.getItem('user')
+  // useEffect(() =>{
+  // GoogleMapApi()
+  // } , [])
   return (
     <>
       <Router>

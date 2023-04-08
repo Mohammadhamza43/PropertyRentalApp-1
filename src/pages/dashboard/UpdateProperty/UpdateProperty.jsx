@@ -1522,8 +1522,8 @@ const UpdateProperty = () => {
                                                             </label>
                                                         </div>
                                                         {tour &&
-                                                            <table class="table">
-                                                                <thead class="thead-dark">
+                                                            <table className="table">
+                                                                <thead className="thead-dark">
                                                                     <tr>
                                                                         <th scope="col">Tour type</th>
                                                                         <th scope="col">Tour name</th>
@@ -1554,8 +1554,8 @@ const UpdateProperty = () => {
                                                             </label>
                                                         </div>
                                                         {video &&
-                                                            <table class="table">
-                                                                <thead class="thead-dark">
+                                                            <table className="table">
+                                                                <thead className="thead-dark">
                                                                     <tr>
                                                                         <th scope="col">Video type</th>
                                                                         <th scope="col">Viddeo name</th>
