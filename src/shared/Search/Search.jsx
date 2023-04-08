@@ -249,12 +249,12 @@ const Search = () => {
 
                         </div>
 
-                        <div className="address">
+                        {/* <div className="address">
                             <p>City: <span>{address.city}</span></p>
                             <p>State: <span>{address.state}</span></p>
                             <p>Zip: <span>{address.zip}</span></p>
                             <p>Country: <span>{address.country}</span></p>
-                        </div>
+                        </div> */}
                         <div>
 
     </div>
