@@ -33,23 +33,31 @@ axiosInstance.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config;
 
-        if (error.response.status === 401 && !originalRequest._retry) {
-            originalRequest._retry = true;
+        if (error.response.status === 401) {
+            localStorage.clear();
+            window.location.assign('/login');
+            // originalRequest._retry = true;
 
-            try {
+            /*try {
                 const url = `/user/accessToken/${userAccessToken}`
                 const response = await axiosInstance.put(url, {
                     // pass any necessary data for token refresh here
                 });
-                const token = response.data['newRefreshToken'];
-                localStorage.setItem('token', token);
-                axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-                return axiosInstance(originalRequest);
+                if (response.status === 200) {
+                    const token = response.data['newRefreshToken'];
+                    localStorage.setItem('token', token);
+                    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+                    return axiosInstance(originalRequest);
+                } else {
+                    localStorage.clear();
+                    window.location.assign('/login')
+                }
             } catch (e) {
                 // handle token refresh error
                 // TODO: Empty Local Storage and redirect to Login Page
+
                 console.log(e);
-            }
+            }*/
         }
         return Promise.reject(error);
     }
