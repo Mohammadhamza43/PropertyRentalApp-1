@@ -109,7 +109,7 @@
     min-width: 100%;
     border-top: 1px solid rgba(0,0,0,.06);
 }
-/* 
+/*
 input{
     width: 100%;
 } */
@@ -196,6 +196,15 @@ select {
     border: 1px solid #ffffff;
     color: rgb(255, 255, 255);
     padding-inline: 64px;
+}
+
+.address-field .search-icons {
+    color: #8E8F8C;
+    font-size: 1.25rem;
+    right: 10px;
+    position: absolute;
+    top: 0.55rem;
+    z-index: 1;
 }
 
 
@@ -342,7 +351,7 @@ select {
   display: flex;
 }
 
-.add-feature:not(:first-child) { 
+.add-feature:not(:first-child) {
   margin-top: 20px
 }
 
