@@ -178,7 +178,7 @@ div{
     font-size: 1.125rem;
     height: 2.24rem;
     padding-bottom: 0.6875rem;
-    padding-left: 2.75rem;
+    padding-right: 2.75rem;
     padding-top: 0.6875rem;
     line-height: 1.875rem;
     transition-property: background-color,border-color,color;
@@ -208,7 +208,7 @@ input[type="text"]{
 .form-item-block .search-icons {
     color: #8E8F8C;
     font-size: 1.25rem;
-    left: 13px;
+    right: 10px;
     position: absolute;
     top: 0.55rem;
     z-index: 1;
