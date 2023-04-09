@@ -75,7 +75,7 @@ function Profile() {
                 .catch((error) => {
                     setGetUserdata(false)
                     setLoader(false)
-                    toast.error('error', {position: toast.POSITION.BOTTOM_RIGHT})
+                    toast.error('error', {position: toast.POSITION.TOP_LEFT})
                 });
             /*fetch('https://walrus-app-ovpy2.ondigitalocean.app/user', {
 
@@ -106,7 +106,7 @@ function Profile() {
                 .catch((error) => {
                     setGetUserdata(false)
                     setLoader(false)
-                    toast.error('error', { position: toast.POSITION.BOTTOM_RIGHT })
+                    toast.error('error', { position: toast.POSITION.TOP_LEFT })
                 });*/
         }
     })
@@ -131,20 +131,20 @@ function Profile() {
                 if (res.status === 200) {
                     setFormLoader(false)
                     toast.success('User Updated Successfully.',
-                        {position: toast.POSITION.BOTTOM_RIGHT})
+                        {position: toast.POSITION.TOP_LEFT})
                     window.location.reload(false);
                 }
             })
             .catch((error) => {
                 if (error) {
                     return (setFormLoader(false),
-                        toast.error(error, {position: toast.POSITION.BOTTOM_RIGHT}))
+                        toast.error(error, {position: toast.POSITION.TOP_LEFT}))
 
 
                 } else {
                     setFormLoader(false)
                     toast.error('400 Error',
-                        {position: toast.POSITION.BOTTOM_RIGHT}
+                        {position: toast.POSITION.TOP_LEFT}
                     )
                 }
             })
@@ -160,20 +160,20 @@ function Profile() {
                 if (res.ok) {
                     setFormLoader(false)
                     toast.success('User Successfully updated.',
-                        { position: toast.POSITION.BOTTOM_RIGHT })
+                        { position: toast.POSITION.TOP_LEFT })
                     window.location.reload(false);
                 }
             })
             .catch((error) => {
                 if (error) {
                     return (setFormLoader(false),
-                        toast.error(error, { position: toast.POSITION.BOTTOM_RIGHT }))
+                        toast.error(error, { position: toast.POSITION.TOP_LEFT }))
 
 
                 } else {
                     setFormLoader(false)
                     toast.error('400 Error',
-                        { position: toast.POSITION.BOTTOM_RIGHT }
+                        { position: toast.POSITION.TOP_LEFT }
                     )
                 }
             })*/
@@ -221,7 +221,7 @@ function Profile() {
                     setRSLoader(false)
                     console.log(error);
                     toast.error(error.response.data.message[0],
-                        {position: toast.POSITION.BOTTOM_RIGHT}
+                        {position: toast.POSITION.TOP_LEFT}
                     )
                 })
 
@@ -359,7 +359,7 @@ function Profile() {
                                             <div className='divider'></div>
                                             <form onSubmit={handleSubmit}>
                                                 <div className="row">
-                                                    <div className="col-lg-12 mt-4">
+                                                    <div className="col-lg-6 mt-4">
                                                         <label>Old Password</label>
                                                         <div className='password-filed'>
                                                             <input
@@ -380,6 +380,8 @@ function Profile() {
                                                         </div>
                                                         {errors.password && touched.password &&
                                                         <p className='error'>{errors.password}</p>}
+                                                    </div>
+                                                    <div className="col-lg-6 mt-4">
                                                     </div>
                                                     <div className="col-lg-6 mt-4">
                                                         <label>New Password</label>

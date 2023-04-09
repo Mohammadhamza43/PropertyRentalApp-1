@@ -113,7 +113,7 @@ const UploadProperty = () => {
     const windowsOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
     const fencedOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
     const statusOptions = [{ value: 'active', label: 'Active' }, { value: 'inactive', label: 'Inactive' }, { value: 'sold', label: 'Sold' }, { value: 'rented', label: 'Rented' }]
-    const areaUniyOptions = [{ value: 'mm', label: 'MM' }, { value: 'cm', label: 'CM' }, { value: 'm', label: 'M' }, { value: 'km', label: 'KM' }]
+    const areaUniyOptions = [{ value: 'mm', label: 'mm' }, { value: 'cm', label: 'cm' }, { value: 'm', label: 'm' }, { value: 'km', label: 'km' }]
 
     const [advertising, setAdvertising] = useState({ value: 'sale', label: 'Sale' })
     const [propertyType, setPropertyType] = useState({ value: 'propertytype', label: 'Property Type' })
@@ -278,7 +278,7 @@ const UploadProperty = () => {
             setFormLoader(true)
             return (
                 toast.success('Image is required.',
-                    { position: toast.POSITION.BOTTOM_RIGHT })
+                    { position: toast.POSITION.TOP_LEFT })
 
             )
         }
@@ -295,12 +295,12 @@ const UploadProperty = () => {
                 setFormLoader(false)
                 navigate('/user-properties')
                 // toast.success('Property Successfully uploaded.',
-                //     { position: toast.POSITION.BOTTOM_RIGHT })
+                //     { position: toast.POSITION.TOP_LEFT })
             })
             .catch((error) => {
                 setFormLoader(false)
 
-                toast.error(error, { position: toast.POSITION.BOTTOM_RIGHT })
+                toast.error(error, { position: toast.POSITION.TOP_LEFT })
 
 
 
@@ -441,7 +441,7 @@ const UploadProperty = () => {
                                                     <Dropdown options={propertytypeOptions} onChange={(e) => { setPropertyType(e) }} value={propertyType.value} placeholder="Select property type" />
                                                 </div>
                                             </div>
-                                            {2 === 2
+                                            {propertyType.value !== 'propertytype' && propertyType.value !== ''
                                                 &&
                                                 <>
                                                     <div className="col-lg-4">
@@ -696,7 +696,7 @@ const UploadProperty = () => {
                                                     }
                                                     {(propertyType.value !== 'garage' && propertyType.value !== 'land') &&
                                                         <div className="col-lg-4 mt-4">
-                                                            <label> kitchen</label>
+                                                            <label> Kitchen</label>
                                                             <div className='password-fil'>
                                                                 <input
                                                                     type='number'
@@ -707,6 +707,7 @@ const UploadProperty = () => {
                                                                     placeholder='Enter number of Kitchen'
                                                                     onChange={(e) => { setKitchen(e.target.value) }}
                                                                     value={kitchen}
+                                                                    min={1}
                                                                     required
                                                                 />
                                                             </div>
@@ -725,6 +726,7 @@ const UploadProperty = () => {
                                                                     placeholder='Enter number of bath'
                                                                     onChange={(e) => { setBath(e.target.value) }}
                                                                     value={bath}
+                                                                    min={1}
                                                                     required
                                                                 />
                                                             </div>
@@ -807,7 +809,7 @@ const UploadProperty = () => {
                                                             type="text"
                                                             id=""
                                                             className='input'
-                                                            placeholder='Enter drscription'
+                                                            placeholder='Enter description'
                                                             rows="5"
                                                             required
                                                             onChange={(e) => { setDescription(e.target.value) }}
@@ -864,7 +866,7 @@ const UploadProperty = () => {
                                                         <label>Postal Code</label>
                                                         <div className='password-filed'>
                                                             <input
-                                                                type='textarea'
+                                                                type='number'
                                                                 style={{ padding: '10px 16px' }}
                                                                 className="input"
                                                                 autoComplete='off'

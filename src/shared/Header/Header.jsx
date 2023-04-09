@@ -46,7 +46,7 @@ function Header() {
                 <li className='nav-item'><NavLink to="/services" className="nav-link">Services</NavLink></li>
                 <li className='nav-item'><NavLink to="/properties" className="nav-link">Properties</NavLink></li>
                 <li className='nav-item'><NavLink to="/contact" className="nav-link">Contact</NavLink></li>
-                <li className='nav-item desk-hide' onClick={logout}><Link className="nav-link">Logout</Link></li>
+                <li className='nav-item desk-hide' onClick={logout}><Link className="nav-link">Log-out</Link></li>
                 <li className='nav-item desk-hide'><NavLink to="/profile" className="nav-link">Profile</NavLink></li>
                 <li className='nav-item mobile-hide dropdown' onClick={() => { setShow(!show) }} style={{ position: 'relative', margin: 'auto' }}>
 
@@ -70,7 +70,7 @@ function Header() {
                         <li className='nav-item'><NavLink to="/user-properties" className="nav-link">Your properties</NavLink></li>
                         <li className='nav-item'><NavLink to="/upload-property" className="nav-link">Add property</NavLink></li>
                         <li className='nav-item'><NavLink to="/profile" className="nav-link">Profile</NavLink></li>
-                        <li className='nav-item' onClick={logout}><Link className="nav-link">Logout</Link></li>
+                        <li className='nav-item' onClick={logout}><Link className="nav-link">Log-out</Link></li>
                       </ul>
                       </div>
                     </div>
@@ -97,7 +97,7 @@ function Header() {
                 <li className='nav-item'><NavLink to="/properties" className="nav-link">Properties</NavLink></li>
                 <li className='nav-item'><NavLink to="/contact" className="nav-link">Contact</NavLink></li>
                 <li className='nav-item'><NavLink to="/login" className="nav-link">Login</NavLink></li>
-                <li className='nav-item'><NavLink to="/signup" className="nav-link">Signup</NavLink></li>
+                <li className='nav-item'><NavLink to="/signup" className="nav-link">Sign up</NavLink></li>
               </ul>
             </div>
           </div>

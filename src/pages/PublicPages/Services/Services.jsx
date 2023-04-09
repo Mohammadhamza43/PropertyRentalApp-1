@@ -64,7 +64,7 @@ function Services() {
             <div className="media block-6 services d-block text-center">
             	<div className="icon d-flex justify-content-center align-items-center"><span className="flaticon-locked"><HiOutlineLockClosed/></span></div>
               <div className="media-body py-md-4">
-                <h3>Lokced in Pricing</h3>
+                <h3>Locked in Pricing</h3>
                 <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
               </div>
             </div>      

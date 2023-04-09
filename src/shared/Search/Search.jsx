@@ -242,7 +242,7 @@ const Search = () => {
                                 </div>
                             </div>
                             <div className='form-item-block'>
-                                <input type="text" ref={searchInput} id='campoBus' placeholder='Search in Spain' />
+                                <input type="text" ref={searchInput} id='campoBus' placeholder='Search' />
                                 <MdGpsFixed className='search-icons' onClick={findMyLocation}/>
                             </div>
                             <button className='btn action'>Search</button>

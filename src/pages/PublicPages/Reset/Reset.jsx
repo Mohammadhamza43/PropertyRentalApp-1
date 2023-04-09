@@ -27,7 +27,7 @@ function Reset() {
     //         .then((res) => {
     //             setLoader(false);
     //             toast.success('Password reset link is sent to your email', {
-    //                 position: toast.POSITION.BOTTOM_RIGHT 
+    //                 position: toast.POSITION.TOP_LEFT 
     //             });
     //             localStorage.setItem('user', JSON.stringify({
     //                 login: true,
@@ -36,7 +36,7 @@ function Reset() {
     //         }).catch((error) => {
     //             setLoader(false);
     //             toast.error('error', {
-    //                 position: toast.POSITION.BOTTOM_RIGHT 
+    //                 position: toast.POSITION.TOP_LEFT 
     //             });
     //         })
     // }
@@ -51,7 +51,7 @@ function Reset() {
                     .then((res) => {
                         setLoader(false);
                         toast.success('Password reset link is sent to your email', {
-                            position: toast.POSITION.BOTTOM_RIGHT 
+                            position: toast.POSITION.TOP_LEFT 
                         });
                         localStorage.setItem('user', JSON.stringify({
                             login: true,
@@ -61,7 +61,7 @@ function Reset() {
                         setLoader(false);
                         console.log(error);
                         toast.error(error.response.data.message[0], {
-                            position: toast.POSITION.BOTTOM_RIGHT 
+                            position: toast.POSITION.TOP_LEFT 
                         });
                     })
         }

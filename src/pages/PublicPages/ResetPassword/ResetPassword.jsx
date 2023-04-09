@@ -65,7 +65,7 @@ function ResetPassword() {
                 setLoader(false);
                 console.log(error.response.data.message);
                 toast.error(error.response.data.message, {
-                    position: toast.POSITION.BOTTOM_RIGHT
+                    position: toast.POSITION.TOP_LEFT
                 });
             })
         }

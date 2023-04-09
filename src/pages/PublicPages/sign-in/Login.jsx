@@ -94,7 +94,7 @@ const Login = () => {
                     setLoader(false)
                     console.log(error);
                     toast.error(error.response.data.message[0],
-                        { position: toast.POSITION.BOTTOM_RIGHT }
+                        { position: toast.POSITION.TOP_LEFT }
                     )
                 })
 
@@ -106,7 +106,7 @@ const Login = () => {
         <>
 
             <Header />
-            <div className="hero-wrap ftco-degree-bg" style={{ backgroundImage: `url(${bgOne})` }} data-stellar-background-ratio="0.5">
+            <div className="hero-wrap ftco-degree-bg" style={{ backgroundImage: `url(${bgOne})` , position : 'relative'}} data-stellar-background-ratio="0.5">
                 <div className="overlay"></div>
                 <div className="container">
                     <div className="row no-gutters slider-text justify-content-center align-items-center">
@@ -120,7 +120,7 @@ const Login = () => {
                                         </div>
                                         <div className="form-container sign-in-container">
                                             <form onSubmit={handleSubmit}>
-                                                <h1 className='main-he'>Login In</h1>
+                                                <h1 className='main-he'>Log in</h1>
                                                 <div style={{ width: '100%' }}>
                                                     <input
                                                         type="email"
@@ -128,6 +128,7 @@ const Login = () => {
                                                         name='email'
                                                         id='email'
                                                         placeholder='Enter your email'
+                                                        style={{borderColor : errors.email && '#e86ed0'}}
                                                         value={values.email}
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
@@ -143,6 +144,7 @@ const Login = () => {
                                                         id='password'
                                                         placeholder='Enter your password'
                                                         value={values.password}
+                                                        style={{borderColor : errors.password && '#e86ed0'}}
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
                                                     />
@@ -172,9 +174,8 @@ const Login = () => {
                         </div>
                     </div>
                 </div>
-
+                <ToastContainer />
             </div>
-            <ToastContainer />
             <Footer />
         </>
 
