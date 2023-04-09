@@ -170,7 +170,7 @@ const UploadProperty = () => {
     const [areaLocation, setAreaLocation] = useState('')
     const [propertyStatus, setPropertyStatus] = useState({value: 'active', label: 'Active'})
     const [selectedImages, setSelectedImages] = useState([]);
-    const [otherFeatuers, setotherFeaturs] = useState([{name: '', value: ''}]);
+    const [otherFeatures, setOtherFeatures] = useState([{id: Math.random(), name: '', value: ''}]);
     const [unit, setUnit] = useState(0);
     const [wide, setWide] = useState(0);
     const [long, setLong] = useState(0);
@@ -219,7 +219,7 @@ const UploadProperty = () => {
                     floors: totalFloors,
                     security: security.value,
                     elevator: elevetor.value,
-                    otherAmenities: [...otherFeatuers]
+                    otherAmenities: [...otherFeatures]
                 }
                 console.log(newHomeAmenities);
                 break;
@@ -235,7 +235,7 @@ const UploadProperty = () => {
                     window: window.value,
                     furnished: furnished.value,
                     floorNo: floorNumber,
-                    otherAmenities: [...otherFeatuers]
+                    otherAmenities: [...otherFeatures]
                 }
                 break;
             case 'office' || 'commercialProperties' || 'building':
@@ -249,14 +249,14 @@ const UploadProperty = () => {
                     window: window.value,
                     furnished: furnished.value,
                     floorNo: floorNumber,
-                    otherAmenities: [...otherFeatuers]
+                    otherAmenities: [...otherFeatures]
                 }
                 break;
             case 'land':
                 landAmenities = {
                     type: type,
                     fenced: fenced.value,
-                    otherAmenities: [...otherFeatuers]
+                    otherAmenities: [...otherFeatures]
                 }
                 break;
             case 'garage':
@@ -265,7 +265,7 @@ const UploadProperty = () => {
                     wide: wide,
                     long: long,
                     height: height,
-                    otherAmenities: [...otherFeatuers]
+                    otherAmenities: [...otherFeatures]
                 }
                 break;
 
@@ -334,25 +334,29 @@ const UploadProperty = () => {
 
 
     const addlines = () => {
-        setotherFeaturs([...otherFeatuers, {name: '', value: ''}])
+        // let i = 0
+        setOtherFeatures([...otherFeatures, {id: Math.random(), name: '', value: ''}])
+        console.log({otherFeatuers: otherFeatures})
     }
 
     const updatefeature = (e, index) => {
         const {name, value} = e.target;
-        const list = [...otherFeatuers];
+        const list = [...otherFeatures];
         list[index][name] = value;
-        setotherFeaturs(list)
+        setOtherFeatures(list)
     }
 
     const removelines = (index) => {
-        const featureList = [...otherFeatuers]
-        featureList.splice(index, 1)
-        setotherFeaturs(featureList)
+        console.log({index})
+        const featureList = otherFeatures.filter((x) => x.id !== index)
+        // featureList.splice(index, 1)
+        setOtherFeatures(featureList)
     }
 
     const onSelectFile = (event) => {
         const selectedFiles = event.target.files;
         const selectedFilesArray = Array.from(selectedFiles);
+        console.log({selectedFilesArray})
         setSelectedImages(selectedFilesArray);
         event.target.value = "";
     };
@@ -456,7 +460,7 @@ const UploadProperty = () => {
     useEffect(() => {
         // initMapScript().then(() => initAutocomplete())
         initAutocomplete()
-    });
+    }, [otherFeatures]);
 
 
     return (
@@ -923,11 +927,11 @@ const UploadProperty = () => {
                                                     <label>Other features </label>
                                                     <div>
                                                         {
-                                                            otherFeatuers.map((value, index) => {
+                                                            otherFeatures.length > 0 && otherFeatures.map((value, index) => {
                                                                 return (
 
-                                                                    <div key={index}>
-                                                                        <div id={index} className='add-feature mb-3'>
+                                                                    <div key={value.id}>
+                                                                        <div className='add-feature mb-3'>
                                                                             <input className='input' type="text"
                                                                                    name='name' placeholder='Enter name'
                                                                                    onChange={e => {
@@ -939,22 +943,23 @@ const UploadProperty = () => {
                                                                                    onChange={e => {
                                                                                        updatefeature(e, index)
                                                                                    }}/>
-                                                                            {otherFeatuers.length !== 1 &&
-                                                                            <button className='remove' type='text'
+                                                                            {otherFeatures.length !== 1 &&
+                                                                            <button className='remove' type='button'
                                                                                     onClick={() => {
-                                                                                        removelines(index)
+                                                                                        removelines(value.id)
                                                                                     }}>Remove</button>
                                                                             }
                                                                         </div>
-                                                                        {otherFeatuers.length - 1 === index &&
-                                                                        <button className='button mt-4' type='text'
-                                                                                onClick={addlines}>Add Feature</button>
-                                                                        }
+                                                                        {/*{otherFeatures.length - 1 === index &&*/}
+
+                                                                        {/*}*/}
                                                                     </div>
 
 
                                                                 )
                                                             })}
+                                                        <button className='button mt-4' type='button'
+                                                                onClick={addlines}>Add Feature</button>
                                                     </div>
                                                 </div>
 
@@ -1083,10 +1088,12 @@ const UploadProperty = () => {
                                                     <label>Location</label>
                                                     <div className='password-filed'>
                                                         <input
-                                                            ttype="text"
+                                                            type="text"
                                                             className="input"
                                                             placeholder='Enter Location'
-                                                            onChange={(e) => { setPinLocation(e.target.value) }}
+                                                            onChange={(e) => {
+                                                                setPinLocation(e.target.value)
+                                                            }}
                                                             value={pinLocation}
                                                             required
                                                         />
@@ -1102,7 +1109,8 @@ const UploadProperty = () => {
                                                                     <div key={index} className="image">
                                                                         <img src={imagesArray} height="150"
                                                                              alt="upload"/>
-                                                                        <button onClick={() => deleteHandler(index)}>
+                                                                        <button type={"button"}
+                                                                                onClick={() => deleteHandler(index)}>
                                                                             <MdDelete/>
                                                                         </button>
                                                                         <p>{index + 1}</p>
