@@ -74,7 +74,7 @@ function Signup() {
                     }
                     console.log(error);
                     toast.error(error.response.data.message[0], {
-                        position: toast.POSITION.BOTTOM_RIGHT
+                        position: toast.POSITION.TOP_LEFT
                     });
                 })
         }
@@ -105,6 +105,7 @@ function Signup() {
                                                         value={values.name}
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
+                                                        style={{borderColor : errors.name && '#e86ed0'}}
                                                     />
                                                     {errors.name && touched.name && <p className='error'>{errors.name}</p>}
                                                 </div>
@@ -118,6 +119,7 @@ function Signup() {
                                                         value={values.email}
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
+                                                        style={{borderColor : errors.email && '#e86ed0'}}
                                                     />
                                                     {errors.email && touched.email && <p className='error'>{errors.email}</p>}
                                                     {/* {dublicateEmail && <p className='error'>User with this email already exists</p>} */}
@@ -133,6 +135,7 @@ function Signup() {
                                                         value={values.password}
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
+                                                        style={{borderColor : errors.password && '#e86ed0'}}
                                                     />
                                                     <span onClick={() => togglePassword('password')}>
                                                         {passwordType === "password" ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
@@ -145,10 +148,11 @@ function Signup() {
                                                         autoComplete='off'
                                                         name='confirmPassword'
                                                         id='confirmPassword'
-                                                        placeholder='Enter your confirm Password'
+                                                        placeholder='Enter your confirm password'
                                                         value={values.confirmPassword}
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
+                                                        style={{borderColor : errors.confirmPassword && '#e86ed0'}}
                                                     />
                                                     <span onClick={() => togglePassword('confirmPassword')}>
                                                         {confirmPasswordType === "password" ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}

@@ -2235,6 +2235,12 @@ pre code {
 font-size: 24px;
 }
 
+.Toastify__toast-container--top-left {
+  top: 50%!important;
+  left: 50% !important;
+  transform: translate(-50%, -50%);
+}
+
 @media (max-width: 575.98px) {
   .table-responsive-sm {
     display: block;

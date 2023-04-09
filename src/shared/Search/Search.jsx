@@ -222,26 +222,18 @@ const Search = () => {
                                 <div className="chack-box">
                                     <ul className="nav nav-tabs" id="myTab" role="tablist">
                                         <li className="nav-item" role="presentation">
-                                            <button className="nav-link active" id="home-tab" data-toggle="tab"
-                                                    data-target="#home" type="button" role="tab" aria-controls="home"
-                                                    aria-selected="true">Buy
-                                            </button>
+                                            <button className="nav-link active" id="home-tab" data-toggle="tab" data-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Buy</button>
                                         </li>
                                         <li className="nav-item" role="presentation">
-                                            <button className="nav-link" id="profile-tab" data-toggle="tab"
-                                                    data-target="#profile" type="button" role="tab"
-                                                    aria-controls="profile" aria-selected="false">Rent
-                                            </button>
+                                            <button className="nav-link" id="profile-tab" data-toggle="tab" data-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Rent</button>
                                         </li>
                                     </ul>
                                 </div>
                             </div>
                             <div className='form-typology-wrapper'>
-                                <div className={`dropdown-wrapper ${toggle ? 'active' : ''}`} onClick={() => {
-                                    setToggle(!toggle)
-                                }}>
+                                <div className={`dropdown-wrapper ${toggle ? 'active' : ''}`} onClick={() => { setToggle(!toggle) }}>
                                     <span className='placeholder'>Property Type</span>
-                                    <MdKeyboardArrowDown/>
+                                    <MdKeyboardArrowDown />
                                     <ul className='dropdown'>
                                         <li>New Home</li>
                                         <li>Room</li>
@@ -255,7 +247,7 @@ const Search = () => {
                                 </div>
                             </div>
                             <div className='form-item-block'>
-                                <input type="text" ref={searchInput} id='campoBus' placeholder='Search in Spain'/>
+                                <input type="text" ref={searchInput} id='campoBus' placeholder='Search Properties' />
                                 <MdGpsFixed className='search-icons' onClick={findMyLocation}/>
                             </div>
                             <button className='btn action'>Search</button>
@@ -270,7 +262,7 @@ const Search = () => {
                         </div> */}
                         <div>
 
-                        </div>
+    </div>
 
                     </div>
                 </div>

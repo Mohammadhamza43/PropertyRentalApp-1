@@ -115,23 +115,17 @@ const UploadProperty = () => {
         {value: 'home', label: 'Home'},
     ]
 
-    const parkingOptions = [{value: false, label: 'No'}, {value: true, label: 'Yes'}]
-    const securityOptions = [{value: false, label: 'No'}, {value: true, label: 'Yes'}]
-    const elevetorOptions = [{value: false, label: 'No'}, {value: true, label: 'Yes'}]
-    const deckrOptions = [{value: false, label: 'No'}, {value: true, label: 'Yes'}]
-    const furnishedOptions = [{value: false, label: 'No'}, {value: true, label: 'Yes'}]
-    const airConditioningOptions = [{value: false, label: 'No'}, {value: true, label: 'Yes'}]
-    const balconyOptions = [{value: false, label: 'No'}, {value: true, label: 'Yes'}]
-    const windowsOptions = [{value: false, label: 'No'}, {value: true, label: 'Yes'}]
-    const fencedOptions = [{value: false, label: 'No'}, {value: true, label: 'Yes'}]
-    const statusOptions = [{value: 'active', label: 'Active'}, {value: 'inactive', label: 'Inactive'}, {
-        value: 'sold',
-        label: 'Sold'
-    }, {value: 'rented', label: 'Rented'}]
-    const areaUniyOptions = [{value: 'mm', label: 'MM'}, {value: 'cm', label: 'CM'}, {
-        value: 'm',
-        label: 'M'
-    }, {value: 'km', label: 'KM'}]
+    const parkingOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
+    const securityOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
+    const elevetorOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
+    const deckrOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
+    const furnishedOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
+    const airConditioningOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
+    const balconyOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
+    const windowsOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
+    const fencedOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
+    const statusOptions = [{ value: 'active', label: 'Active' }, { value: 'inactive', label: 'Inactive' }, { value: 'sold', label: 'Sold' }, { value: 'rented', label: 'Rented' }]
+    const areaUniyOptions = [{ value: 'mm', label: 'mm' }, { value: 'cm', label: 'cm' }, { value: 'm', label: 'm' }, { value: 'km', label: 'km' }]
 
     const [advertising, setAdvertising] = useState({value: 'sale', label: 'Sale'})
     const [propertyType, setPropertyType] = useState({value: 'propertytype', label: 'Property Type'})
@@ -303,7 +297,7 @@ const UploadProperty = () => {
             setFormLoader(true)
             return (
                 toast.success('Image is required.',
-                    {position: toast.POSITION.BOTTOM_RIGHT})
+                    { position: toast.POSITION.TOP_LEFT })
 
             )
         }
@@ -320,12 +314,12 @@ const UploadProperty = () => {
                 setFormLoader(false)
                 navigate('/user-properties')
                 // toast.success('Property Successfully uploaded.',
-                //     { position: toast.POSITION.BOTTOM_RIGHT })
+                //     { position: toast.POSITION.TOP_LEFT })
             })
             .catch((error) => {
                 setFormLoader(false)
 
-                toast.error(error, {position: toast.POSITION.BOTTOM_RIGHT})
+                toast.error(error, { position: toast.POSITION.TOP_LEFT })
 
 
             })
@@ -498,89 +492,79 @@ const UploadProperty = () => {
                                                     }} value={propertyType.value} placeholder="Select property type"/>
                                                 </div>
                                             </div>
-                                            {2 === 2
-                                            &&
-                                            <>
-                                                <div className="col-lg-4">
-                                                    <label>Title</label>
-                                                    <div className='password-filed'>
-                                                        <input
-                                                            type='text'
-                                                            className="input"
-                                                            autoComplete='off'
-                                                            name='confirmNewPassword'
-                                                            id='confirmNewPassword'
-                                                            placeholder='Enter title'
-                                                            required
-                                                            onChange={(e) => {
-                                                                setTitle(e.target.value)
-                                                            }}
-                                                            value={title}
-                                                        />
+                                            {propertyType.value !== 'propertytype' && propertyType.value !== ''
+                                                &&
+                                                <>
+                                                    <div className="col-lg-4">
+                                                        <label>Title</label>
+                                                        <div className='password-filed'>
+                                                            <input
+                                                                type='text'
+                                                                className="input"
+                                                                autoComplete='off'
+                                                                name='confirmNewPassword'
+                                                                id='confirmNewPassword'
+                                                                placeholder='Enter title'
+                                                                required
+                                                                onChange={(e) => { setTitle(e.target.value) }}
+                                                                value={title}
+                                                            />
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div className="col-lg-4 mt-4">
-                                                    <label>Price</label>
-                                                    <div className='password-filed'>
-                                                        <input
-                                                            type='number'
-                                                            className="input"
-                                                            autoComplete='off'
-                                                            name='date'
-                                                            id='date'
-                                                            placeholder='Enter Price'
-                                                            onChange={(e) => {
-                                                                setPricee(e.target.value)
-                                                            }}
-                                                            value={pricee}
-                                                            required
-                                                            data-required-message="price is Required!"
-                                                        />
+                                                    <div className="col-lg-4 mt-4">
+                                                        <label>Price</label>
+                                                        <div className='password-filed'>
+                                                            <input
+                                                                type='number'
+                                                                className="input"
+                                                                autoComplete='off'
+                                                                name='date'
+                                                                id='date'
+                                                                placeholder='Enter Price'
+                                                                onChange={(e) => { setPricee(e.target.value) }}
+                                                                value={pricee}
+                                                                required
+                                                                data-required-message="price is Required!"
+                                                            />
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div className="col-lg-4 mt-4">
-                                                    <label>Available From</label>
-                                                    <div className='password-filed'>
-                                                        <input
-                                                            type='date'
-                                                            className="input"
-                                                            autoComplete='off'
-                                                            name='date'
-                                                            id='date'
-                                                            placeholder='Enter area in square yard'
-                                                            onChange={(e) => {
-                                                                setDate(e.target.value)
-                                                            }}
-                                                            value={date}
-                                                            required
-                                                        />
+                                                    <div className="col-lg-4 mt-4">
+                                                        <label>Available From</label>
+                                                        <div className='password-filed'>
+                                                            <input
+                                                                type='date'
+                                                                className="input"
+                                                                autoComplete='off'
+                                                                name='date'
+                                                                id='date'
+                                                                placeholder='Enter area in square yard'
+                                                                onChange={(e) => { setDate(e.target.value) }}
+                                                                value={date}
+                                                                required
+                                                            />
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div className="col-lg-4 mt-4">
-                                                    <label>Area</label>
-                                                    <div className='password-filed'>
-                                                        <input
-                                                            type='number'
-                                                            className="input"
-                                                            autoComplete='off'
-                                                            name='confirmNewPassword'
-                                                            id='confirmNewPassword'
-                                                            placeholder='Enter area'
-                                                            onChange={(e) => {
-                                                                setAreaa(e.target.value)
-                                                            }}
-                                                            value={areaa}
-                                                            required
-                                                        />
+                                                    <div className="col-lg-4 mt-4">
+                                                        <label>Area</label>
+                                                        <div className='password-filed'>
+                                                            <input
+                                                                type='number'
+                                                                className="input"
+                                                                autoComplete='off'
+                                                                name='confirmNewPassword'
+                                                                id='confirmNewPassword'
+                                                                placeholder='Enter area'
+                                                                onChange={(e) => { setAreaa(e.target.value) }}
+                                                                value={areaa}
+                                                                required
+                                                            />
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div className="col-lg-4 mt-4">
-                                                    <label>Area unit</label>
-                                                    <Dropdown options={areaUniyOptions} onChange={(e) => {
-                                                        setAreaUnit(e)
-                                                    }} value={areaUnit.label} placeholder="Select area unit"/>
-                                                </div>
-                                                <div className="col-lg-6"></div>
+                                                    <div className="col-lg-4 mt-4">
+                                                        <label>Area unit</label>
+                                                        <Dropdown options={areaUniyOptions} onChange={(e) => { setAreaUnit(e) }} value={areaUnit.label} placeholder="Select area unit" />
+                                                    </div>
+                                                    <div className="col-lg-6"></div>
 
 
                                                 {(propertyType.value !== 'garage'
@@ -682,179 +666,165 @@ const UploadProperty = () => {
                                                         setFurnished(e)
                                                     }} value={fenced.label} placeholder="Select fenced"/>
 
-                                                </div>
-                                                }
-                                                {(propertyType.value === 'land') &&
-                                                <div className="col-lg-4 mt-4">
-                                                    <label>Land Type</label>
-                                                    <div className='password-filed'>
-                                                        <input
-                                                            type='text'
-                                                            style={{padding: '10px 16px'}}
-                                                            className="input"
-                                                            autoComplete='off'
-                                                            name='confirmNewPassword'
-                                                            id='confirmNewPassword'
-                                                            placeholder='Enter unit'
-                                                            onChange={(e) => {
-                                                                setType(e.target.value)
-                                                            }}
-                                                            value={type}
-                                                            required
-                                                        />
-                                                    </div>
-                                                </div>
-                                                }
-                                                {(propertyType.value === 'garage') &&
-                                                <div className="col-lg-4 mt-4">
-                                                    <label>Unit</label>
-                                                    <div className='password-filed'>
-                                                        <input
-                                                            type='number'
-                                                            style={{padding: '10px 16px'}}
-                                                            className="input"
-                                                            autoComplete='off'
-                                                            name='confirmNewPassword'
-                                                            id='confirmNewPassword'
-                                                            placeholder='Enter unit'
-                                                            onChange={(e) => {
-                                                                setUnit(e.target.value)
-                                                            }}
-                                                            value={unit}
-                                                            required
-                                                        />
-                                                    </div>
-                                                </div>
-                                                }
-                                                {(propertyType.value === 'garage') &&
-                                                <div className="col-lg-4 mt-4">
-                                                    <label>Wide</label>
-                                                    <div className='password-filed'>
-                                                        <input
-                                                            type='number'
-                                                            style={{padding: '10px 16px'}}
-                                                            className="input"
-                                                            autoComplete='off'
-                                                            name='confirmNewPassword'
-                                                            id='confirmNewPassword'
-                                                            placeholder='Enter unit'
-                                                            onChange={(e) => {
-                                                                setWide(e.target.value)
-                                                            }}
-                                                            value={wide}
-                                                            required
-                                                        />
-                                                    </div>
-                                                </div>
-                                                }
-                                                {(propertyType.value === 'garage') &&
-                                                <div className="col-lg-4 mt-4">
-                                                    <label>Long</label>
-                                                    <div className='password-filed'>
-                                                        <input
-                                                            type='number'
-                                                            style={{padding: '10px 16px'}}
-                                                            className="input"
-                                                            autoComplete='off'
-                                                            name='confirmNewPassword'
-                                                            id='confirmNewPassword'
-                                                            placeholder='Enter unit'
-                                                            onChange={(e) => {
-                                                                setLong(e.target.value)
-                                                            }}
-                                                            value={long}
-                                                            required
-                                                        />
-                                                    </div>
-                                                </div>
-                                                }
-                                                {(propertyType.value === 'garage') &&
-                                                <div className="col-lg-4 mt-4">
-                                                    <label>Height</label>
-                                                    <div className='password-filed'>
-                                                        <input
-                                                            type='number'
-                                                            style={{padding: '10px 16px'}}
-                                                            className="input"
-                                                            autoComplete='off'
-                                                            name='confirmNewPassword'
-                                                            id='confirmNewPassword'
-                                                            placeholder='Enter unit'
-                                                            onChange={(e) => {
-                                                                setheight(e.target.value)
-                                                            }}
-                                                            value={height}
-                                                            required
-                                                        />
-                                                    </div>
-                                                </div>
-                                                }
-                                                {(propertyType.value !== 'garage' && propertyType.value !== 'land') &&
-                                                <div className="col-lg-4 mt-4">
-                                                    <label> kitchen</label>
-                                                    <div className='password-fil'>
-                                                        <input
-                                                            type='number'
-                                                            className="input"
-                                                            autoComplete='off'
-                                                            name='confirmNewPassword'
-                                                            id='confirmNewPassword'
-                                                            placeholder='Enter number of Kitchen'
-                                                            onChange={(e) => {
-                                                                setKitchen(e.target.value)
-                                                            }}
-                                                            value={kitchen}
-                                                            required
-                                                        />
-                                                    </div>
-                                                </div>
-                                                }
-                                                {(propertyType.value !== 'land' && propertyType.value !== 'garage') &&
-                                                <div className="col-lg-4 mt-4">
-                                                    <label>Bath</label>
-                                                    <div className='password-filed'>
-                                                        <input
-                                                            type='number'
-                                                            className="input"
-                                                            autoComplete='off'
-                                                            name='confirmNewPassword'
-                                                            id='confirmNewPassword'
-                                                            placeholder='Enter number of bath'
-                                                            onChange={(e) => {
-                                                                setBath(e.target.value)
-                                                            }}
-                                                            value={bath}
-                                                            required
-                                                        />
-                                                    </div>
-                                                </div>
-                                                }
-                                                {(propertyType.value !== 'garage'
-                                                    && propertyType.value !== 'land'
-                                                    && propertyType.value !== 'room'
-                                                    && propertyType.value !== 'office'
-                                                    && propertyType.value !== 'building'
-                                                    && propertyType.value !== 'commercialProperties'
-                                                ) &&
-                                                <div className="col-lg-4 mt-4">
-                                                    <label>Living Room</label>
-                                                    <div className='password-filed'>
-                                                        <input
-                                                            type='number'
-                                                            className="input"
-                                                            autoComplete='off'
-                                                            name='confirmNewPassword'
-                                                            id='confirmNewPassword'
-                                                            placeholder='Enter number of living rooms'
-                                                            onChange={(e) => {
-                                                                setLivingRoom(e.target.value)
-                                                            }}
-                                                            value={livingRoom}
-                                                            required
-                                                        />
-                                                    </div>
-                                                </div>
-                                                }
+                                                        </div>
+                                                    }
+                                                    {(propertyType.value === 'land') &&
+                                                        <div className="col-lg-4 mt-4">
+                                                            <label>Land Type</label>
+                                                            <div className='password-filed'>
+                                                                <input
+                                                                    type='text'
+                                                                    style={{ padding: '10px 16px' }}
+                                                                    className="input"
+                                                                    autoComplete='off'
+                                                                    name='confirmNewPassword'
+                                                                    id='confirmNewPassword'
+                                                                    placeholder='Enter unit'
+                                                                    onChange={(e) => { setType(e.target.value) }}
+                                                                    value={type}
+                                                                    required
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                    {(propertyType.value === 'garage') &&
+                                                        <div className="col-lg-4 mt-4">
+                                                            <label>Unit</label>
+                                                            <div className='password-filed'>
+                                                                <input
+                                                                    type='number'
+                                                                    style={{ padding: '10px 16px' }}
+                                                                    className="input"
+                                                                    autoComplete='off'
+                                                                    name='confirmNewPassword'
+                                                                    id='confirmNewPassword'
+                                                                    placeholder='Enter unit'
+                                                                    onChange={(e) => { setUnit(e.target.value) }}
+                                                                    value={unit}
+                                                                    required
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                    {(propertyType.value === 'garage') &&
+                                                        <div className="col-lg-4 mt-4">
+                                                            <label>Wide</label>
+                                                            <div className='password-filed'>
+                                                                <input
+                                                                    type='number'
+                                                                    style={{ padding: '10px 16px' }}
+                                                                    className="input"
+                                                                    autoComplete='off'
+                                                                    name='confirmNewPassword'
+                                                                    id='confirmNewPassword'
+                                                                    placeholder='Enter unit'
+                                                                    onChange={(e) => { setWide(e.target.value) }}
+                                                                    value={wide}
+                                                                    required
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                    {(propertyType.value === 'garage') &&
+                                                        <div className="col-lg-4 mt-4">
+                                                            <label>Long</label>
+                                                            <div className='password-filed'>
+                                                                <input
+                                                                    type='number'
+                                                                    style={{ padding: '10px 16px' }}
+                                                                    className="input"
+                                                                    autoComplete='off'
+                                                                    name='confirmNewPassword'
+                                                                    id='confirmNewPassword'
+                                                                    placeholder='Enter unit'
+                                                                    onChange={(e) => { setLong(e.target.value) }}
+                                                                    value={long}
+                                                                    required
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                    {(propertyType.value === 'garage') &&
+                                                        <div className="col-lg-4 mt-4">
+                                                            <label>Height</label>
+                                                            <div className='password-filed'>
+                                                                <input
+                                                                    type='number'
+                                                                    style={{ padding: '10px 16px' }}
+                                                                    className="input"
+                                                                    autoComplete='off'
+                                                                    name='confirmNewPassword'
+                                                                    id='confirmNewPassword'
+                                                                    placeholder='Enter unit'
+                                                                    onChange={(e) => { setheight(e.target.value) }}
+                                                                    value={height}
+                                                                    required
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                    {(propertyType.value !== 'garage' && propertyType.value !== 'land') &&
+                                                        <div className="col-lg-4 mt-4">
+                                                            <label> Kitchen</label>
+                                                            <div className='password-fil'>
+                                                                <input
+                                                                    type='number'
+                                                                    className="input"
+                                                                    autoComplete='off'
+                                                                    name='confirmNewPassword'
+                                                                    id='confirmNewPassword'
+                                                                    placeholder='Enter number of Kitchen'
+                                                                    onChange={(e) => { setKitchen(e.target.value) }}
+                                                                    value={kitchen}
+                                                                    min={1}
+                                                                    required
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                    {(propertyType.value !== 'land' && propertyType.value !== 'garage') &&
+                                                        <div className="col-lg-4 mt-4">
+                                                            <label>Bath</label>
+                                                            <div className='password-filed'>
+                                                                <input
+                                                                    type='number'
+                                                                    className="input"
+                                                                    autoComplete='off'
+                                                                    name='confirmNewPassword'
+                                                                    id='confirmNewPassword'
+                                                                    placeholder='Enter number of bath'
+                                                                    onChange={(e) => { setBath(e.target.value) }}
+                                                                    value={bath}
+                                                                    min={1}
+                                                                    required
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                    {(propertyType.value !== 'garage'
+                                                        && propertyType.value !== 'land'
+                                                        && propertyType.value !== 'room'
+                                                        && propertyType.value !== 'office'
+                                                        && propertyType.value !== 'building'
+                                                        && propertyType.value !== 'commercialProperties'
+                                                    ) &&
+                                                        <div className="col-lg-4 mt-4">
+                                                            <label>Living Room</label>
+                                                            <div className='password-filed'>
+                                                                <input
+                                                                    type='number'
+                                                                    className="input"
+                                                                    autoComplete='off'
+                                                                    name='confirmNewPassword'
+                                                                    id='confirmNewPassword'
+                                                                    placeholder='Enter number of living rooms'
+                                                                    onChange={(e) => { setLivingRoom(e.target.value) }}
+                                                                    value={livingRoom}
+                                                                    required
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    }
 
                                                 {(propertyType.value !== 'newHome'
                                                     && propertyType.value !== 'home'
@@ -905,20 +875,18 @@ const UploadProperty = () => {
                                                 </div>
                                                 }
 
-                                                <div className="col-lg-12 mt-4">
-                                                    <label>Description</label>
-                                                    <textarea
-                                                        name="textarea"
-                                                        type="text"
-                                                        id=""
-                                                        className='input'
-                                                        placeholder='Enter drscription'
-                                                        rows="5"
-                                                        required
-                                                        onChange={(e) => {
-                                                            setDescription(e.target.value)
-                                                        }}
-                                                        value={description}>
+                                                    <div className="col-lg-12 mt-4">
+                                                        <label>Description</label>
+                                                        <textarea
+                                                            name="textarea"
+                                                            type="text"
+                                                            id=""
+                                                            className='input'
+                                                            placeholder='Enter description'
+                                                            rows="5"
+                                                            required
+                                                            onChange={(e) => { setDescription(e.target.value) }}
+                                                            value={description}>
                                                         </textarea>
                                                 </div>
 
@@ -989,7 +957,7 @@ const UploadProperty = () => {
                                                     <label>Postal Code</label>
                                                     <div className='password-filed'>
                                                         <input
-                                                            type='textarea'
+                                                            type='number'
                                                             style={{padding: '10px 16px'}}
                                                             className="input"
                                                             autoComplete='off'

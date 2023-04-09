@@ -65,7 +65,7 @@ const UserProperty = () => {
         setList(updatedItems);
         setFormLoader(false)
         toast.success(data.message || 'Property Deleted.',
-            {position: toast.POSITION.BOTTOM_RIGHT})
+            {position: toast.POSITION.TOP_LEFT})
     }
 
     const changeStatus = async (status , id) =>{
@@ -75,12 +75,12 @@ const UserProperty = () => {
                 if(res.data){
                     setFormLoader(false)
                     toast.success('Status Successfully updated.',
-                        { position: toast.POSITION.BOTTOM_RIGHT })
+                        { position: toast.POSITION.TOP_LEFT })
                 }
             })
             .catch((error) => {
                 setFormLoader(false)
-                toast.error(error, { position: toast.POSITION.BOTTOM_RIGHT })
+                toast.error(error, { position: toast.POSITION.TOP_LEFT })
             })
         /*fetch(`https://walrus-app-ovpy2.ondigitalocean.app/property/status/${id}`, {
             method: "PUT",
@@ -94,11 +94,11 @@ const UserProperty = () => {
           if(res.ok){
               setFormLoader(false)
               toast.success('Status Successfully updated.',
-                  { position: toast.POSITION.BOTTOM_RIGHT })
+                  { position: toast.POSITION.TOP_LEFT })
           }
         }) .catch((error) => {
                     setFormLoader(false)
-                    toast.error(error, { position: toast.POSITION.BOTTOM_RIGHT })
+                    toast.error(error, { position: toast.POSITION.TOP_LEFT })
         })*/
     }
 

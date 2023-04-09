@@ -100,37 +100,31 @@ const UpdateProperty = () => {
         {value: 'commercialProperties', label: 'Commercial Properties'},
         {value: 'home', label: 'Home'},
     ]
-    const parkingOptions = [{value: false, label: 'No'}, {value: true, label: 'Yes'}]
-    const securityOptions = [{value: false, label: 'No'}, {value: true, label: 'Yes'}]
-    const elevetorOptions = [{value: false, label: 'No'}, {value: true, label: 'Yes'}]
-    const deckrOptions = [{value: false, label: 'No'}, {value: true, label: 'Yes'}]
-    const furnishedOptions = [{value: false, label: 'No'}, {value: true, label: 'Yes'}]
-    const airConditioningOptions = [{value: false, label: 'No'}, {value: true, label: 'Yes'}]
-    const balconyOptions = [{value: false, label: 'No'}, {value: true, label: 'Yes'}]
-    const windowsOptions = [{value: false, label: 'No'}, {value: true, label: 'Yes'}]
-    const fencedOptions = [{value: false, label: 'No'}, {value: true, label: 'Yes'}]
-    const elevatorOptions = [{value: false, label: 'No'}, {value: true, label: 'Yes'}]
-    const statusOptions = [{value: 'active', label: 'Active'}, {value: 'inactive', label: 'Inactive'}, {
-        value: 'sold',
-        label: 'Sold'
-    }, {value: 'rented', label: 'Rented'}]
-    const areaUnitOptions = [{value: 'mm', label: 'MM'}, {value: 'cm', label: 'CM'}, {
-        value: 'm',
-        label: 'M'
-    }, {value: 'km', label: 'KM'}]
+    const parkingOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
+    const securityOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
+    const elevetorOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
+    const deckrOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
+    const furnishedOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
+    const airConditioningOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
+    const balconyOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
+    const windowsOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
+    const fencedOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
+    const elevatorOptions = [{ value: false, label: 'No' }, { value: true, label: 'Yes' }]
+    const statusOptions = [{ value: 'active', label: 'Active' }, { value: 'inactive', label: 'Inactive' }, { value: 'sold', label: 'Sold' }, { value: 'rented', label: 'Rented' }]
+    const areaUnitOptions = [{ value: 'mm', label: 'mm' }, { value: 'cm', label: 'cm' }, { value: 'm', label: 'm' }, { value: 'km', label: 'km' }]
     const [formLoader, setFormLoader] = useState(false)
-    const [advertising, setAdvertising] = useState({value: 'sale', label: 'Sale'})
+    const [advertising, setAdvertising] = useState({ value: 'sale', label: 'Sale' })
     const [get, setGet] = useState(true)
-    const [propertyType, setPropertyType] = useState({value: 'propertytype', label: 'Property Type'})
+    const [propertyType, setPropertyType] = useState({ value: 'propertytype', label: 'Property Type' })
     const [title, setTitle] = useState('')
     const [pricee, setPricee] = useState('')
     const [date, setDate] = useState('')
     const [areaa, setAreaa] = useState('')
-    const [areaUnit, setAreaUnit] = useState({value: 'mm', label: 'MM'})
+    const [areaUnit, setAreaUnit] = useState({ value: 'mm', label: 'MM' })
     const [type, setType] = useState('')
     const [room, setRoom] = useState('')
-    const [window, setWindow] = useState({value: false, label: 'No'})
-    const [fenced, setFenced] = useState({value: false, label: 'No'})
+    const [window, setWindow] = useState({ value: false, label: 'No' })
+    const [fenced, setFenced] = useState({ value: false, label: 'No' })
     const [kitchen, setKitchen] = useState('')
     const [bath, setBath] = useState('')
     const [livingRoom, setLivingRoom] = useState('')
@@ -328,12 +322,12 @@ const UpdateProperty = () => {
             setFormLoader(false)
             if (res.ok) (
                 toast.success('Image deleted succesfully.',
-                    {position: toast.POSITION.BOTTOM_RIGHT}))
+                    { position: toast.POSITION.TOP_LEFT }))
 
         }).catch((error) => {
-                setFormLoader(false)
-                toast.error('error.message', {position: toast.POSITION.BOTTOM_RIGHT})
-            }
+            setFormLoader(false)
+            toast.error('error.message', { position: toast.POSITION.TOP_LEFT })
+        }
         )
     }
     const DeleteOldTour = async (url) => {
@@ -353,15 +347,15 @@ const UpdateProperty = () => {
             setFormLoader(false)
             if (res.ok) (
                 toast.success('Tour deleted succesfully.',
-                    {position: toast.POSITION.BOTTOM_RIGHT})
-            )
+                    { position: toast.POSITION.TOP_LEFT })
+                    )
 
         }).catch((error) => {
-                setFormLoader(false)
-                if (error) {
-                    toast.error('error.message', {position: toast.POSITION.BOTTOM_RIGHT})
-                }
+            setFormLoader(false)
+            if(error){
+                toast.error('error.message', { position: toast.POSITION.TOP_LEFT })
             }
+        }
         )
     }
     const DeleteOldVideo = async (url) => {
@@ -379,11 +373,11 @@ const UpdateProperty = () => {
             setOldVideo('')
             if (res.ok) (
                 toast.success('Video deleted succesfully.',
-                    {position: toast.POSITION.BOTTOM_RIGHT}))
+                    { position: toast.POSITION.TOP_LEFT }))
 
         }).catch((error) => {
-                toast.error('error.message', {position: toast.POSITION.BOTTOM_RIGHT})
-            }
+            toast.error('error.message', { position: toast.POSITION.TOP_LEFT })
+        }
         )
     }
 
@@ -568,7 +562,7 @@ const UpdateProperty = () => {
                     setTour('')
                     window.location.reload(false);
                     toast.success('Property Successfully uploaded.',
-                        {position: toast.POSITION.BOTTOM_RIGHT})
+                    { position: toast.POSITION.TOP_LEFT })
                     // navigate('/user-properties')
                 }
 
@@ -576,12 +570,12 @@ const UpdateProperty = () => {
             .catch((error) => {
                 if (error) {
                     setFormLoader(false)
-                    toast.error(error, {position: toast.POSITION.BOTTOM_RIGHT})
+                    toast.error(error, { position: toast.POSITION.TOP_LEFT })
 
 
                 } else {
                     toast.error('400 Error',
-                        {position: toast.POSITION.BOTTOM_RIGHT}
+                        { position: toast.POSITION.TOP_LEFT }
                     )
                 }
             })
@@ -601,6 +595,7 @@ const UpdateProperty = () => {
     }
 
     const removelines = (index) => {
+        console.log(index);
         const featureList = [...otherFeatuers]
         featureList.splice(index, 1)
         setotherFeaturs(featureList)
@@ -824,43 +819,41 @@ const UpdateProperty = () => {
                                                         </div>
                                                     </div>
 
-                                                    <div className="col-lg-4 mt-4">
-                                                        <label> Kitchen</label>
-                                                        <div className='password-fil'>
-                                                            <input
-                                                                type='number'
-                                                                className="input"
-                                                                autoComplete='off'
-                                                                name='confirmNewPassword'
-                                                                id='confirmNewPassword'
-                                                                placeholder='Enter number of Kitchen'
-                                                                onChange={(e) => {
-                                                                    setKitchen(e.target.value)
-                                                                }}
-                                                                defaultValue={kitchen}
-                                                                required
-                                                            />
-                                                        </div>
-                                                    </div>
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label> Kitchen</label>
+                                                                <div className='password-fil'>
+                                                                    <input
+                                                                        type='number'
+                                                                        className="input"
+                                                                        autoComplete='off'
+                                                                        name='confirmNewPassword'
+                                                                        id='confirmNewPassword'
+                                                                        placeholder='Enter number of Kitchen'
+                                                                        onChange={(e) => { setKitchen(e.target.value) }}
+                                                                        defaultValue={kitchen}
+                                                                        min={1}
+                                                                        required
+                                                                    />
+                                                                </div>
+                                                            </div>
 
-                                                    <div className="col-lg-4 mt-4">
-                                                        <label>Bath</label>
-                                                        <div className='password-filed'>
-                                                            <input
-                                                                type='number'
-                                                                className="input"
-                                                                autoComplete='off'
-                                                                name='confirmNewPassword'
-                                                                id='confirmNewPassword'
-                                                                placeholder='Enter number of bath'
-                                                                onChange={(e) => {
-                                                                    setBath(e.target.value)
-                                                                }}
-                                                                defaultValue={bath}
-                                                                required
-                                                            />
-                                                        </div>
-                                                    </div>
+                                                            <div className="col-lg-4 mt-4">
+                                                                <label>Bath</label>
+                                                                <div className='password-filed'>
+                                                                    <input
+                                                                        type='number'
+                                                                        className="input"
+                                                                        autoComplete='off'
+                                                                        name='confirmNewPassword'
+                                                                        id='confirmNewPassword'
+                                                                        placeholder='Enter number of bath'
+                                                                        onChange={(e) => { setBath(e.target.value) }}
+                                                                        defaultValue={bath}
+                                                                        min={1}
+                                                                        required
+                                                                    />
+                                                                </div>
+                                                            </div>
 
                                                     <div className="col-lg-4 mt-4">
                                                         <label>Living Room</label>
@@ -1705,18 +1698,16 @@ const UpdateProperty = () => {
                                                 </>
                                                 }
 
-                                                <div className="col-lg-12 mt-4">
-                                                    <label>Description</label>
-                                                    <textarea
-                                                        type="text"
-                                                        className='input'
-                                                        placeholder='Enter drscription'
-                                                        rows="5"
-                                                        required
-                                                        onChange={(e) => {
-                                                            setDescription(e.target.value)
-                                                        }}
-                                                        value={description}>
+                                                    <div className="col-lg-12 mt-4">
+                                                        <label>Description</label>
+                                                        <textarea
+                                                            type="text"
+                                                            className='input'
+                                                            placeholder='Enter description'
+                                                            rows="5"
+                                                            required
+                                                            onChange={(e) => { setDescription(e.target.value) }}
+                                                            value={description}>
                                                         </textarea>
                                                 </div>
 
@@ -1782,7 +1773,7 @@ const UpdateProperty = () => {
                                                     <label>Postal Code</label>
                                                     <div className='password-filed'>
                                                         <input
-                                                            type='textarea'
+                                                            type='number'
                                                             style={{padding: '10px 16px'}}
                                                             className="input"
                                                             placeholder='Enter postal code'

@@ -138,15 +138,19 @@ select {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: inherit;
-    font-weight: 500;
+    font-size: 16px;
+    font-weight: 700;
     padding: 0.428571em 1em;
     text-shadow: none;
     cursor: pointer;
-    background: transparent;
+    background-color: #e86ed0 !important;
     border-radius: 6px;
-    border: 1px solid #ccd0d5;
-    color: rgb(118, 118, 118);
+    border: transparent;
+    color: rgb(255, 255, 255);
+}
+
+.upload-file span{
+    margin-left: 10px;
 }
 
 .upload-file input{
