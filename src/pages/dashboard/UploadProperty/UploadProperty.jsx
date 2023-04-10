@@ -454,7 +454,7 @@ const UploadProperty = () => {
     useEffect(() => {
         // initMapScript().then(() => initAutocomplete())
         initAutocomplete()
-    }, [otherFeatures]);
+    },);
 
 
     return (
@@ -493,8 +493,8 @@ const UploadProperty = () => {
                                                 </div>
                                             </div>
                                             {/* {propertyType.value !== 'propertytype' && propertyType.value !== '' */}
-                                        
-                                                
+
+
                                                     <div className="col-lg-4">
                                                         <label>Title</label>
                                                         <div className='password-filed'>
@@ -773,7 +773,7 @@ const UploadProperty = () => {
                                                                     autoComplete='off'
                                                                     name='confirmNewPassword'
                                                                     id='confirmNewPassword'
-                                                                    placeholder='Enter number of kitchen'
+                                                                    placeholder='Enter number of kitchens'
                                                                     onChange={(e) => { setKitchen(e.target.value) }}
                                                                     value={kitchen}
                                                                     min={1}
@@ -936,12 +936,11 @@ const UploadProperty = () => {
                                                     <div className='password-filed address-field'>
                                                         <input
                                                             ref={searchInput}
-                                                            type='textarea'
-                                                            style={{padding: '10px 16px'}}
+                                                            type='text'
                                                             className="input"
+                                                            name='address'
+                                                            id='address'
                                                             placeholder='Enter address'
-                                                            onChange={(e) => {setAddress(e.target.value)}}
-                                                            // value={address}
                                                             required
                                                         />
                                                         <MdGpsFixed className='search-icons' onClick={findMyLocation}/>
@@ -1188,7 +1187,7 @@ const UploadProperty = () => {
                                                 <div className="col-lg-12 mt-4">
                                                     <button type="submit" className='button'>Upload Property</button>
                                                 </div>
-                                            
+
 
 
                                         </div>
