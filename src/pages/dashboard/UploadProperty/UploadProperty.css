@@ -199,12 +199,13 @@ select {
 }
 
 .address-field .search-icons {
-    color: #8E8F8C;
-    font-size: 1.25rem;
-    right: 10px;
-    position: absolute;
-    top: 0.55rem;
-    z-index: 1;
+  color: #8E8F8C;
+  font-size: 1.25rem;
+  position: absolute;
+  right: 20px;
+  z-index: 1;
+  top: 50%;
+  transform: translate(10px, -50%);
 }
 
 
