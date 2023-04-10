@@ -104,7 +104,7 @@ const UploadProperty = () => {
 
 
     const advertisingOptions = [{value: 'sale', label: 'Sale'}, {value: 'rent', label: 'Rent'}]
-    const propertytypeOptions = [{value: 'propertytype', label: 'Property Type'},
+    const propertytypeOptions = [
         {value: 'newHome', label: 'New Home'},
         {value: 'room', label: 'Room'},
         {value: 'office', label: 'Office'},
@@ -128,7 +128,7 @@ const UploadProperty = () => {
     const areaUniyOptions = [{ value: 'mm', label: 'mm' }, { value: 'cm', label: 'cm' }, { value: 'm', label: 'm' }, { value: 'km', label: 'km' }]
 
     const [advertising, setAdvertising] = useState({value: 'sale', label: 'Sale'})
-    const [propertyType, setPropertyType] = useState({value: 'propertytype', label: 'Property Type'})
+    const [propertyType, setPropertyType] = useState({value: 'newHome', label: 'New Home'})
     const [title, setTitle] = useState('')
     const [pricee, setPricee] = useState('')
     const [date, setDate] = useState('')
@@ -492,9 +492,9 @@ const UploadProperty = () => {
                                                     }} value={propertyType.value} placeholder="Select property type"/>
                                                 </div>
                                             </div>
-                                            {propertyType.value !== 'propertytype' && propertyType.value !== ''
-                                                &&
-                                                <>
+                                            {/* {propertyType.value !== 'propertytype' && propertyType.value !== '' */}
+                                        
+                                                
                                                     <div className="col-lg-4">
                                                         <label>Title</label>
                                                         <div className='password-filed'>
@@ -773,7 +773,7 @@ const UploadProperty = () => {
                                                                     autoComplete='off'
                                                                     name='confirmNewPassword'
                                                                     id='confirmNewPassword'
-                                                                    placeholder='Enter number of Kitchen'
+                                                                    placeholder='Enter number of kitchen'
                                                                     onChange={(e) => { setKitchen(e.target.value) }}
                                                                     value={kitchen}
                                                                     min={1}
@@ -939,14 +939,8 @@ const UploadProperty = () => {
                                                             type='textarea'
                                                             style={{padding: '10px 16px'}}
                                                             className="input"
-                                                            autoComplete='off'
-                                                            name='address'
-                                                            id='address'
                                                             placeholder='Enter address'
-                                                            onChange={(e) => {
-                                                                setAddress(e.target.value)
-                                                                console.log({address})
-                                                            }}
+                                                            onChange={(e) => {setAddress(e.target.value)}}
                                                             // value={address}
                                                             required
                                                         />
@@ -1194,8 +1188,7 @@ const UploadProperty = () => {
                                                 <div className="col-lg-12 mt-4">
                                                     <button type="submit" className='button'>Upload Property</button>
                                                 </div>
-                                            </>
-                                            }
+                                            
 
 
                                         </div>

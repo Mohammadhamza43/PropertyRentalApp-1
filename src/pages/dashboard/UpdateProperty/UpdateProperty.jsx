@@ -90,7 +90,7 @@ const UpdateProperty = () => {
     const navigate = useNavigate()
     const [id, setId] = useState('');
     const advertisingOptions = [{value: 'sale', label: 'Sale'}, {value: 'rent', label: 'Rent'}]
-    const propertytypeOptions = [{value: 'propertytype', label: 'Property Type'},
+    const propertytypeOptions = [
         {value: 'newHome', label: 'New Home'},
         {value: 'room', label: 'Room'},
         {value: 'office', label: 'Office'},
@@ -115,7 +115,7 @@ const UpdateProperty = () => {
     const [formLoader, setFormLoader] = useState(false)
     const [advertising, setAdvertising] = useState({ value: 'sale', label: 'Sale' })
     const [get, setGet] = useState(true)
-    const [propertyType, setPropertyType] = useState({ value: 'propertytype', label: 'Property Type' })
+    const [propertyType, setPropertyType] = useState({value: 'newHome', label: 'New Home'})
     const [title, setTitle] = useState('')
     const [pricee, setPricee] = useState('')
     const [date, setDate] = useState('')
@@ -203,9 +203,9 @@ const UpdateProperty = () => {
                     setCountry(selectedProperty.location.country)
                     setCity(selectedProperty.location.city)
                     setAddress(selectedProperty.location.address)
-                    if (searchInput && searchInput.current) {
-                        searchInput.current.value = address;
-                    }
+                    // if (searchInput && searchInput.current) {
+                    //     searchInput.current.value = address;
+                    // }
                     setAreaLocation(selectedProperty.location.areaLocation)
                     setStreetNumber(selectedProperty.location.streetNumber)
                     setPinLocation(selectedProperty.location.pinLocation)
@@ -637,7 +637,8 @@ const UpdateProperty = () => {
         // console.log('Address: ' + address);
         const placeDetails = extractAddress(place);
         // console.log({placeDetails})
-        setAddress(searchInput.current.value);
+        // setAddress(searchInput.current.value);
+        // setAddress(searchInput.current);
         setCountry(placeDetails.country)
         setCity(placeDetails.city)
         setPostalCode(placeDetails.zip)
@@ -657,8 +658,10 @@ const UpdateProperty = () => {
 
         // let autocomplete = new window.google.maps.places.Autocomplete(searchInput.current);
 
+        console.log(searchInput.current)
         // console.log(searchInput.current.value);
         let autocomplete = new myWindowObject.google.maps.places.Autocomplete(searchInput.current);
+        console.log(autocomplete);
         autocomplete.setFields(["address_component", "geometry", "formatted_address", "name"]);
         autocomplete.addListener("place_changed", () => onChangeAddress(autocomplete));
     }
@@ -679,7 +682,7 @@ const UpdateProperty = () => {
                 setStreetNumber(_address.streetNumber)
                 setAreaLocation(_address.area)
                 setPinLocation(place.formatted_address)
-                searchInput.current.value = place.formatted_address;
+                // searchInput.current.value = place.formatted_address;
             })
     }
 
@@ -729,7 +732,8 @@ const UpdateProperty = () => {
                                                               placeholder="Select property type"/>
                                                 </div>
                                             </div>
-                                            {propertyType?.value !== 'propertytype' && propertyType !== 'propertytype' && propertyType !== ''
+                                            {/* {propertyType?.value !== 'propertytype' && propertyType !== 'propertytype' && propertyType !== '' */}
+                                            {2 === 2
                                             &&
                                             <>
                                                 <div className="col-lg-4">
@@ -828,7 +832,7 @@ const UpdateProperty = () => {
                                                                         autoComplete='off'
                                                                         name='confirmNewPassword'
                                                                         id='confirmNewPassword'
-                                                                        placeholder='Enter number of Kitchen'
+                                                                        placeholder='Enter number of kitchen'
                                                                         onChange={(e) => { setKitchen(e.target.value) }}
                                                                         defaultValue={kitchen}
                                                                         min={1}
@@ -1756,15 +1760,15 @@ const UpdateProperty = () => {
                                                     <div className='password-filed address-field'>
                                                         <input
                                                             ref={searchInput}
-                                                            type='textarea'
+                                                            type='text'
                                                             style={{padding: '10px 16px'}}
                                                             className="input"
                                                             placeholder='Enter address'
-                                                            /*onChange={(e) => {
+                                                            onChange={(e) => {
                                                                 setAddress(e.target.value)
                                                             }}
-                                                            defaultValue={address}*/
-                                                            required
+                                                            defaultValue={address}
+                                                            // required
                                                         />
                                                         <MdGpsFixed className='search-icons' onClick={findMyLocation}/>
                                                     </div>
