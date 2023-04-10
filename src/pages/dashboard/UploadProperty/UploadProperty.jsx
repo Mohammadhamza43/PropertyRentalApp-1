@@ -454,7 +454,7 @@ const UploadProperty = () => {
     useEffect(() => {
         // initMapScript().then(() => initAutocomplete())
         initAutocomplete()
-    }, [otherFeatures]);
+    },);
 
 
     return (
@@ -936,19 +936,9 @@ const UploadProperty = () => {
                                                     <div className='password-filed address-field'>
                                                         <input
                                                             ref={searchInput}
-                                                            type='textarea'
-                                                            style={{padding: '10px 16px'}}
+                                                            type='text'
                                                             className="input"
-                                                            autoComplete='off'
-                                                            name='address'
-                                                            id='address'
                                                             placeholder='Enter address'
-                                                            onChange={(e) => {
-                                                                setAddress(e.target.value)
-                                                                console.log({address})
-                                                            }}
-                                                            // value={address}
-                                                            required
                                                         />
                                                         <MdGpsFixed className='search-icons' onClick={findMyLocation}/>
                                                     </div>
