@@ -1,12 +1,15 @@
-import React, {useEffect, useRef, useState} from 'react'
-import {MdGpsFixed, MdKeyboardArrowDown} from 'react-icons/md'
+import React, { useEffect, useRef, useState } from 'react'
+import { MdGpsFixed, MdKeyboardArrowDown } from 'react-icons/md'
+import Dropdown from 'react-dropdown';
 import './Search.css'
+import 'react-dropdown/style.css';
 
 const apiKey = process.env.REACT_APP_API_KEY;
 const mapApiJs = process.env.REACT_APP_MAP_API_JS;
 const geocodeJson = process.env.REACT_APP_GEOCODE_JSON;
 
 function loadAsyncScript(src) {
+
     return new Promise(resolve => {
         const script = document.createElement('script');
         Object.assign(script, {
@@ -76,22 +79,35 @@ const extractAddress = (place) => {
 
 const Search = () => {
 
+    const propertytypeOptions = [
+        { value: 'newHome', label: 'New Home' },
+        { value: 'room', label: 'Room' },
+        { value: 'office', label: 'Office' },
+        { value: 'land', label: 'Land' },
+        { value: 'building', label: 'Building' },
+        { value: 'garage', label: 'Garage' },
+        { value: 'commercialProperties', label: 'Commercial Properties' },
+        { value: 'home', label: 'Home' },
+    ]
+
+    const [propertyType, setPropertyType] = useState({ value: 'newHome', label: 'New Home' })
+
     const [toggle, setToggle] = useState(false)
     const [showType, setShowType] = useState(false)
     const [showBed, setShowBed] = useState(false)
     const [showBath, setShowBath] = useState(false)
-    const [location, setLocation] = useState({value: 0, Name: 'NewYork'})
-    const [type, setType] = useState({value: 0, Name: 'Apartment'})
-    const [bed, setBed] = useState({value: 0, Name: '01'})
-    const [bath, setBath] = useState({value: 0, Name: '01'})
+    const [location, setLocation] = useState({ value: 0, Name: 'NewYork' })
+    const [type, setType] = useState({ value: 0, Name: 'Apartment' })
+    const [bed, setBed] = useState({ value: 0, Name: '01' })
+    const [bath, setBath] = useState({ value: 0, Name: '01' })
     // const [value, setValue] = useState(null);
     // console.log(value);
 
-//     geocodeByAddress(value.value.description)
-//   .then(results => getLatLng(results[0]))
-//   .then(({ lat, lng }) =>
-//     console.log('Successfully got latitude and longitude', { lat, lng })
-//   );
+    //     geocodeByAddress(value.value.description)
+    //   .then(results => getLatLng(results[0]))
+    //   .then(({ lat, lng }) =>
+    //     console.log('Successfully got latitude and longitude', { lat, lng })
+    //   );
 
     const searchInput = useRef(null);
     const [address, setAddress] = useState({});
@@ -129,7 +145,7 @@ const Search = () => {
     }
 
 
-    const reverseGeocode = ({latitude: lat, longitude: lng}) => {
+    const reverseGeocode = ({ latitude: lat, longitude: lng }) => {
         const url = `${geocodeJson}?key=${apiKey}&latlng=${lat},${lng}`;
         searchInput.current.value = "Getting your location...";
         fetch(url)
@@ -164,7 +180,7 @@ const Search = () => {
             <form>
                 <div className="row">
                     <div className="col-lg-12">
-                        <div className='d-flex'>
+                        <div className='row'>
                             {/* <div className='p-locations' onClick={() =>{setShowLocation(!showLocation); setShowType(false);setShowBath(false);setShowBed(false)  }}>
                             <label htmlFor="">Location</label>
                             <div className="data">
@@ -218,19 +234,22 @@ const Search = () => {
                         <div className='s-icon'>
                             <a><AiOutlineSearch/></a>
                             </div> */}
-                            <div className="chack-box-wrap">
-                                <div className="chack-box">
-                                    <ul className="nav nav-tabs" id="myTab" role="tablist">
-                                        <li className="nav-item" role="presentation">
-                                            <button className="nav-link active" id="home-tab" data-toggle="tab" data-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Buy</button>
-                                        </li>
-                                        <li className="nav-item" role="presentation">
-                                            <button className="nav-link" id="profile-tab" data-toggle="tab" data-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Rent</button>
-                                        </li>
-                                    </ul>
+                            <div className="col-lg-3 p-0">
+                                <div className="chack-box-wrap">
+                                    <div className="chack-box">
+                                        <ul className="nav nav-tabs" id="myTab" role="tablist">
+                                            <li className="nav-item" role="presentation">
+                                                <button className="nav-link active" id="home-tab" data-toggle="tab" data-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Buy</button>
+                                            </li>
+                                            <li className="nav-item" role="presentation">
+                                                <button className="nav-link" id="profile-tab" data-toggle="tab" data-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Rent</button>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-                            <div className='form-typology-wrapper'>
+
+                            {/* <div className='form-typology-wrapper'>
                                 <div className={`dropdown-wrapper ${toggle ? 'active' : ''}`} onClick={() => { setToggle(!toggle) }}>
                                     <span className='placeholder'>Property Type</span>
                                     <MdKeyboardArrowDown />
@@ -245,12 +264,21 @@ const Search = () => {
                                         <li>Home</li>
                                     </ul>
                                 </div>
+                            </div> */}
+                            <div className="col-lg-3 p-0">
+                                <Dropdown options={propertytypeOptions} onChange={(e) => {
+                                    setPropertyType(e)
+                                }} value={propertyType.value} placeholder="Select property type" />
                             </div>
+                            <div className="col-lg-4 p-0">
                             <div className='form-item-block'>
                                 <input type="text" ref={searchInput} id='campoBus' placeholder='Search Properties' />
-                                <MdGpsFixed className='search-icons' onClick={findMyLocation}/>
+                                <MdGpsFixed className='search-icons' onClick={findMyLocation} />
                             </div>
+                            </div>
+                            <div className="col-lg-2 p-0">
                             <button className='btn action'>Search</button>
+                            </div>
 
                         </div>
 
@@ -262,7 +290,7 @@ const Search = () => {
                         </div> */}
                         <div>
 
-    </div>
+                        </div>
 
                     </div>
                 </div>

@@ -93,7 +93,7 @@ function Signup() {
                                     {loader && <Apiloader />}
                                     <div className='containerr right-panel-active' id="containerr">
                                         <div className="form-containerr sign-up-container">
-                                            <form onSubmit={handleSubmit}>
+                                            <form onSubmit={handleSubmit} lang='en'>
                                                 <h1 className='main-he'>Sign up</h1>
                                                 <div style={{ width: '100%' }}>
                                                     <input
