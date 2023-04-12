@@ -46,7 +46,7 @@ const Login = () => {
         message.current = query.get('message')
         if (message !== '') {
             toast.success((message.current?.replace(/-/g, ' ')),
-                { position: toast.POSITION.BOTTOM_RIGHT })
+                { position: toast.POSITION.TOP_LEFT })
         }
     }, [message])
 
@@ -78,7 +78,7 @@ const Login = () => {
                 .then((res) => {
                     setLoader(false)
                     toast.success('Successfully login',
-                        { position: toast.POSITION.BOTTOM_RIGHT })
+                        { position: toast.POSITION.TOP_LEFT })
                     localStorage.setItem('user', JSON.stringify({
                         login: true,
                         token: res.data.data.user
