@@ -31,13 +31,16 @@ import ClientCarousel from '../../../shared/ClientCarousel/ClientCarousel'
 import Search from '../../../shared/Search/Search'
 import Header from '../../../shared/Header/Header'
 import Footer from '../../../shared/Footer/Footer'
+import { useRef } from 'react'
 
 
 function Home() {
-
+	const myRef = useRef(null)
 	useEffect(() =>{
 		window.scrollTo(0, 0);
 	})
+	const executeScroll = () => myRef.current.scrollIntoView()
+
 	const carouselData = [
 		{p1 : 'Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.',
 		image : PersonOne,
@@ -86,14 +89,14 @@ function Home() {
 						</div>
 					</div>
 				</div>
-				<div className="mouse">
+				<div className="mouse" onClick={executeScroll}>
 					<a className="mouse-icon">
 						<div className="mouse-wheel"><BsArrowDownShort/></div>
 					</a>
 				</div>
 			</div>
 
-			<section className="ftco-section ftco-no-pb">
+			<section className="ftco-section ftco-no-pb" ref={myRef}>
 				<div className="container">
 					<div className="row justify-content-center">
 						<div className="col-md-12 heading-section text-center mb-5">
@@ -101,7 +104,7 @@ function Home() {
 							<h2 className="mb-2">The smartest way to buy a home</h2>
 						</div>
 					</div>
-					<div className="row d-flex">
+					<div className="row d-flex" ref={myRef}>
 						<div className="col-md-3 d-flex align-self-stretch">
 							<div className="media block-6 services d-block text-center">
 								<div className="icon d-flex justify-content-center align-items-center"><span className="flaticon-piggy-bank"><CiBank/></span></div>

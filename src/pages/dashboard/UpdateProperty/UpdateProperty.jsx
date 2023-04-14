@@ -120,7 +120,7 @@ const UpdateProperty = () => {
     const [pricee, setPricee] = useState('')
     const [date, setDate] = useState('')
     const [areaa, setAreaa] = useState('')
-    const [areaUnit, setAreaUnit] = useState({ value: 'mm', label: 'MM' })
+    const [areaUnit, setAreaUnit] = useState({ value: 'mm', label: 'mm' })
     const [type, setType] = useState('')
     const [room, setRoom] = useState('')
     const [window, setWindow] = useState({ value: false, label: 'No' })
@@ -818,6 +818,7 @@ const UpdateProperty = () => {
                                                                     setRoom(e.target.value)
                                                                 }}
                                                                 defaultValue={room}
+                                                                min={1}
                                                                 required
                                                             />
                                                         </div>
@@ -873,6 +874,7 @@ const UpdateProperty = () => {
                                                                     setLivingRoom(e.target.value)
                                                                 }}
                                                                 defaultValue={livingRoom}
+                                                                min={1}
                                                                 required
                                                             />
                                                         </div>
@@ -937,6 +939,7 @@ const UpdateProperty = () => {
                                                                     setTotalFloors(e.target.value)
                                                                 }}
                                                                 defaultValue={totalFloors}
+                                                                min={1}
                                                                 required
                                                             />
                                                         </div>
@@ -2044,7 +2047,7 @@ const UpdateProperty = () => {
                                                         </div>
                                                     </div>
                                                 </div>}
-                                                <div className="col-lg-12 mt-4">
+                                                <div className="col-lg-12 mt-4 text-center">
                                                     <button type="submit" value="submit" className='button'>
                                                         Update Property
                                                     </button>

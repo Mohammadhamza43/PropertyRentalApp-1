@@ -195,7 +195,7 @@ select {
     border-radius: 6px;
     border: 1px solid #ffffff;
     color: rgb(255, 255, 255);
-    padding-inline: 64px;
+    padding-inline: 34px;
 }
 
 .address-field .search-icons {
