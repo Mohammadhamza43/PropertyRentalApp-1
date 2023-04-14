@@ -134,7 +134,7 @@ const UploadProperty = () => {
     const [date, setDate] = useState('')
     const [areaa, setAreaa] = useState('')
     const [type, setType] = useState('')
-    const [areaUnit, setAreaUnit] = useState({value: 'mm', label: 'MM'})
+    const [areaUnit, setAreaUnit] = useState({value: 'mm', label: 'mm'})
     const [room, setRoom] = useState('')
     const [window, setWindow] = useState({value: false, label: 'No'})
     const [fenced, setFenced] = useState({value: false, label: 'No'})
@@ -588,6 +588,7 @@ const UploadProperty = () => {
                                                             onChange={(e) => {
                                                                 setRoom(e.target.value)
                                                             }}
+                                                            min={1}
                                                             value={room}
                                                         />
                                                     </div>
@@ -820,6 +821,7 @@ const UploadProperty = () => {
                                                                     placeholder='Enter number of living rooms'
                                                                     onChange={(e) => { setLivingRoom(e.target.value) }}
                                                                     value={livingRoom}
+                                                                    min={1}
                                                                     required
                                                                 />
                                                             </div>
@@ -869,6 +871,7 @@ const UploadProperty = () => {
                                                                 setTotalFloors(e.target.value)
                                                             }}
                                                             value={totalFloors}
+                                                            min={1}
                                                             required
                                                         />
                                                     </div>
@@ -1184,7 +1187,7 @@ const UploadProperty = () => {
                                                     }
                                                 </div>
 
-                                                <div className="col-lg-12 mt-4">
+                                                <div className="col-lg-12 mt-4 text-center">
                                                     <button type="submit" className='button'>Upload Property</button>
                                                 </div>
 
