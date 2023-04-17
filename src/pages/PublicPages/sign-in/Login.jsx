@@ -29,7 +29,7 @@ const initialValues = {
 
 
 const Login = () => {
-    const [incorrectPass , setInncorrectPass] = useState(false)
+    const [loginError , setLoginError] = useState('')
 
 
     const navigate = useNavigate()
@@ -93,14 +93,15 @@ const Login = () => {
                     }
                 }).catch((error) => {
                     setLoader(false)
-                    console.log(error);
-                    if(error.response.data.message[0] === 'Password incorrect'){
-                        setInncorrectPass(true)
-                        console.log('Password incorrect');
-                    }
-                    toast.error(error.response.data.message[0],
-                        { position: toast.POSITION.TOP_LEFT }
-                    )
+                    setLoginError(error.response.data.message[0])
+                    // console.log(error);
+                    // if(error.response.data.message[0] === 'Password incorrect'){
+                    //     setInncorrectPass(true)
+                    //     console.log('Password incorrect');
+                    // }
+                    // toast.error(error.response.data.message[0],
+                    //     { position: toast.POSITION.TOP_LEFT }
+                    // )
                 })
 
         }
@@ -158,7 +159,7 @@ const Login = () => {
                                                     </span>
                                                 </div>
                                                 {errors.password && touched.password && <p className='error'>{errors.password}</p>}
-                                                {incorrectPass && <p className='error'>Password incorrect</p>}
+                                                {loginError && <p className='error'>{loginError}</p>}
                                                 <Link to='/reset-password'>Forgot your password?</Link>
                                                 <button type="submit">Login</button>
                                             </form>

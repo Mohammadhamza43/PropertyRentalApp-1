@@ -235,7 +235,7 @@ const Search = () => {
                             <a><AiOutlineSearch/></a>
                             </div> */}
                             <div className="col-lg-3 p-0">
-                                <div className="chack-box-wrap">
+                                {/* <div className="chack-box-wrap">
                                     <div className="chack-box">
                                         <ul className="nav nav-tabs" id="myTab" role="tablist">
                                             <li className="nav-item" role="presentation">
@@ -246,7 +246,22 @@ const Search = () => {
                                             </li>
                                         </ul>
                                     </div>
+                                </div> */}
+                                    <div className="chack-box-custom">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
+                                            <label class="form-check-label" for="flexRadioDefault1">
+                                                Buy
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" />
+                                            <label class="form-check-label" for="flexRadioDefault2">
+                                                Rent
+                                            </label>
+                                        </div>
                                 </div>
+
                             </div>
 
                             {/* <div className='form-typology-wrapper'>
@@ -271,13 +286,13 @@ const Search = () => {
                                 }} value={propertyType.value} placeholder="Select property type" />
                             </div>
                             <div className="col-lg-4 p-0">
-                            <div className='form-item-block'>
-                                <input type="text" ref={searchInput} id='campoBus' placeholder='Search Properties' />
-                                <MdGpsFixed className='search-icons' onClick={findMyLocation} />
-                            </div>
+                                <div className='form-item-block'>
+                                    <input type="text" ref={searchInput} id='campoBus' placeholder='Search Properties' />
+                                    <MdGpsFixed className='search-icons' onClick={findMyLocation} />
+                                </div>
                             </div>
                             <div className="col-lg-2 p-0">
-                            <button className='btn action'>Search</button>
+                                <button className='btn action'>Search</button>
                             </div>
 
                         </div>

@@ -35,6 +35,7 @@ function Signup() {
     const [confirmPasswordType, setConfirmPasswordType] = useState('password');
     const [dublicateEmail, setDublicateEmail] = useState(false);
     const [loader, setLoader] = useState(false);
+    const [signuperror, setSignuperror] = useState('');
 
     const togglePassword = (e) => {
         if (e === 'password') {
@@ -69,13 +70,14 @@ function Signup() {
 
                 }).catch((error) => {
                     setLoader(false);
-                    if(error.response.data.message[0] === "User with this email already exists"){
-                        setDublicateEmail(true)
-                    }
-                    console.log(error);
-                    toast.error(error.response.data.message[0], {
-                        position: toast.POSITION.TOP_LEFT
-                    });
+                    setSignuperror(error.response.data.message[0])
+                    // if(error.response.data.message[0] === "User with this email already exists"){
+                    //     setDublicateEmail(true)
+                    // }
+                    // console.log(error);
+                    // toast.error(error.response.data.message[0], {
+                    //     position: toast.POSITION.TOP_LEFT
+                    // });
                 })
         }
     });
@@ -159,6 +161,7 @@ function Signup() {
                                                     </span>
                                                 </div>
                                                 {errors.confirmPassword && touched.confirmPassword && <p className='error-last'>{errors.confirmPassword}</p>}
+                                                {signuperror && <p className='error-last'>{signuperror}</p>}
                                                 <button type="submit">Submit</button>
                                             </form>
                                         </div>

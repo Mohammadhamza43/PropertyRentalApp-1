@@ -135,6 +135,7 @@ select {
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100%;
 }
 
 .upload-file button{
@@ -210,5 +211,10 @@ select {
 
     .user-card-body {
         padding: 20px;
+    }
+    
+    .upload-icons{
+        display: block;
+        opacity: 0;
     }
 }
