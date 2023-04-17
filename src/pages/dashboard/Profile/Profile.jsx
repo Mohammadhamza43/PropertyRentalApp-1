@@ -1,16 +1,17 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import BootstrapSwitchButton from 'bootstrap-switch-button-react'
-import {FiUser} from 'react-icons/fi'
+import { FiUser } from 'react-icons/fi'
 import Footer from '../../../shared/Footer/Footer'
 import Header from '../../../shared/Header/Header'
 import Loading from '../../../shared/Loading/Loading'
-import {toast, ToastContainer} from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import Apiloader from '../../../shared/ApiLoader/Apiloader'
-import {useNavigate} from 'react-router-dom'
-import {changePasswordSchema} from '../../../schemas';
+import { useNavigate } from 'react-router-dom'
+import { changePasswordSchema } from '../../../schemas';
 import './Profile.css'
-import {AiOutlineEye, AiOutlineEyeInvisible} from 'react-icons/ai'
-import {useFormik} from 'formik'
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
+import { BsCameraFill } from 'react-icons/bs'
+import { useFormik } from 'formik'
 import axiosInstance from "../../../shared/HttpClient/axiosInstance";
 
 const initialValues = {
@@ -51,6 +52,42 @@ function Profile() {
     // const newpassword = useRef(null);
     // const newPasswordConform = useRef(null);
 
+    const updateimage = async (imagee) => {
+        const formData = new FormData();
+        formData.append('address', address)
+        formData.append('city', city)
+        formData.append('contact', contact)
+        formData.append('image', imagee)
+        formData.append('country', country)
+        formData.append('name', name)
+        formData.append('isAgent', isAgent)
+
+        setFormLoader(true)
+
+        axiosInstance.put('user/profile', formData)
+            .then((res) => {
+                if (res.status === 200) {
+                    setFormLoader(false)
+                    toast.success('User Updated Successfully.',
+                        { position: toast.POSITION.TOP_LEFT })
+                    window.location.reload(false);
+                }
+            })
+            .catch((error) => {
+                if (error) {
+                    return (setFormLoader(false),
+                        toast.error(error, { position: toast.POSITION.TOP_LEFT }))
+
+
+                } else {
+                    setFormLoader(false)
+                    toast.error('400 Error',
+                        { position: toast.POSITION.TOP_LEFT }
+                    )
+                }
+            })
+    }
+
 
     useEffect(() => {
 
@@ -66,7 +103,7 @@ function Profile() {
                     setIsAgent(data.isAgent)
                     setCountry(data.country)
                     setCity(data.city)
-                    localStorage.setItem('image', JSON.stringify({userPic: data.image}))
+                    localStorage.setItem('image', JSON.stringify({ userPic: data.image }))
                     setImageName(data.image)
                     setEmail(data.email)
                     setLoader(false)
@@ -75,41 +112,10 @@ function Profile() {
                 .catch((error) => {
                     setGetUserdata(false)
                     setLoader(false)
-                    toast.error('error', {position: toast.POSITION.TOP_LEFT})
-                });
-            /*fetch('https://walrus-app-ovpy2.ondigitalocean.app/user', {
-
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                    "AUTHORIZATION": `BEARER ${token}`
-                        }})
-
-                .then((res) => {return res.json()})
-
-                .then((data) => {
-                    console.log(data);
-                    setName(data.data.name)
-                    setContact(data.data.contact)
-                    setAddress(data.data.address)
-                    setIsAgent(data.data.isAgent)
-                    setCountry(data.data.country)
-                    setCity(data.data.city)
-                    localStorage.setItem('image', JSON.stringify({ userPic: data.data.image }))
-                    setImageName(data.data.image)
-                    setEmail(data.data.email)
-                    setLoader(false)
-                    setGetUserdata(false)
-                })
-
-                .catch((error) => {
-                    setGetUserdata(false)
-                    setLoader(false)
                     toast.error('error', { position: toast.POSITION.TOP_LEFT })
-                });*/
+                });
         }
-    })
+    },[updateimage])
 
     const updateProfile = async (event) => {
         event.preventDefault(); // 👈️ prevent page refreslog
@@ -131,35 +137,6 @@ function Profile() {
                 if (res.status === 200) {
                     setFormLoader(false)
                     toast.success('User Updated Successfully.',
-                        {position: toast.POSITION.TOP_LEFT})
-                    window.location.reload(false);
-                }
-            })
-            .catch((error) => {
-                if (error) {
-                    return (setFormLoader(false),
-                        toast.error(error, {position: toast.POSITION.TOP_LEFT}))
-
-
-                } else {
-                    setFormLoader(false)
-                    toast.error('400 Error',
-                        {position: toast.POSITION.TOP_LEFT}
-                    )
-                }
-            })
-        /*await fetch('https://walrus-app-ovpy2.ondigitalocean.app/user/profile', {
-            method: "PUT",
-            headers: {
-                "Accept": "application/json",
-                "AUTHORIZATION": `BEARER ${token}`
-            },
-            body: formData
-        })
-            .then((res) => {
-                if (res.ok) {
-                    setFormLoader(false)
-                    toast.success('User Successfully updated.',
                         { position: toast.POSITION.TOP_LEFT })
                     window.location.reload(false);
                 }
@@ -176,8 +153,9 @@ function Profile() {
                         { position: toast.POSITION.TOP_LEFT }
                     )
                 }
-            })*/
+            })
     }
+
 
 
     const togglePassword = (e) => {
@@ -206,7 +184,7 @@ function Profile() {
     }
 
 
-    const {values, errors, touched, handleBlur, handleChange, handleSubmit} = useFormik({
+    const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
         validationSchema: changePasswordSchema,
         onSubmit: (values) => {
@@ -221,7 +199,7 @@ function Profile() {
                     setRSLoader(false)
                     console.log(error);
                     toast.error(error.response.data.message[0],
-                        {position: toast.POSITION.TOP_LEFT}
+                        { position: toast.POSITION.TOP_LEFT }
                     )
                 })
 
@@ -234,28 +212,45 @@ function Profile() {
         <>
             {loader ?
 
-                <Loading/>
+                <Loading />
 
                 :
 
                 <>
-                    <Header/>
+                    <Header />
                     <section className='profile-section'>
                         <div className="container">
                             <div className="row">
                                 <div className="col-lg-9 mx-auto">
-                                    <div className='user-card' style={{position: 'relative'}}>
-                                        {formLoader && <Apiloader/>}
+                                    <div className='user-card' style={{ position: 'relative' }}>
+                                        {formLoader && <Apiloader />}
                                         <div className="user-card-body">
                                             <div className="user-mete">
                                                 <div className='user-card-meta-avatar'>
                                                     {imageName === '' ?
                                                         <div className="img">
-                                                            <span className='icon'><FiUser/></span>
+                                                            <span className='icon'><FiUser /></span>
                                                         </div> :
-                                                        <div className="img-picture">
-                                                            <img src={imageName} alt="" loading='lazy' width={'50px'}
-                                                                 style={{borderRadius: '50%'}}/>
+                                                        <div className="img-picture" style={{ position: 'relative' }}>
+                                                            <img
+                                                                src={imageName}
+                                                                alt=""
+                                                                loading='lazy'
+                                                                width={'50px'}
+                                                                style={{ borderRadius: '50%' }} />
+                                                            {/* <BsCameraFill className='upload-icons' /> */}
+                                                            <div className='upload-icons'>
+                                                                <div className='upload-file'>
+                                                                    <button><BsCameraFill /></button>
+                                                                    <input type="file" id="img" name="img" accept="image/*"
+                                                                        className='button'
+                                                                        onChange={(e) => {
+                                                                            updateimage(e.target.files[0])
+                                                                        }} />
+                                                                </div>
+                                                            </div>
+
+
                                                         </div>
                                                     }
                                                 </div>
@@ -277,52 +272,55 @@ function Profile() {
                                                     <div className="col-lg-6 mt-4">
                                                         <label>Name</label>
                                                         <input type="name" defaultValue={name} className='input'
-                                                               placeholder="Name"
-                                                               onChange={(e) => setName(e.target.value)}/>
+                                                            placeholder="Name"
+                                                            onChange={(e) => setName(e.target.value)} />
                                                     </div>
                                                     <div className="col-lg-6 mt-4">
                                                         <label>Email</label>
                                                         <input type="email" disabled defaultValue={email}
-                                                               className='input' placeholder="Enter email"
-                                                               onChange={(e) => setEmail(e.target.value)}/>
+                                                            className='input' placeholder="Enter email"
+                                                            onChange={(e) => setEmail(e.target.value)} />
                                                     </div>
                                                     <div className="col-lg-6 mt-4">
                                                         <label>Number</label>
                                                         <input type="number" defaultValue={contact} className='input'
-                                                               placeholder="Enter number"
-                                                               onChange={(e) => setContact(e.target.value)}/>
+                                                            placeholder="Enter number"
+                                                            onChange={(e) => setContact(e.target.value)} />
                                                     </div>
                                                     <div className="col-lg-6 mt-4">
                                                         <label>Address</label>
                                                         <input type="text" defaultValue={address} className='input'
-                                                               placeholder="Enter address"
-                                                               onChange={(e) => setAddress(e.target.value)}/>
+                                                            placeholder="Enter address"
+                                                            onChange={(e) => setAddress(e.target.value)} />
                                                     </div>
                                                     <div className="col-lg-6 mt-4">
                                                         <label>Country</label>
                                                         <input type="text" defaultValue={country} className='input'
-                                                               placeholder="Enter country"
-                                                               onChange={(e) => {
-                                                                   setCountry(e.target.value)
-                                                               }}/>
+                                                            placeholder="Enter country"
+                                                            onChange={(e) => {
+                                                                setCountry(e.target.value)
+                                                            }} />
                                                     </div>
                                                     <div className="col-lg-6 mt-4">
                                                         <label>City</label>
                                                         <input type="text" defaultValue={city} className='input'
-                                                               placeholder="Enter city"
-                                                               onChange={(e) => setCity(e.target.value)}/>
+                                                            placeholder="Enter city"
+                                                            onChange={(e) => setCity(e.target.value)} />
                                                     </div>
-                                                    <div className="col-lg-6 mt-4">
+                                                    {/* <div className="col-lg-6 mt-4">
                                                         <label>Upload a picture</label>
                                                         <div className='upload-file'>
                                                             <button>Browse and Upload</button>
                                                             <span>{image.name}</span>
                                                             <input type="file" id="img" name="img" accept="image/*"
-                                                                   className='button'
-                                                                   onChange={(e) => setImage(e.target.files[0])}/>
+                                                                className='button'
+                                                                onChange={
+                                                                    (e) => setImage(e.target.files[0])
+                                                                    
+                                                                    } />
                                                         </div>
-                                                        {/* <input required type="file" id="img" name="img" accept="image/*"  onChange={(e) =>setImage(e)}/> */}
-                                                    </div>
+                                                        
+                                                    </div> */}
                                                     <div className="col-lg-6 mt-4">
                                                         <label>User Type</label>
                                                         <div>
@@ -348,8 +346,8 @@ function Profile() {
 
 
                                 <div className="col-lg-9 mx-auto mt-5">
-                                    <div className='user-card' style={{position: 'relative'}}>
-                                        {rSLoader && <Apiloader/>}
+                                    <div className='user-card' style={{ position: 'relative' }}>
+                                        {rSLoader && <Apiloader />}
                                         <div className="user-card-body">
                                             <div className="user-mete">
                                                 <div className='user-card-meta-avatar'>
@@ -374,12 +372,12 @@ function Profile() {
                                                                 className="input"
                                                             />
                                                             <span onClick={() => togglePassword('password')}>
-                                                                {password === "password" ? <AiOutlineEyeInvisible/> :
-                                                                    <AiOutlineEye/>}
+                                                                {password === "password" ? <AiOutlineEyeInvisible /> :
+                                                                    <AiOutlineEye />}
                                                             </span>
                                                         </div>
                                                         {errors.password && touched.password &&
-                                                        <p className='error'>{errors.password}</p>}
+                                                            <p className='error'>{errors.password}</p>}
                                                     </div>
                                                     <div className="col-lg-6 mt-4">
                                                     </div>
@@ -398,12 +396,12 @@ function Profile() {
                                                                 className="input"
                                                             />
                                                             <span onClick={() => togglePassword('newPassword')}>
-                                                                {newPassword === "password" ? <AiOutlineEyeInvisible/> :
-                                                                    <AiOutlineEye/>}
+                                                                {newPassword === "password" ? <AiOutlineEyeInvisible /> :
+                                                                    <AiOutlineEye />}
                                                             </span>
                                                         </div>
                                                         {errors.newPassword && touched.newPassword &&
-                                                        <p className='error'>{errors.newPassword}</p>}
+                                                            <p className='error'>{errors.newPassword}</p>}
                                                     </div>
                                                     <div className="col-lg-6 mt-4">
                                                         <label>Confirm New Password</label>
@@ -421,11 +419,11 @@ function Profile() {
                                                             />
                                                             <span onClick={() => togglePassword('confirmNewPassword')}>
                                                                 {confirmNewPassword === "password" ?
-                                                                    <AiOutlineEyeInvisible/> : <AiOutlineEye/>}
+                                                                    <AiOutlineEyeInvisible /> : <AiOutlineEye />}
                                                             </span>
                                                         </div>
                                                         {errors.confirmNewPassword && touched.confirmNewPassword &&
-                                                        <p className='error'>{errors.confirmNewPassword}</p>}
+                                                            <p className='error'>{errors.confirmNewPassword}</p>}
                                                     </div>
                                                     <div className="col-lg-12 mt-4">
                                                         <button type="submit" className='button'>Change Password
@@ -441,8 +439,8 @@ function Profile() {
                             </div>
                         </div>
                     </section>
-                    <ToastContainer/>
-                    <Footer/>
+                    <ToastContainer />
+                    <Footer />
 
                 </>
 
