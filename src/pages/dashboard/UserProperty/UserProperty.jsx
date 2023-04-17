@@ -139,7 +139,7 @@ const UserProperty = () => {
                                                         <p className="price">
                                                             {/* <span className="old-price">800,000</span> */}
                                                             <span
-                                                                className="orig-price">${x.price.toLocaleString()}<small>{x.purpose.includes('rent') ? ' / month' : ''}</small></span>
+                                                                className="orig-price">${x.price !== null ? x.price.toLocaleString() : ''}<small>{x.purpose.includes('rent') ? ' / month' : ''}</small></span>
                                                         </p>
                                                         <ul className="property_list">
                                                             <li><span
