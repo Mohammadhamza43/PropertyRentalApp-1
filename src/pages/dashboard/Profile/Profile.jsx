@@ -46,6 +46,8 @@ function Profile() {
     const [password, setPassword] = useState('password')
     const [newPassword, setNewPassword] = useState('password')
     const [confirmNewPassword, setConfirmNewPassword] = useState('password')
+    const [changePasswordError, setChangePasswordError] = useState('')
+
 
 
     // const oldPassword = useRef(null);
@@ -198,9 +200,10 @@ function Profile() {
                 .catch((error) => {
                     setRSLoader(false)
                     console.log(error);
-                    toast.error(error.response.data.message[0],
-                        { position: toast.POSITION.TOP_LEFT }
-                    )
+                    setChangePasswordError(error.response.data.message[0])
+                    // toast.error(error.response.data.message[0],
+                    //     { position: toast.POSITION.TOP_LEFT }
+                    // )
                 })
 
         }
@@ -228,20 +231,30 @@ function Profile() {
                                             <div className="user-mete">
                                                 <div className='user-card-meta-avatar'>
                                                     {imageName === '' ?
-                                                        <div className="img">
+                                                        <div className="img img-picture" style={{ position: 'relative' }}>
                                                             <span className='icon'><FiUser /></span>
+                                                            <div className='upload-icons'>
+                                                                <div className='upload-file'>
+                                                                    <button><BsCameraFill style={{color : '#fff' , fontSize : '30px'}}/></button>
+                                                                    <input type="file" id="img" name="img" accept="image/*"
+                                                                        className='button'
+                                                                        onChange={(e) => {
+                                                                            updateimage(e.target.files[0])
+                                                                        }} />
+                                                                </div>
+                                                            </div>
                                                         </div> :
                                                         <div className="img-picture" style={{ position: 'relative' }}>
                                                             <img
                                                                 src={imageName}
                                                                 alt=""
                                                                 loading='lazy'
-                                                                width={'50px'}
+                                                                width={'80px'}
                                                                 style={{ borderRadius: '50%' }} />
                                                             {/* <BsCameraFill className='upload-icons' /> */}
                                                             <div className='upload-icons'>
                                                                 <div className='upload-file'>
-                                                                    <button><BsCameraFill /></button>
+                                                                    <button><BsCameraFill style={{color : '#fff' , fontSize : '30px'}}/></button>
                                                                     <input type="file" id="img" name="img" accept="image/*"
                                                                         className='button'
                                                                         onChange={(e) => {
@@ -376,8 +389,8 @@ function Profile() {
                                                                     <AiOutlineEye />}
                                                             </span>
                                                         </div>
-                                                        {errors.password && touched.password &&
-                                                            <p className='error'>{errors.password}</p>}
+                                                        {errors.password && touched.password && <p className='error'>{errors.password}</p>}
+                                                        {changePasswordError && <p className='error'>{changePasswordError}</p>}
                                                     </div>
                                                     <div className="col-lg-6 mt-4">
                                                     </div>
