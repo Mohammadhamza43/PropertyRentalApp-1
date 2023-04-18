@@ -349,7 +349,9 @@ function Profile() {
                                                     </div>
 
                                                     <div className="col-lg-12 mt-4">
+                                                        <div className="save-profile">
                                                         <button type='submit' className='button'>Save changes</button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </form>
@@ -363,7 +365,7 @@ function Profile() {
                                         {rSLoader && <Apiloader />}
                                         <div className="user-card-body">
                                             <div className="user-mete">
-                                                <div className='user-card-meta-avatar'>
+                                                <div className='save-password-title'>
                                                     <h1>Change Password</h1>
                                                 </div>
                                             </div>
@@ -439,8 +441,10 @@ function Profile() {
                                                             <p className='error'>{errors.confirmNewPassword}</p>}
                                                     </div>
                                                     <div className="col-lg-12 mt-4">
+                                                    <div className="save-profile">
                                                         <button type="submit" className='button'>Change Password
                                                         </button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </form>
