@@ -276,7 +276,7 @@ const Search = (props) => {
                 </div>
             </form>
         </div>
-        <div>
+        {/* <div>
             <div><span> buy : </span>{buy ? 'true' : 'false'}</div>
             <div><span> rent : </span>{rent ? 'true' : 'false'}</div>
             <div><span> property Type : </span> {propertyType.value}</div>
@@ -285,7 +285,7 @@ const Search = (props) => {
             <div><span> state : </span>{state}</div>
             <div><span> lat : </span>{lat}</div>
             <div><span> lng : </span>{lng}</div>
-        </div>
+        </div> */}
         </>
         
     )
