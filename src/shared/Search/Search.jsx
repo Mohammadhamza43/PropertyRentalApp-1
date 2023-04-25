@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { MdGpsFixed, MdKeyboardArrowDown } from 'react-icons/md'
+import React, { useEffect, useRef, useState } from 'react';
+import { MdGpsFixed, MdKeyboardArrowDown } from 'react-icons/md';
+import { Link , useNavigate ,useLocation } from 'react-router-dom';
 import Dropdown from 'react-dropdown';
 import './Search.css'
 import 'react-dropdown/style.css';
@@ -51,11 +52,14 @@ const extractAddress = (place) => {
         // Extract country
         if (types.includes("country")) {
             address.country = value;
+            // setSearchData({...searchData , address:value})
         }
 
         // Extract state
         if (types.includes("administrative_area_level_1")) {
             address.state = value
+
+            console.log(address.state + 'state');
         }
 
         // Extract city
@@ -77,8 +81,9 @@ const extractAddress = (place) => {
     return address;
 }
 
-const Search = () => {
-
+const Search = (props) => {
+    const location = useLocation();
+    const navigate = useNavigate()
     const propertytypeOptions = [
         { value: 'newHome', label: 'New Home' },
         { value: 'room', label: 'Room' },
@@ -91,46 +96,45 @@ const Search = () => {
     ]
 
     const [propertyType, setPropertyType] = useState({ value: 'newHome', label: 'New Home' })
-
-    const [toggle, setToggle] = useState(false)
-    const [showType, setShowType] = useState(false)
-    const [showBed, setShowBed] = useState(false)
-    const [showBath, setShowBath] = useState(false)
-    const [location, setLocation] = useState({ value: 0, Name: 'NewYork' })
-    const [type, setType] = useState({ value: 0, Name: 'Apartment' })
-    const [bed, setBed] = useState({ value: 0, Name: '01' })
-    const [bath, setBath] = useState({ value: 0, Name: '01' })
-    // const [value, setValue] = useState(null);
-    // console.log(value);
-
-    //     geocodeByAddress(value.value.description)
-    //   .then(results => getLatLng(results[0]))
-    //   .then(({ lat, lng }) =>
-    //     console.log('Successfully got latitude and longitude', { lat, lng })
-    //   );
-
+    const [buy , setBuy] = useState(false)
+    const [rent , setRent] = useState(false)
+    const [country , setCountry] = useState('')
+    const [city , setCity] = useState('')
+    const [state , setState] = useState('')
+    const [lng , setLng] = useState('')
+    const [lat , setLat] = useState('')
     const searchInput = useRef(null);
     const [address, setAddress] = useState({});
-
-    // init gmap script
-    /*const initMapScript = () => {
-      // if script already loaded
-      if(window.google) {
-        return Promise.resolve();
-      }
-      const src = `${mapApiJs}?key=${apiKey}&libraries=places&v=weekly`;
-      return loadAsyncScript(src);
-    }*/
 
     // do something on address change
     const onChangeAddress = (autocomplete) => {
         const place = autocomplete.getPlace();
-        const lat = place.geometry.location.lat();
-        const lng = place.geometry.location.lng();
-        const address = place.formatted_address;
-        console.log('Latitude: ' + lat + ', Longitude: ' + lng);
-        console.log('Address: ' + address);
-        setAddress(address);
+        place.address_components.forEach(component => {
+            const types = component.types;
+            const value = component.long_name;
+    
+            // Extract country
+            if (types.includes("country")) {
+                setCountry(value)
+            }
+    
+            // Extract state
+            if (types.includes("administrative_area_level_1")) {
+                setState(value)
+            }
+    
+            // Extract city
+            if (types.includes("locality")) {
+                setCity(value)
+            }
+        });
+        
+        const latitude = place.geometry.location.lat();
+        setLat(latitude)
+        const longitude = place.geometry.location.lng();
+        setLng(longitude)
+        
+        
     }
 
     //init autocomplete
@@ -152,7 +156,31 @@ const Search = () => {
             .then(response => response.json())
             .then(location => {
                 const place = location.results[0];
+                place.address_components.forEach(component => {
+                    const types = component.types;
+                    const value = component.long_name;
+            
+                    // Extract country
+                    if (types.includes("country")) {
+                        setCountry(value)
+                    }
+            
+                    // Extract state
+                    if (types.includes("administrative_area_level_1")) {
+                        setState(value)
+                    }
+            
+                    // Extract city
+                    if (types.includes("locality")) {
+                        setCity(value)
+                    }
+                });
+                console.log(place.geometry.location.lat);
+                setLat(place.geometry.location.lat)
+                console.log(place.geometry.location.lng);
+                setLng(place.geometry.location.lng)
                 const _address = extractAddress(place);
+                console.log(_address);
                 setAddress(_address);
                 searchInput.current.value = _address.plain();
             })
@@ -167,96 +195,57 @@ const Search = () => {
         }
     }
 
+    const test = 'rent'
+
+    const sendSearchData =() =>{
+        if(location.pathname === '/'){
+            if(buy){ navigate("/properties" , {state : {purpose : 'sale' , propertyType : propertyType.value , country : country , city : city , state : state , lat : lat , lng : lng }})}
+        if(rent){ navigate("/properties" , {state : {purpose : 'rent' , propertyType : propertyType.value , country : country , city : city , state : state , lat : lat , lng : lng}})}
+        if(!buy && !rent){ navigate("/properties" , {purpose : 'sale' , state : {propertyType : propertyType.value , country : country , city : city , state : state , lat : lat , lng : lng}})}
+        }else{
+            const item = {
+                purpose : rent ? 'rent' : 'sale',
+                propertyType : propertyType.value,
+                country : country,
+                city:city,
+                state:state,
+                lat : lat,
+                lng:lng
+    
+            }
+            props.updateState(item);
+        }
+        
+        
+    }
+
 
     //load map script after mounted
     useEffect(() => {
-        // initMapScript().then(() => initAutocomplete())
         initAutocomplete()
     }, []);
 
+    
 
     return (
+        <>
         <div className='property-search'>
             <form>
                 <div className="row">
                     <div className="col-lg-12">
                         <div className='row'>
-                            {/* <div className='p-locations' onClick={() =>{setShowLocation(!showLocation); setShowType(false);setShowBath(false);setShowBed(false)  }}>
-                            <label htmlFor="">Location</label>
-                            <div className="data">
-                                <span>{location.Name}</span>
-                                {showLocation ? <ul>
-                                    <li onClick={() =>{setLocation({value : 0 , Name : 'NewYork' }); setShowLocation(false)}}>NewYork</li>
-                                    <li onClick={() =>{setLocation({value : 1 , Name : 'Bangladesh' }); setShowLocation(false)}}>Bangladesh</li>
-                                    <li onClick={() =>{setLocation({value : 2 , Name : 'India' }); setShowLocation(false)}}>India</li>
-                                </ul> : ''}
-                                <MdKeyboardArrowDown/>
-                            </div>
-                        </div>
-                        <div className='p-locations' onClick={() =>{setShowLocation(false); setShowType(!showType);setShowBath(false);setShowBed(false)  }}>
-                            <label htmlFor="">Property type</label>
-                            <div className="data">
-                                <span>{type.Name}</span>
-                                {showType ? <ul>
-                                    <li onClick={() =>{setType({value : 0 , Name : 'Apartment' }); setShowType(false)}}>Apartment</li>
-                                    <li onClick={() =>{setType({value : 1 , Name : 'House' }); setShowType(false)}}>House</li>
-                                    <li onClick={() =>{setType({value : 2 , Name : 'Complex' }); setShowType(false)}}>Complex</li>
-                                </ul> : ''}
-                                <MdKeyboardArrowDown/>
-                            </div>
-                        </div>
-                        <div className='p-locations' onClick={() =>{setShowLocation(false); setShowType(false);setShowBath(false);setShowBed(!showBed)  }}>
-                            <label htmlFor="">Bed Room</label>
-                            <div className="data">
-                                <span>{bed.Name}</span>
-                                {showBed ? <ul>
-                                    <li onClick={() =>{setBed({value : 0 , Name : '01' }); setShowBed(false)}}>01</li>
-                                    <li onClick={() =>{setBed({value : 1 , Name : '02' }); setShowBed(false)}}>02</li>
-                                    <li onClick={() =>{setBed({value : 2 , Name : '03' }); setShowBed(false)}}>03</li>
-                                </ul> : ''}
-                                <MdKeyboardArrowDown/>
-                            </div>
-                        </div>
-                        <div className='p-locations' onClick={() =>{setShowLocation(false); setShowType(false);setShowBath(!showBath);setShowBed(false)  }}>
-                            <label htmlFor="">Bath Room</label>
-                            <div className="data">
-                                <span>{bath.Name}</span>
-                                {showBath ?
-                                <ul>
-                                    <li onClick={() =>{setBath({value : 0 , Name : '01' }); setShowBath(false)}}>01</li>
-                                    <li onClick={() =>{setBath({value : 1 , Name : '02' }); setShowBath(false)}}>02</li>
-                                    <li onClick={() =>{setBath({value : 2 , Name : '03' }); setShowBath(false)}}>03</li>
-                                </ul> : ''}
-                                <MdKeyboardArrowDown/>
-                            </div>
-                        </div>
-
-                        <div className='s-icon'>
-                            <a><AiOutlineSearch/></a>
-                            </div> */}
+                           
                             <div className="col-lg-3 p-0">
-                                {/* <div className="chack-box-wrap">
-                                    <div className="chack-box">
-                                        <ul className="nav nav-tabs" id="myTab" role="tablist">
-                                            <li className="nav-item" role="presentation">
-                                                <button className="nav-link active" id="home-tab" data-toggle="tab" data-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Buy</button>
-                                            </li>
-                                            <li className="nav-item" role="presentation">
-                                                <button className="nav-link" id="profile-tab" data-toggle="tab" data-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Rent</button>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div> */}
                                     <div className="chack-box-custom">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
-                                            <label class="form-check-label" for="flexRadioDefault1">
+                                        <div className="form-check">
+                                            <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" onClick={e =>{setBuy(e.target.checked); setRent(false)}} />
+                                            <label className="form-check-label" htmlFor="flexRadioDefault1">
                                                 Buy
                                             </label>
                                         </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" />
-                                            <label class="form-check-label" for="flexRadioDefault2">
+                                        <div className="form-check">
+                                            <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" onClick={e =>{setRent(e.target.checked); setBuy(false)}}/>
+                                            <label className="form-check-label" htmlFor="flexRadioDefault2">
                                                 Rent
                                             </label>
                                         </div>
@@ -264,26 +253,8 @@ const Search = () => {
 
                             </div>
 
-                            {/* <div className='form-typology-wrapper'>
-                                <div className={`dropdown-wrapper ${toggle ? 'active' : ''}`} onClick={() => { setToggle(!toggle) }}>
-                                    <span className='placeholder'>Property Type</span>
-                                    <MdKeyboardArrowDown />
-                                    <ul className='dropdown'>
-                                        <li>New Home</li>
-                                        <li>Room</li>
-                                        <li>Office</li>
-                                        <li> Land</li>
-                                        <li>Building</li>
-                                        <li>Garage</li>
-                                        <li>Commercial Properties</li>
-                                        <li>Home</li>
-                                    </ul>
-                                </div>
-                            </div> */}
                             <div className="col-lg-3 p-0">
-                                <Dropdown options={propertytypeOptions} onChange={(e) => {
-                                    setPropertyType(e)
-                                }} value={propertyType.value} placeholder="Select property type" />
+                                <Dropdown options={propertytypeOptions} onChange={(e) =>setPropertyType(e)} value={propertyType.value} placeholder="Select property type" />
                             </div>
                             <div className="col-lg-4 p-0">
                                 <div className='form-item-block'>
@@ -292,17 +263,11 @@ const Search = () => {
                                 </div>
                             </div>
                             <div className="col-lg-2 p-0">
-                                <button className='btn action'>Search</button>
+                            <button type='button' className='btn action' onClick={sendSearchData}>Search</button>
+                                
                             </div>
 
                         </div>
-
-                        {/* <div className="address">
-                            <p>City: <span>{address.city}</span></p>
-                            <p>State: <span>{address.state}</span></p>
-                            <p>Zip: <span>{address.zip}</span></p>
-                            <p>Country: <span>{address.country}</span></p>
-                        </div> */}
                         <div>
 
                         </div>
@@ -311,6 +276,18 @@ const Search = () => {
                 </div>
             </form>
         </div>
+        <div>
+            <div><span> buy : </span>{buy ? 'true' : 'false'}</div>
+            <div><span> rent : </span>{rent ? 'true' : 'false'}</div>
+            <div><span> property Type : </span> {propertyType.value}</div>
+            <div><span> country : </span>{country}</div>
+            <div><span> city : </span>{city}</div>
+            <div><span> state : </span>{state}</div>
+            <div><span> lat : </span>{lat}</div>
+            <div><span> lng : </span>{lng}</div>
+        </div>
+        </>
+        
     )
 }
 
