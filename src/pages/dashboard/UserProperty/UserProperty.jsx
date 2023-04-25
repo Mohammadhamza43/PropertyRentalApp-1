@@ -31,16 +31,6 @@ const UserProperty = () => {
     const getPropertyList = async () => {
         const response = await axiosInstance.get('property/user')
         const data = await response.data
-        /*const response = await fetch('https://walrus-app-ovpy2.ondigitalocean.app/property/user', {
-
-            method: "GET",
-            headers: {
-                "Accept": "application/json",
-                "AUTHORIZATION": `BEARER ${token}`
-            }
-        })
-        console.log('axiosInstance', response.json())
-        const data = await response.json()*/
 
         setLoader(false)
         setList(data.data)
@@ -50,17 +40,6 @@ const UserProperty = () => {
         setFormLoader(true)
         const response = await axiosInstance.put(`property/delete/${id}`)
         const data = await response.data
-        /*const response = await fetch(`https://walrus-app-ovpy2.ondigitalocean.app/property/delete/${id}`, {
-
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-                "AUTHORIZATION": `BEARER ${token}`
-            },
-        })
-        const data = await response.json()*/
-
         const updatedItems = list.filter((item) => item._id !== id);
         setList(updatedItems);
         setFormLoader(false)
@@ -82,24 +61,7 @@ const UserProperty = () => {
                 setFormLoader(false)
                 toast.error(error, { position: toast.POSITION.TOP_LEFT })
             })
-        /*fetch(`https://walrus-app-ovpy2.ondigitalocean.app/property/status/${id}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-                "AUTHORIZATION": `BEARER ${token}`
-            },
-            body :JSON.stringify({status : status})
-        }).then((res) =>{
-          if(res.ok){
-              setFormLoader(false)
-              toast.success('Status Successfully updated.',
-                  { position: toast.POSITION.TOP_LEFT })
-          }
-        }) .catch((error) => {
-                    setFormLoader(false)
-                    toast.error(error, { position: toast.POSITION.TOP_LEFT })
-        })*/
+    
     }
 
     return (
