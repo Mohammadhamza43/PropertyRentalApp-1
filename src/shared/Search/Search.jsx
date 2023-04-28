@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { MdGpsFixed, MdKeyboardArrowDown } from 'react-icons/md';
-import { Link , useNavigate ,useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Dropdown from 'react-dropdown';
 import './Search.css'
 import 'react-dropdown/style.css';
@@ -96,13 +96,13 @@ const Search = (props) => {
     ]
 
     const [propertyType, setPropertyType] = useState({ value: 'newHome', label: 'New Home' })
-    const [buy , setBuy] = useState(false)
-    const [rent , setRent] = useState(false)
-    const [country , setCountry] = useState('')
-    const [city , setCity] = useState('')
-    const [state , setState] = useState('')
-    const [lng , setLng] = useState('')
-    const [lat , setLat] = useState('')
+    const [buy, setBuy] = useState(false)
+    const [rent, setRent] = useState(false)
+    const [country, setCountry] = useState('')
+    const [city, setCity] = useState('')
+    const [state, setState] = useState('')
+    const [lng, setLng] = useState('')
+    const [lat, setLat] = useState('')
     const searchInput = useRef(null);
     const [address, setAddress] = useState({});
 
@@ -112,29 +112,29 @@ const Search = (props) => {
         place.address_components.forEach(component => {
             const types = component.types;
             const value = component.long_name;
-    
+
             // Extract country
             if (types.includes("country")) {
                 setCountry(value)
             }
-    
+
             // Extract state
             if (types.includes("administrative_area_level_1")) {
                 setState(value)
             }
-    
+
             // Extract city
             if (types.includes("locality")) {
                 setCity(value)
             }
         });
-        
+
         const latitude = place.geometry.location.lat();
         setLat(latitude)
         const longitude = place.geometry.location.lng();
         setLng(longitude)
-        
-        
+
+
     }
 
     //init autocomplete
@@ -159,17 +159,17 @@ const Search = (props) => {
                 place.address_components.forEach(component => {
                     const types = component.types;
                     const value = component.long_name;
-            
+
                     // Extract country
                     if (types.includes("country")) {
                         setCountry(value)
                     }
-            
+
                     // Extract state
                     if (types.includes("administrative_area_level_1")) {
                         setState(value)
                     }
-            
+
                     // Extract city
                     if (types.includes("locality")) {
                         setCity(value)
@@ -197,26 +197,32 @@ const Search = (props) => {
 
     const test = 'rent'
 
-    const sendSearchData =() =>{
-        if(location.pathname === '/'){
-            if(buy){ navigate("/properties" , {state : {purpose : 'sale' , propertyType : propertyType.value , country : country , city : city , state : state , lat : lat , lng : lng }})}
-        if(rent){ navigate("/properties" , {state : {purpose : 'rent' , propertyType : propertyType.value , country : country , city : city , state : state , lat : lat , lng : lng}})}
-        if(!buy && !rent){ navigate("/properties" , {purpose : 'sale' , state : {propertyType : propertyType.value , country : country , city : city , state : state , lat : lat , lng : lng}})}
-        }else{
+    const sendSearchData = () => {
+        if (location.pathname === '/') {
+            if (buy) {
+                navigate("/properties", { state: { purpose: 'sale', propertyType: propertyType.value, country: country, city: city, state: state, lat: lat, lng: lng } })
+            }
+            if (rent) {
+                navigate("/properties", { state: { purpose: 'rent', propertyType: propertyType.value, country: country, city: city, state: state, lat: lat, lng: lng } })
+            }
+            if (!buy && !rent) {
+                navigate("/properties", { purpose: 'sale', state: { propertyType: propertyType.value, country: country, city: city, state: state, lat: lat, lng: lng } })
+            }
+        } else {
             const item = {
-                purpose : rent ? 'rent' : 'sale',
-                propertyType : propertyType.value,
-                country : country,
-                city:city,
-                state:state,
-                lat : lat,
-                lng:lng
-    
+                purpose: rent ? 'rent' : 'sale',
+                propertyType: propertyType.value,
+                country: country,
+                city: city,
+                state: state,
+                lat: lat,
+                lng: lng
+
             }
             props.updateState(item);
         }
-        
-        
+
+
     }
 
 
@@ -225,58 +231,58 @@ const Search = (props) => {
         initAutocomplete()
     }, []);
 
-    
+
 
     return (
         <>
-        <div className='property-search'>
-            <form>
-                <div className="row">
-                    <div className="col-lg-12">
-                        <div className='row'>
-                           
-                            <div className="col-lg-3 p-0">
+            <div className='property-search'>
+                <form>
+                    <div className="row">
+                        <div className="col-lg-12">
+                            <div className='row'>
+
+                                <div className="col-lg-3 p-0">
                                     <div className="chack-box-custom">
                                         <div className="form-check">
-                                            <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" onClick={e =>{setBuy(e.target.checked); setRent(false)}} />
+                                            <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" onClick={e => { setBuy(e.target.checked); setRent(false) }} />
                                             <label className="form-check-label" htmlFor="flexRadioDefault1">
                                                 Buy
                                             </label>
                                         </div>
                                         <div className="form-check">
-                                            <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" onClick={e =>{setRent(e.target.checked); setBuy(false)}}/>
+                                            <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" onClick={e => { setRent(e.target.checked); setBuy(false) }} />
                                             <label className="form-check-label" htmlFor="flexRadioDefault2">
                                                 Rent
                                             </label>
                                         </div>
+                                    </div>
+
+                                </div>
+
+                                <div className="col-lg-3 p-0">
+                                    <Dropdown options={propertytypeOptions} onChange={(e) => setPropertyType(e)} value={propertyType.value} placeholder="Select property type" />
+                                </div>
+                                <div className="col-lg-4 p-0">
+                                    <div className='form-item-block'>
+                                        <input type="text" ref={searchInput} id='campoBus' placeholder='Search Properties' />
+                                        <MdGpsFixed className='search-icons' onClick={findMyLocation} />
+                                    </div>
+                                </div>
+                                <div className="col-lg-2 p-0">
+                                    <button type='button' className='btn action' onClick={sendSearchData}>Search</button>
+
                                 </div>
 
                             </div>
+                            <div>
 
-                            <div className="col-lg-3 p-0">
-                                <Dropdown options={propertytypeOptions} onChange={(e) =>setPropertyType(e)} value={propertyType.value} placeholder="Select property type" />
-                            </div>
-                            <div className="col-lg-4 p-0">
-                                <div className='form-item-block'>
-                                    <input type="text" ref={searchInput} id='campoBus' placeholder='Search Properties' />
-                                    <MdGpsFixed className='search-icons' onClick={findMyLocation} />
-                                </div>
-                            </div>
-                            <div className="col-lg-2 p-0">
-                            <button type='button' className='btn action' onClick={sendSearchData}>Search</button>
-                                
                             </div>
 
                         </div>
-                        <div>
-
-                        </div>
-
                     </div>
-                </div>
-            </form>
-        </div>
-        {/* <div>
+                </form>
+            </div>
+            {/* <div>
             <div><span> buy : </span>{buy ? 'true' : 'false'}</div>
             <div><span> rent : </span>{rent ? 'true' : 'false'}</div>
             <div><span> property Type : </span> {propertyType.value}</div>
@@ -287,7 +293,7 @@ const Search = (props) => {
             <div><span> lng : </span>{lng}</div>
         </div> */}
         </>
-        
+
     )
 }
 
