@@ -11698,7 +11698,7 @@ h5,
 
 .ftco-navbar-light {
   background: transparent !important;
-  position: absolute;
+  position: fixed;
   top: 0px;
   left: 0;
   right: 0;
