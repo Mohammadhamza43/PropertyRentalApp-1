@@ -242,10 +242,14 @@ svg:not(:root) {
 
 .gPahXz {
     position: fixed;
-    top: calc(72px + env(safe-area-inset-top));
+    top: calc(57px + env(safe-area-inset-top));
     bottom: 0px;
     right: 0px;
     width: 100%;
+}
+
+.map-iframe{
+    height: calc(100% - 40px);
 }
 
 .fuUXys {
@@ -569,6 +573,223 @@ svg:not(:root) {
     line-height: 20px;
 }
 
+.icon-wrapper svg{
+margin-top: 0.2px;
+}
+
+.dyWqS {
+    padding: 22px 16px 22px 20px;
+    height: auto;
+    min-width: 0px;
+    position: inherit;
+    border-radius: 0px 0px 12px 12px;
+}
+
+.emUQRl {
+    position: absolute;
+    left: 16px;
+    top: auto;
+    bottom: 8px;
+}
+
+.lfdbms {
+    position: relative;
+    padding: 4px 8px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.lfdbms::before {
+    display: block;
+    content: "";
+    position: absolute;
+    inset: 0px;
+    background: rgb(255, 0, 134);
+    border-radius: 2px;
+    transform: skew(348deg);
+    z-index: -1;
+}
+
+.mQJFy {
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    color: rgb(255, 255, 255);
+    font-size: 12px;
+    margin: 0;
+    line-height: 14px;
+    font-weight: 700;
+}
+
+.swIbZ {
+    margin-bottom: 6px;
+    margin-right: 40px;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 25px;
+    color: rgb(16, 16, 16);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+}
+
+.gWTwZn {
+    line-height: 20px;
+    font-size: 14px;
+    color: rgb(52, 61, 66);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.bjJoNh {
+    margin: 0px 40px 6px 0px;
+    font-size: 14px;
+    line-height: 25px;
+    color: rgb(52, 61, 66);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dHYeSr {
+    display: block;
+}
+
+.doqKNP:not(:last-child) {
+    margin-bottom: 6px;
+}
+
+.doqKNP {
+    display: flex;
+    margin: 0px;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 25px;
+    padding: 0px;
+}
+
+.rkh7f0-1 .rkh7f0-2{
+    
+}
+
+.ddpQTN {
+    display: inline-flex;
+    align-items: center;
+    list-style-type: none;
+}
+
+.rkh7f0-1 .rkh7f0-2.iMDBSi svg{
+    font-size: 20px;
+    margin-bottom: 3px;
+    margin-right: 3px !important;
+    
+}
+
+.ddpQTN {
+    display: inline-flex;
+    -webkit-box-align: center;
+    align-items: center;
+    list-style-type: none;
+    margin-right: 10px;
+}
+
+.hcVMxo {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.hcVMxo .bWMeDG{
+    line-height: 20px;
+    font-size: 14px;
+    color: rgb(52, 61, 66);
+}
+
+.bWMeDG {
+    display: inline-block;
+}
+
+.kydbmE > a {
+    border-radius: 12px;
+}
+
+.kXLBZg {
+    display: inline-flex;
+    -webkit-box-align: center;
+    align-items: center;
+    position: absolute;
+    right: 6px;
+    bottom: 129px;
+}
+
+.kSoMrH {
+    display: inline-block;
+}
+
+.bToTeF {
+    position: relative;
+    margin: 0px;
+    padding: 8px;
+    line-height: 24px;
+    color: rgb(52, 61, 66);
+    overflow: hidden;
+    outline: 0px;
+    border: 0px;
+    border-radius: 24px;
+    background: transparent;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+.coJfiJ {
+    position: relative;
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    pointer-events: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.fmZa-d {
+    display: inline-block;
+    fill: currentcolor;
+    pointer-events: none;
+    width: 32px;
+    height: 32px;
+}
+
+.sc-1h490wc-1:hover path{
+    fill: rgb(255 0 124);
+}
+
+.coJfiJ .icon {
+    vertical-align: top;
+}
+
+.eRPHdN {
+    width: 100%;
+    height: 100%;
+    color: rgb(52, 61, 66);
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: transparent;
+    display: flex;
+}
+
+.bWMeDG:not(:first-child)::before {
+    padding: 0px 4px;
+    content: " • ";
+}
 @media (min-width: 961px){
     .ggJHdq {
         padding-bottom: 32px;
@@ -647,7 +868,7 @@ svg:not(:root) {
 
 .dmEQCF {
     position: fixed;
-    top: 72px;
+    top: 57px;
     left: 0px;
     padding: 16px 38px;
     height: 84px;
@@ -661,4 +882,532 @@ svg:not(:root) {
 .cvMAEu {
     display: inline-flex;
 }
+}
+
+
+.epnMmH {
+    padding: 16px 48px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px -5px 5px 0px;
+}
+
+.ipxbJD {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+}
+
+.ikpcuX {
+    flex: 1 1 0%;
+}
+
+.bkTCAh {
+    margin: 0px;
+    padding: 0px;
+    width: auto;
+    overflow: visible;
+    white-space: nowrap;
+    background: transparent;
+    border: none;
+    user-select: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    font-size: 14px;
+    line-height: 24px;
+    font-weight: 500;
+    color: rgb(255, 0, 134);
+}
+
+a, button {
+    cursor: pointer;
+    outline: 0px;
+}
+
+.iuAQpx {
+    flex: 2 1 0%;
+}
+
+.hyeZAL {
+    margin: 0px;
+    overflow: visible;
+    white-space: nowrap;
+    background: rgb(255, 0, 134);
+    border: none;
+    user-select: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    display: inline-block;
+    padding: 10px 24px;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 32px;
+    border-radius: 26px;
+    text-align: center;
+    color: rgb(255, 255, 255);
+    width: 100%;
+}
+
+.range-number{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+.range-number div{
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+/*******************************
+* MODAL AS LEFT/RIGHT SIDEBAR
+* Add "left" or "right" in modal parent div, after class="modal".
+* Get free snippets on bootpen.com
+*******************************/
+.modal.left .modal-dialog,
+.modal.right .modal-dialog {
+    position: fixed;
+    margin: auto;
+    width: 420px;
+    height: 100%;
+    -webkit-transform: translate3d(0%, 0, 0);
+        -ms-transform: translate3d(0%, 0, 0);
+         -o-transform: translate3d(0%, 0, 0);
+            transform: translate3d(0%, 0, 0);
+}
+
+.hbxTUi {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0%;
+    -webkit-box-flex: 1;
+    overflow-y: auto;
+}
+
+.gOGxgr {
+    padding: 16px 26px 16px;
+}
+
+.kKonjn {
+    padding: 0px 10px 10px;
+}
+
+
+.cZxCSd {
+    margin: 0px 0px 28px;
+}
+
+.kvGcLL {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    user-select: none;
+    color: rgb(16, 16, 16);
+    margin: 0px 0px 16px;
+}
+
+.jcRztj {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    text-align: left;
+    line-height: 32px;
+    background: none;
+    border: 0px;
+    cursor: default;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.iBnkJT {
+    flex: 1 1 0%;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.gZszZo {
+    display: flex;
+    flex: 1 1 0%;
+    -webkit-box-pack: center;
+    justify-content: center;
+    margin: 0px;
+    padding: 11px 24px;
+    font-size: 13px;
+    line-height: 20px;
+    border: 1px solid rgb(0, 23, 59);
+    border-radius: 22px;
+    user-select: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: subpixel-antialiased;
+    cursor: pointer;
+    font-weight: 500;
+    color: rgb(0, 23, 59);
+    background: rgb(247, 247, 247);
+}
+
+.fXoFer {
+    display: flex;
+    width: 100%;
+    box-shadow: rgb(233, 236, 241) 0px 0px 0px 1px inset;
+    border-radius: 22px;
+}
+
+.jUPYmK {
+    display: flex;
+    flex: 1 1 0%;
+    -webkit-box-pack: center;
+    justify-content: center;
+    margin: 0px;
+    padding: 11px 24px;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 20px;
+    color: rgb(52, 61, 66);
+    border: 1px solid transparent;
+    border-radius: 22px;
+    background: none;
+    user-select: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: subpixel-antialiased;
+    cursor: pointer;
+}
+
+.kPUAQh {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    user-select: none;
+    color: rgb(52, 61, 66);
+}
+
+.gsheHX {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    text-align: left;
+    line-height: 32px;
+    background: none;
+    border: 0px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.iBnkJT {
+    flex: 1 1 0%;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.kpgnTE {
+    /* transform: rotate(90deg) scale(1.25); */
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) 0s;
+}
+
+.cZohV {
+    overflow: hidden;
+    /* display: inline-block; */
+    vertical-align: middle;
+    margin-top: -4px;
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+}
+
+.jDEIHe:last-of-type {
+    margin: 0px;
+}
+
+
+.jDEIHe {
+    margin: 0px 0px 8px;
+    padding: 0px;
+}
+
+.hRTczC:not(:last-child) {
+    margin: 0px 0px 8px;
+}
+
+.inAQUt {
+    position: relative;
+    font-size: 14px;
+    vertical-align: middle;
+    text-decoration: none;
+    stroke: rgb(52, 61, 66);
+    border-radius: 8px;
+    cursor: pointer;
+    user-select: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: start;
+    justify-content: flex-start;
+    padding: 0px;
+    line-height: 32px;
+    color: rgb(52, 61, 66);
+    border: 0px;
+    background: none;
+}
+
+.inAQUt {
+    position: relative;
+    font-size: 14px;
+    vertical-align: middle;
+    text-decoration: none;
+    stroke: rgb(52, 61, 66);
+    border-radius: 8px;
+    cursor: pointer;
+    user-select: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: start;
+    justify-content: flex-start;
+    padding: 0px;
+    line-height: 32px;
+    color: rgb(52, 61, 66);
+    border: 0px;
+    background: none;
+}
+
+.inAQUt .sc-1uzywjh-0 {
+    right: 0px;
+    color: rgb(52, 61, 66);
+}
+
+
+.inAQUt .sc-1uzywjh-0 {
+    color: rgb(255, 0, 134);
+}
+
+.emTcCo {
+    font-size: 13px;
+    color: rgb(144, 161, 169);
+    position: absolute;
+    top: 0px;
+    right: 16px;
+}
+
+.kPUAQh:hover {
+    color: rgb(255, 0, 134);
+    cursor: pointer;
+}
+
+.inAQUt .icon {
+    margin-right: 18px;
+    color: rgb(0, 23, 59) !important;
+    stroke: rgb(0, 23, 59) !important;
+    margin-right: 6px;
+}
+
+.inAQUt .icon svg {
+    stroke: red;
+    fill: red;
+}
+
+svg:not(:root) {
+    overflow: hidden;
+}
+
+.clDIaZ {
+    display: inline-block;
+    fill: #000;
+    pointer-events: none;
+    width: 16px;
+    height: 16px;
+    margin-bottom: 4px;
+}
+
+.chack-icons{
+    width: 17px;
+    height: 17px;
+    margin-right: 6px;
+    margin-bottom: 5px;
+}
+.ikzRsx {
+    padding: 12px 12px 16px;
+    margin: 0px 0px 28px;
+    background-color: rgb(247, 247, 247);
+    border-radius: 4px;
+}
+
+.jDEIHe li {
+    list-style: none;
+}
+
+.modal.left .modal-content,
+.modal.right .modal-content {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.modal.left .modal-body,
+.modal.right .modal-body {
+    padding: 15px 15px 80px;
+}
+
+/*Left*/
+.modal.left.fade .modal-dialog{
+    left: -320px;
+    -webkit-transition: opacity 0.3s linear, left 0.3s ease-out;
+       -moz-transition: opacity 0.3s linear, left 0.3s ease-out;
+         -o-transition: opacity 0.3s linear, left 0.3s ease-out;
+            transition: opacity 0.3s linear, left 0.3s ease-out;
+}
+
+.modal.left.fade.in .modal-dialog{
+    left: 0;
+}
+    
+/*Right*/
+.modal.right.fade .modal-dialog {
+    /* right: -320px; */
+    -webkit-transition: opacity 0.3s linear, right 0.3s ease-out;
+       -moz-transition: opacity 0.3s linear, right 0.3s ease-out;
+         -o-transition: opacity 0.3s linear, right 0.3s ease-out;
+            transition: opacity 0.3s linear, right 0.3s ease-out;
+}
+
+.modal.right.fade.in .modal-dialog {
+    right: 0;
+}
+
+/* ----- MODAL STYLE ----- */
+.modal-content {
+    border-radius: 0;
+    border: none;
+}
+
+.modal-header {
+    border-bottom-color: #EEEEEE;
+    background-color: #FAFAFA;
+}
+
+/* ----- v CAN BE DELETED v ----- */
+
+
+.demo {
+padding-top: 60px;
+padding-bottom: 110px;
+}
+
+.btn-demo {
+margin: 15px;
+padding: 10px 15px;
+border-radius: 0;
+font-size: 16px;
+background-color: #FFFFFF;
+}
+
+.btn-demo:focus {
+outline: 0;
+}
+
+.demo-footer {
+position: fixed;
+bottom: 0;
+width: 100%;
+padding: 15px;
+background-color: #212121;
+text-align: center;
+}
+
+.demo-footer > a {
+text-decoration: none;
+font-weight: bold;
+font-size: 16px;
+color: #fff;
+}
+
+.fycLmA {
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    max-width: 490px;
+    height: 100%;
+    z-index: 1200;
+    overflow: auto;
+    transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0s;
+    left: 0px;
+    transform: translate3d(0px, 0px, 0px);
+}
+
+.jOespU {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: rgb(255, 255, 255);
+}
+
+.etQrqG {
+    padding: 20px 30px;
+    border-bottom: 1px solid rgb(233, 236, 241);
+}
+
+.hktXrC {
+    position: relative;
+}
+
+.cbRSA {
+    flex: 1 1 0%;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    color: rgb(16, 16, 16);
+    user-select: none;
+}
+
+.lcxzRD {
+    display: flex;
+    position: absolute;
+    top: -10px;
+    right: 0px;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border-radius: 22px;
+    border: 0px;
+    user-select: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: subpixel-antialiased;
+    cursor: pointer;
+}
+
+.lcxzRD svg {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+}
+
+.fKOyQl {
+    display: inline-block;
+    fill: currentcolor;
+    pointer-events: none;
+    width: 24px;
+    height: 24px;
 }

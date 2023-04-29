@@ -133,14 +133,11 @@ const Search = (props) => {
         setLat(latitude)
         const longitude = place.geometry.location.lng();
         setLng(longitude)
-
-
     }
 
     //init autocomplete
     const initAutocomplete = () => {
         if (!searchInput.current) return;
-
         const autocomplete = new window.google.maps.places.Autocomplete(searchInput.current);
         autocomplete.setFields(["address_component", "geometry", "formatted_address"]);
         autocomplete.addListener("place_changed", () => onChangeAddress(autocomplete));
@@ -200,13 +197,13 @@ const Search = (props) => {
     const sendSearchData = () => {
         if (location.pathname === '/') {
             if (buy) {
-                navigate("/properties", { state: { purpose: 'sale', propertyType: propertyType.value, country: country, city: city, state: state, lat: lat, lng: lng } })
+                navigate("/properties", { state: { purpose: 'buy', propertyType: propertyType.value, country: country, city: city, state: state, lat: lat, lng: lng } })
             }
             if (rent) {
                 navigate("/properties", { state: { purpose: 'rent', propertyType: propertyType.value, country: country, city: city, state: state, lat: lat, lng: lng } })
             }
             if (!buy && !rent) {
-                navigate("/properties", { purpose: 'sale', state: { propertyType: propertyType.value, country: country, city: city, state: state, lat: lat, lng: lng } })
+                navigate("/properties", { purpose: 'buy', state: { propertyType: propertyType.value, country: country, city: city, state: state, lat: lat, lng: lng } })
             }
         } else {
             const item = {
