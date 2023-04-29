@@ -96,7 +96,7 @@ const Search = (props) => {
     ]
 
     const [propertyType, setPropertyType] = useState({ value: 'newHome', label: 'New Home' })
-    const [buy, setBuy] = useState(false)
+    const [buy, setBuy] = useState(true)
     const [rent, setRent] = useState(false)
     const [country, setCountry] = useState('')
     const [city, setCity] = useState('')
@@ -105,10 +105,13 @@ const Search = (props) => {
     const [lat, setLat] = useState('')
     const searchInput = useRef(null);
     const [address, setAddress] = useState({});
+    const [planAddress, setPlanAddress] = useState('');
 
+    
     // do something on address change
     const onChangeAddress = (autocomplete) => {
         const place = autocomplete.getPlace();
+        setPlanAddress(place.formatted_address);
         place.address_components.forEach(component => {
             const types = component.types;
             const value = component.long_name;
@@ -197,13 +200,13 @@ const Search = (props) => {
     const sendSearchData = () => {
         if (location.pathname === '/') {
             if (buy) {
-                navigate("/properties", { state: { purpose: 'buy', propertyType: propertyType.value, country: country, city: city, state: state, lat: lat, lng: lng } })
+                navigate("/properties", { state: { purpose: 'buy', propertyType: propertyType.value, country: country, city: city, state: state, lat: lat, lng: lng  ,planAddress:planAddress} })
             }
             if (rent) {
-                navigate("/properties", { state: { purpose: 'rent', propertyType: propertyType.value, country: country, city: city, state: state, lat: lat, lng: lng } })
+                navigate("/properties", { state: { purpose: 'rent', propertyType: propertyType.value, country: country, city: city, state: state, lat: lat, lng: lng ,planAddress:planAddress} })
             }
             if (!buy && !rent) {
-                navigate("/properties", { purpose: 'buy', state: { propertyType: propertyType.value, country: country, city: city, state: state, lat: lat, lng: lng } })
+                navigate("/properties", { purpose: 'buy', state: { propertyType: propertyType.value, country: country, city: city, state: state, lat: lat, lng: lng ,planAddress:planAddress} })
             }
         } else {
             const item = {
@@ -241,7 +244,7 @@ const Search = (props) => {
                                 <div className="col-lg-3 p-0">
                                     <div className="chack-box-custom">
                                         <div className="form-check">
-                                            <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" onClick={e => { setBuy(e.target.checked); setRent(false) }} />
+                                            <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked onClick={e => { setBuy(e.target.checked); setRent(false) }} />
                                             <label className="form-check-label" htmlFor="flexRadioDefault1">
                                                 Buy
                                             </label>

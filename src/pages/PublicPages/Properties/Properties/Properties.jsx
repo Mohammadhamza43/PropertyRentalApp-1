@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Carousel from 'react-multi-carousel';
 import Header from '../../../../shared/Header/Header'
 import { useState } from 'react'
@@ -32,27 +32,143 @@ const geocodeJson = process.env.REACT_APP_GEOCODE_JSON;
 const Properties = ({ google }) => {
 
 	const location = useLocation();
-	console.log(location);
-	var purpose, propertyType, city, lat, lng = '';
+	var purpose, propertyType, cityFiltertxt, latFiltertxt, lngFiltertxt,pAddress = '';
 	if (location.state !== null && location.state !== '') {
 		if (typeof location.state.purpose !== "undefined") {
 			purpose = location.state.purpose.charAt(0).toUpperCase() + location.state.purpose.slice(1);
 		}
 		propertyType = location.state.propertyType;
-		city = location.state.city;
-		lat = location.state.lat;
-		lng = location.state.lng;
+		cityFiltertxt = location.state.city;
+		latFiltertxt = location.state.lat;
+		lngFiltertxt = location.state.lng;
+		pAddress = location.state.planAddress;
 	}
 	const [filteredData, setFilteredData] = useState([]);
 	const [priceRange, setPriceRange] = useState({ min: 0, max: 100000 }); // initial price range
 	const [interested, setInterested] = useState(purpose);
 	const [PropertyDT, setPropertyDT] = useState(propertyType);
 
-	const [cityFilter, setCityFilter] = useState(city);
-	const [latFilter, setLatFilter] = useState(lat);
-	const [longFilter, setLongFilter] = useState(lng);
+	const [cityFilter, setCityFilter] = useState(cityFiltertxt);
+	const [latFilter, setLatFilter] = useState(latFiltertxt);
+	const [longFilter, setLongFilter] = useState(lngFiltertxt);
+	const [bedRoomDT, setBedRoomDT] = useState('');
+	const searchInput = useRef(null);
+	const [country, setCountry] = useState('');
+
+	const [addressFilter, setAddressFilter] = useState('');
+
+	const [city, setCity] = useState('');
+	const [state, setState] = useState('');
+	const [lng, setLng] = useState('');
+	const [lat, setLat] = useState('');
+
+	const [planAddress, setPlanAddress] = useState(pAddress);
+	
 	// const { city, country, propertyType, purpose } = location?.state;
 
+	// do something on address change
+	const onChangeAddress = (autocomplete) => {
+		const place = autocomplete.getPlace();
+		setAddressFilter(place.formatted_address);
+
+		place.address_components.forEach(component => {
+			const types = component.types;
+			const value = component.long_name;
+
+			// Extract country
+			if (types.includes("country")) {
+				setCountry(value)
+			}
+
+			// Extract state
+			if (types.includes("administrative_area_level_1")) {
+				setState(value)
+			}
+
+			// Extract city
+			if (types.includes("locality")) {
+				setCity(value)
+			}
+		});
+
+		const latitude = place.geometry.location.lat();
+		setLat(latitude)
+		const longitude = place.geometry.location.lng();
+		setLng(longitude)
+	}
+
+	const extractAddress = (place) => {
+		console.log(place);
+		const address = {
+			city: "",
+			state: "",
+			zip: "",
+			country: "",
+			streetNumber: "",
+			plain() {
+				const city = this.city ? this.city + ", " : "";
+				const zip = this.zip ? this.zip + ", " : "";
+				const state = this.state ? this.state + ", " : "";
+				return city + zip + state + this.country;
+			}
+		}
+
+		if (!Array.isArray(place?.address_components)) {
+			return address;
+		}
+
+		place.address_components.forEach(component => {
+			const types = component.types;
+			//   console.log(component.types);
+			const value = component.long_name;
+			//   console.log(component.long_name);
+
+			// Extract country
+			if (types.includes("country")) {
+				address.country = value;
+				// setSearchData({...searchData , address:value})
+			}
+
+			// Extract state
+			if (types.includes("administrative_area_level_1")) {
+				address.state = value
+
+				console.log(address.state + 'state');
+			}
+
+			// Extract city
+			if (types.includes("locality")) {
+				address.city = value
+			}
+
+			// Extract street number
+			if (types.includes("street_number")) {
+				address.streetNumber = value
+			}
+
+			// Extract postal code
+			if (types.includes("postal_code")) {
+				address.zip = value
+			}
+		});
+
+		return address;
+	}
+
+
+	//init autocomplete
+	const initAutocomplete = () => {
+		if (!searchInput.current) return;
+		const autocomplete = new window.google.maps.places.Autocomplete(searchInput.current);
+		autocomplete.setFields(["address_component", "geometry", "formatted_address"]);
+		autocomplete.addListener("place_changed", () => onChangeAddress(autocomplete));
+		const address = extractAddress(autocomplete)
+
+	}
+	useEffect(() => {
+		initAutocomplete();
+		searchInput.current.value=pAddress;
+	}, []);
 
 	useEffect(() => {
 		const filterData = () => {
@@ -70,8 +186,10 @@ const Properties = ({ google }) => {
 				url += `&type=${PropertyDT}`;
 			}
 
+			if (typeof bedRoomDT !== "undefined" && bedRoomDT !== null && bedRoomDT !== '') {
+				url += `&rooms=${bedRoomDT}`;
+			}
 
-			console.log(url);
 			axios({
 				method: 'get',
 				url: url,
@@ -82,7 +200,7 @@ const Properties = ({ google }) => {
 		}
 
 		filterData();
-	}, [priceRange, interested, PropertyDT, cityFilter]);
+	}, [priceRange, interested, PropertyDT, cityFilter, bedRoomDT]);
 
 
 	const locations = [
@@ -138,7 +256,6 @@ const Properties = ({ google }) => {
 	const [toogle1, setToggle1] = useState(false)
 	const [toogle2, setToggle2] = useState(false)
 
-	const [bedRoomDT, setBedRoomDT] = useState('')
 
 	const [slider, setSlider] = useState(false)
 	const propertydata = [
@@ -153,7 +270,6 @@ const Properties = ({ google }) => {
 		{ name: 'Home', value: 'home', count: 10 }
 	]
 	const bedRoomdata = [
-		{ name: 'Studio', count: 10 },
 		{ name: 1, count: 333 },
 		{ name: 2, count: 22 },
 		{ name: 3, count: 44 },
@@ -186,6 +302,21 @@ const Properties = ({ google }) => {
 		map.fitBounds(bounds);
 	};
 
+	const searchHandaler = () => {
+		setCityFilter(city);
+	}
+	const clearFilterHandler = () => {
+		setPriceRange({
+			min: 0,
+			max: 100000
+		});
+		setInterested('');
+		setPropertyDT('');
+		setCityFilter('');
+		searchInput.current.value = '';
+		
+	}
+
 	return (
 		<>
 			<Header />
@@ -200,14 +331,14 @@ const Properties = ({ google }) => {
 											<div className='sc-1m7uu2m-7 gPABWM'>
 												<div className='sc-1m7uu2m-8 ciruMZ'>
 													<form className='sc-1m7uu2m-1 cvMAEu'>
-														<input type="input" className='sc-1m7uu2m-2 jweLbp' />
+														<input type="input" ref={searchInput} className='sc-1m7uu2m-2 jweLbp' />
 													</form>
 												</div>
 												<div className='sc-1m7uu2m-9 fcca-di'>
-													<button className='sc-1m7uu2m-10 kpnlB'>
+													<button className='sc-1m7uu2m-10 kpnlB' onClick={() => clearFilterHandler()}>
 														<RxCross2 />
 													</button>
-													<button className='sc-1m7uu2m-12 kcAJIc'>
+													<button className='sc-1m7uu2m-12 kcAJIc' onClick={() => searchHandaler()}>
 														<GrFormSearch className='clDIaZ' />
 														Search
 													</button>
@@ -256,14 +387,17 @@ const Properties = ({ google }) => {
 						<div className='r0xktz-1 bkBfQn'>
 							<header aria-label="Search summary" className="u8rllx-0 kigdhw">
 								<div className="sc-15z6z4m-0 fVUrto">
-									{interested !== "" && interested !== "" ?
-										<>
-											<span className="sc-15z6z4m-1 iFYwzu">For {interested}</span>
-											<a href="/for-rent/melbourne-vic-3000/real-estate" className="sc-15z6z4m-1 lcnZym">Melbourne (CBD), VIC 3000</a>
-										</>
-										: <></>}
-								</div><h1 className="u8rllx-1 jaHnaj">Rental properties in Melbourne (CBD), VIC 3000</h1>
-								<div className="u8rllx-2 iHZmYi"><h2 className="u8rllx-3 gCIxxJ">{filteredData.length} properties including surrounding and nearby suburbs</h2>
+									{
+										interested !== "" && interested !== "" ?
+											<>
+												<span className="sc-15z6z4m-1 iFYwzu">For {interested}</span>
+												<a href="/for-rent/melbourne-vic-3000/real-estate" className="sc-15z6z4m-1 lcnZym">{addressFilter}</a>
+											</>
+											: <></>
+									}
+								</div><h1 className="u8rllx-1 jaHnaj">Rental properties in {addressFilter}</h1>
+								<div className="u8rllx-2 iHZmYi">
+									<h2 className="u8rllx-3 gCIxxJ">{filteredData.length} properties including surrounding and nearby suburbs</h2>
 								</div>
 							</header>
 
@@ -274,7 +408,7 @@ const Properties = ({ google }) => {
 											return (
 												<div className='sc-1ti9q65-0 ggJHdq'>
 													<article className='sc-1e63uev-0 kydbmE'>
-														<Link className="sc-1fvt3tm-0 eRPHdN">
+														<Link to={`/properties/${item['_id']}`} className="sc-1fvt3tm-0 eRPHdN">
 															<div className='sc-3i257o-0 iMMhrs'>
 																<Carousel responsive={responsive} showDots={true} arrows={false} className="carosal">
 																	{item['photos'].map((img, i) => (
@@ -339,8 +473,12 @@ const Properties = ({ google }) => {
 												</div>
 											)
 										}
-										) : <><h3>No Record Found</h3></>}
-
+										)
+											:
+											<>
+												<h3>No Record Found</h3>
+											</>
+									}
 								</div>
 							</section>
 						</div>
@@ -562,7 +700,7 @@ const Properties = ({ google }) => {
 										<footer className="sc-1y0l0ze-6 epnMmH">
 											<div className="sc-1y0l0ze-7 ipxbJD">
 												<div className="sc-1y0l0ze-8 ikpcuX">
-													<button type="button" className="sc-1lxqdjp-0 bkTCAh">Clear all</button>
+													<button type="button" className="sc-1lxqdjp-0 bkTCAh" onClick={() => clearFilterHandler()}>Clear all</button>
 												</div>
 												<div className="sc-1y0l0ze-9 iuAQpx">
 													<button type="button" className="sc-9rc7kn-0 hyeZAL">Search 1,873 properties</button>
