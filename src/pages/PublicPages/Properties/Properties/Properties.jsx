@@ -65,8 +65,8 @@ const Properties = ({ google }) => {
 
 	const [planAddress, setPlanAddress] = useState(pAddress);
 	const [sortingFilter, setSortingFilter] = useState('');
-	
-	
+
+
 	// do something on address change
 	const onChangeAddress = (autocomplete) => {
 		const place = autocomplete.getPlace();
@@ -165,8 +165,8 @@ const Properties = ({ google }) => {
 		var options = {
 			types: ['(cities)'],
 			// componentRestrictions: {country: "us"}
-		   };
-		const autocomplete = new window.google.maps.places.Autocomplete(searchInput.current,options);
+		};
+		const autocomplete = new window.google.maps.places.Autocomplete(searchInput.current, options);
 		autocomplete.setFields(["address_component", "geometry", "formatted_address"]);
 		autocomplete.addListener("place_changed", () => onChangeAddress(autocomplete));
 		const address = extractAddress(autocomplete)
@@ -213,7 +213,7 @@ const Properties = ({ google }) => {
 		}
 
 		filterData();
-	}, [priceRange, interested, PropertyDT, cityFilter, bedRoomDT , sortingFilter]);
+	}, [priceRange, interested, PropertyDT, cityFilter, bedRoomDT, sortingFilter]);
 
 
 	const locations = [
@@ -246,7 +246,7 @@ const Properties = ({ google }) => {
 		{ value: 'updatedAt', label: 'Created Date' }
 	]
 
-	const [home, setHome] = useState({ value: 'one', label: 'Homes for you' })
+	const [home, setHome] = useState({ value: 'city', label: 'City' })
 
 	const responsive = {
 		superLargeDesktop: {
@@ -325,7 +325,7 @@ const Properties = ({ google }) => {
 			max: 100000
 		});
 		setInterested('');
-		setPropertyDT('');
+		setPropertyDT('all');
 		setCityFilter('');
 		searchInput.current.value = '';
 
@@ -347,9 +347,9 @@ const Properties = ({ google }) => {
 									<div className='sc-1m7uu2m-0 lExsy'>
 										<div className='sc-1m7uu2m-6 bimUfb'>
 											<div className='sc-1m7uu2m-7 gPABWM'>
-												<div className='sc-1m7uu2m-8 ciruMZ' style={{width:'60%'}}>
+												<div className='sc-1m7uu2m-8 ciruMZ' style={{ width: '60%' }}>
 													{/* <form className='sc-1m7uu2m-1 cvMAEu'> */}
-														<input type="input" ref={searchInput} className='sc-1m7uu2m-2 jweLbp'/>
+													<input type="input" ref={searchInput} className='sc-1m7uu2m-2 jweLbp' />
 													{/* </form> */}
 												</div>
 												<div className='sc-1m7uu2m-9 fcca-di'>
@@ -623,7 +623,7 @@ const Properties = ({ google }) => {
 															</button>
 														</h3>
 														<div className="sc-11yfpl8-5 gbsVeP"></div>
-														{ slider &&
+														{slider &&
 															<div id="side-proptype-region" role="region" aria-labelledby="side-proptype-section" className="hide"><div>
 																<Slider
 																	range
