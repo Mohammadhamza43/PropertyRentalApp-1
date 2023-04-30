@@ -32,7 +32,7 @@ const geocodeJson = process.env.REACT_APP_GEOCODE_JSON;
 const Properties = ({ google }) => {
 
 	const location = useLocation();
-	var purpose, propertyType, cityFiltertxt, latFiltertxt, lngFiltertxt,pAddress = '';
+	var purpose, propertyType, cityFiltertxt, latFiltertxt, lngFiltertxt, pAddress = '';
 	if (location.state !== null && location.state !== '') {
 		if (typeof location.state.purpose !== "undefined") {
 			purpose = location.state.purpose.charAt(0).toUpperCase() + location.state.purpose.slice(1);
@@ -43,6 +43,7 @@ const Properties = ({ google }) => {
 		lngFiltertxt = location.state.lng;
 		pAddress = location.state.planAddress;
 	}
+	const [isLoading, setLoading] = useState(false);
 	const [filteredData, setFilteredData] = useState([]);
 	const [priceRange, setPriceRange] = useState({ min: 0, max: 100000 }); // initial price range
 	const [interested, setInterested] = useState(purpose);
@@ -63,12 +64,13 @@ const Properties = ({ google }) => {
 	const [lat, setLat] = useState('');
 
 	const [planAddress, setPlanAddress] = useState(pAddress);
-	
-	// const { city, country, propertyType, purpose } = location?.state;
+	const [sortingFilter, setSortingFilter] = useState('');
+
 
 	// do something on address change
 	const onChangeAddress = (autocomplete) => {
 		const place = autocomplete.getPlace();
+		console.log(place);
 		setAddressFilter(place.formatted_address);
 
 		place.address_components.forEach(component => {
@@ -159,7 +161,12 @@ const Properties = ({ google }) => {
 	//init autocomplete
 	const initAutocomplete = () => {
 		if (!searchInput.current) return;
-		const autocomplete = new window.google.maps.places.Autocomplete(searchInput.current);
+
+		var options = {
+			types: ['(cities)'],
+			// componentRestrictions: {country: "us"}
+		};
+		const autocomplete = new window.google.maps.places.Autocomplete(searchInput.current, options);
 		autocomplete.setFields(["address_component", "geometry", "formatted_address"]);
 		autocomplete.addListener("place_changed", () => onChangeAddress(autocomplete));
 		const address = extractAddress(autocomplete)
@@ -167,10 +174,11 @@ const Properties = ({ google }) => {
 	}
 	useEffect(() => {
 		initAutocomplete();
-		searchInput.current.value=pAddress;
+		searchInput.current.value = pAddress;
 	}, []);
 
 	useEffect(() => {
+		setLoading(true);
 		const filterData = () => {
 			var url = `https://walrus-app-ovpy2.ondigitalocean.app/property/list`;;
 			if (priceRange) {
@@ -190,17 +198,22 @@ const Properties = ({ google }) => {
 				url += `&rooms=${bedRoomDT}`;
 			}
 
+			if (typeof sortingFilter !== "undefined" && sortingFilter !== null && sortingFilter !== '') {
+				url += `&sortAttr=${sortingFilter}`;
+			}
+			console.log(url);
 			axios({
 				method: 'get',
 				url: url,
 			})
 				.then(function (response) {
 					setFilteredData(response.data.data);
+					setLoading(false);
 				});
 		}
 
 		filterData();
-	}, [priceRange, interested, PropertyDT, cityFilter, bedRoomDT]);
+	}, [priceRange, interested, PropertyDT, cityFilter, bedRoomDT, sortingFilter]);
 
 
 	const locations = [
@@ -223,16 +236,17 @@ const Properties = ({ google }) => {
 	const [activeMarker, setActiveMarker] = useState(null);
 
 
-	const homeOptions = [
-		{ value: 'one', label: 'Homes for you' },
-		{ value: 'two', label: 'Homes One' },
-		{ value: 'three', label: 'Homes for you' },
-		{ value: 'four', label: 'Homes for you' },
-		{ value: 'five', label: 'Homes for you' },
-		{ value: 'six', label: 'Homes for you' }
+	const sortOptions = [
+		{ value: 'city', label: 'City' },
+		{ value: 'type', label: 'Type' },
+		{ value: 'status', label: 'Status' },
+		{ value: 'avalibleFrom', label: 'Avalible From' },
+		{ value: 'userId', label: 'User Id' },
+		{ value: 'createdAt', label: 'Created Date' },
+		{ value: 'updatedAt', label: 'Created Date' }
 	]
 
-	const [home, setHome] = useState({ value: 'one', label: 'Homes for you' })
+	const [home, setHome] = useState({ value: 'city', label: 'City' })
 
 	const responsive = {
 		superLargeDesktop: {
@@ -302,7 +316,7 @@ const Properties = ({ google }) => {
 		map.fitBounds(bounds);
 	};
 
-	const searchHandaler = () => {
+	const searchHandler = () => {
 		setCityFilter(city);
 	}
 	const clearFilterHandler = () => {
@@ -311,10 +325,14 @@ const Properties = ({ google }) => {
 			max: 100000
 		});
 		setInterested('');
-		setPropertyDT('');
+		setPropertyDT('all');
 		setCityFilter('');
 		searchInput.current.value = '';
-		
+
+	}
+
+	const sortingHandler = (e) => {
+		setSortingFilter(e.value);
 	}
 
 	return (
@@ -329,16 +347,16 @@ const Properties = ({ google }) => {
 									<div className='sc-1m7uu2m-0 lExsy'>
 										<div className='sc-1m7uu2m-6 bimUfb'>
 											<div className='sc-1m7uu2m-7 gPABWM'>
-												<div className='sc-1m7uu2m-8 ciruMZ'>
-													<form className='sc-1m7uu2m-1 cvMAEu'>
-														<input type="input" ref={searchInput} className='sc-1m7uu2m-2 jweLbp' />
-													</form>
+												<div className='sc-1m7uu2m-8 ciruMZ' style={{ width: '60%' }}>
+													{/* <form className='sc-1m7uu2m-1 cvMAEu'> */}
+													<input type="input" ref={searchInput} className='sc-1m7uu2m-2 jweLbp' />
+													{/* </form> */}
 												</div>
 												<div className='sc-1m7uu2m-9 fcca-di'>
 													<button className='sc-1m7uu2m-10 kpnlB' onClick={() => clearFilterHandler()}>
 														<RxCross2 />
 													</button>
-													<button className='sc-1m7uu2m-12 kcAJIc' onClick={() => searchHandaler()}>
+													<button className='sc-1m7uu2m-12 kcAJIc' onClick={() => searchHandler()}>
 														<GrFormSearch className='clDIaZ' />
 														Search
 													</button>
@@ -359,8 +377,9 @@ const Properties = ({ google }) => {
 													<button type="button" className="sc-125xj6w-0 cTGHMu">
 														<BsArrowDownUp />
 														Sort:
-														<Dropdown options={homeOptions} onChange={(e) => {
-															setHome(e)
+														<Dropdown options={sortOptions} onChange={(e) => {
+															setHome(e);
+															sortingHandler(e);
 														}} value={home.label} placeholder="Select advertising for" />
 													</button>
 												</div>
@@ -403,77 +422,87 @@ const Properties = ({ google }) => {
 
 							<section>
 								<div className='sc-1yg0wqx-0 kSqCqh'>
-									{
-										(filteredData.length > 0) ? filteredData.map((item, index) => {
-											return (
-												<div className='sc-1ti9q65-0 ggJHdq'>
-													<article className='sc-1e63uev-0 kydbmE'>
-														<Link to={`/properties/${item['_id']}`} className="sc-1fvt3tm-0 eRPHdN">
-															<div className='sc-3i257o-0 iMMhrs'>
-																<Carousel responsive={responsive} showDots={true} arrows={false} className="carosal">
-																	{item['photos'].map((img, i) => (
-																		<div className="body">
-																			<img src={img} loading="lazy" alt="1908/568 Collins Street, Melbourne VIC 3000" width={'100%'} />
-																		</div>
-																	))}
 
-																</Carousel>
-															</div>
-															<div className="sc-1e63uev-4 eyFERU">
-																<time dateTime="2023-05-02T05:00:00+00:00" className="sc-1e63uev-6 bKsBdR">Inspection Tue 2 May 3:00pm</time>
-																<div>
-																	<span title="Video" className="sc-1e63uev-5 cavmBy">
-																		<span className="sc-1h490wc-0 cmMTHu icon-wrapper" role="presentation">
-																			<FiPlayCircle className='sc-1h490wc-0 cmMTHu icon-wrapper' />
-																		</span>
-																	</span>
+									{(isLoading === true)
+										?
+										<div>
+											<h2>
+												Loading...
+											</h2>
+										</div>
+										:
+										(filteredData.length > 0)
+											?
+											filteredData.map((item, index) => {
+												return (
+													<div className='sc-1ti9q65-0 ggJHdq'>
+														<article className='sc-1e63uev-0 kydbmE'>
+															<Link to={`/properties/${item['_id']}`} className="sc-1fvt3tm-0 eRPHdN">
+																<div className='sc-3i257o-0 iMMhrs'>
+																	<Carousel responsive={responsive} showDots={true} arrows={false} className="carosal">
+																		{item['photos'].map((img, i) => (
+																			<div className="body">
+																				<img src={img} loading="lazy" alt="1908/568 Collins Street, Melbourne VIC 3000" width={'100%'} />
+																			</div>
+																		))}
+
+																	</Carousel>
 																</div>
-															</div>
-															<div className="sc-1e63uev-1 dyWqS">
-																<div aria-label="Property Listing Status Label" className="sc-1e63uev-2 emUQRl">
-																	<div className="sc-111qxzs-0 lfdbms">
-																		<h3 className="sc-111qxzs-1 mQJFy">New</h3>
+																<div className="sc-1e63uev-4 eyFERU">
+																	<time dateTime="2023-05-02T05:00:00+00:00" className="sc-1e63uev-6 bKsBdR">Inspection Tue 2 May 3:00pm</time>
+																	<div>
+																		<span title="Video" className="sc-1e63uev-5 cavmBy">
+																			<span className="sc-1h490wc-0 cmMTHu icon-wrapper" role="presentation">
+																				<FiPlayCircle className='sc-1h490wc-0 cmMTHu icon-wrapper' />
+																			</span>
+																		</span>
 																	</div>
 																</div>
-																<h3 className="sc-1e63uev-3 swIbZ">${item['price']}</h3>
-																<div className="ijsdcd-0 gWTwZn">
-																	<h2 className="ijsdcd-1 bjJoNh">{item['location']['pinLocation']}
-																		{/* <span className="ijsdcd-2 dHYeSr">Melbourne VIC 3000</span> */}
-																	</h2>
-																	{item['newHomeAmenities'] &&
-																		<ul className="rkh7f0-0 doqKNP">
-																			<li className="rkh7f0-1 ddpQTN">
-																				<span role="img" aria-label="Bed" className="rkh7f0-2 iMDBSi"><BiBed /></span> {item['newHomeAmenities']['room']}
-																			</li>
-																			<li className="rkh7f0-1 ddpQTN">
-																				<span role="img" aria-label="Bath" className="rkh7f0-2 iMDBSi"><TbBath /></span> {item['newHomeAmenities']['bath']}
-																			</li>
-																			<li className="rkh7f0-1 ddpQTN">
-																				<span role="img" aria-label="Car" className="rkh7f0-2 iMDBSi"><AiOutlineCar /></span> {item['newHomeAmenities']['parking']}
-																			</li>
-																		</ul>
-																	}
-																	<div className="mna96j-0 hcVMxo">
-																		<h4 className="mna96j-1 bWMeDG">Apartment for Rent</h4>
-																		<h4 className="mna96j-1 bWMeDG">NEW on Homely</h4>
+																<div className="sc-1e63uev-1 dyWqS">
+																	<div aria-label="Property Listing Status Label" className="sc-1e63uev-2 emUQRl">
+																		<div className="sc-111qxzs-0 lfdbms">
+																			<h3 className="sc-111qxzs-1 mQJFy">New</h3>
+																		</div>
+																	</div>
+																	<h3 className="sc-1e63uev-3 swIbZ">${item['price']}</h3>
+																	<div className="ijsdcd-0 gWTwZn">
+																		<h2 className="ijsdcd-1 bjJoNh">{item['location']['pinLocation']}
+																			{/* <span className="ijsdcd-2 dHYeSr">Melbourne VIC 3000</span> */}
+																		</h2>
+																		{item['newHomeAmenities'] &&
+																			<ul className="rkh7f0-0 doqKNP">
+																				<li className="rkh7f0-1 ddpQTN">
+																					<span role="img" aria-label="Bed" className="rkh7f0-2 iMDBSi"><BiBed /></span> {item['newHomeAmenities']['room']}
+																				</li>
+																				<li className="rkh7f0-1 ddpQTN">
+																					<span role="img" aria-label="Bath" className="rkh7f0-2 iMDBSi"><TbBath /></span> {item['newHomeAmenities']['bath']}
+																				</li>
+																				<li className="rkh7f0-1 ddpQTN">
+																					<span role="img" aria-label="Car" className="rkh7f0-2 iMDBSi"><AiOutlineCar /></span> {item['newHomeAmenities']['parking']}
+																				</li>
+																			</ul>
+																		}
+																		<div className="mna96j-0 hcVMxo">
+																			<h4 className="mna96j-1 bWMeDG">Apartment for Rent</h4>
+																			<h4 className="mna96j-1 bWMeDG">NEW on Homely</h4>
+																		</div>
 																	</div>
 																</div>
-															</div>
-															<div className="ou1x8i-0 kXLBZg">
-																<div className="sc-2sewnk-0 kSoMrH">
-																	<button type="button" title="Add to collection" aria-label="Add to collection" className="sc-1pk2hw7-0 bToTeF">
-																		<span width="32px" stroke="currentColor" role="presentation" className="suraxk-0 coJfiJ">
-																			<AiOutlineHeart className='sc-1h490wc-1 fmZa-d icon' />
-																		</span>
-																	</button>
+																<div className="ou1x8i-0 kXLBZg">
+																	<div className="sc-2sewnk-0 kSoMrH">
+																		<button type="button" title="Add to collection" aria-label="Add to collection" className="sc-1pk2hw7-0 bToTeF">
+																			<span width="32px" stroke="currentColor" role="presentation" className="suraxk-0 coJfiJ">
+																				<AiOutlineHeart className='sc-1h490wc-1 fmZa-d icon' />
+																			</span>
+																		</button>
+																	</div>
 																</div>
-															</div>
-														</Link>
-													</article>
-												</div>
+															</Link>
+														</article>
+													</div>
+												)
+											}
 											)
-										}
-										)
 											:
 											<>
 												<h3>No Record Found</h3>
@@ -542,10 +571,8 @@ const Properties = ({ google }) => {
 						</div>
 					</div>
 				</div>
+				{/* Filter */}
 				<div className="container demo">
-
-
-
 					<div className="modal right fade" id="myModal2" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel2">
 						<div className="modal-dialog" role="document">
 							<div className="modal-content">
@@ -574,7 +601,7 @@ const Properties = ({ google }) => {
 																	return (
 																		<button
 																			type="button"
-																			class={`sc-1oven2p-0 ${interested === item ? 'gZszZo' : 'jUPYmK'} `}
+																			className={`sc-1oven2p-0 ${interested === item ? 'gZszZo' : 'jUPYmK'} `}
 																			onClick={() => setInterested(item)}
 																		>{item}
 																		</button>
@@ -584,7 +611,7 @@ const Properties = ({ google }) => {
 															</div>
 														</div>
 													</div>
-													<div class={`sc-11yfpl8-0  ${slider ? 'ikzRsx' : 'kKonjn'}`}>
+													<div className={`sc-11yfpl8-0  ${slider ? 'ikzRsx' : 'kKonjn'}`}>
 														<h3 className="sc-11yfpl8-2 kPUAQh">
 															<button type="button" onClick={() => { setSlider(!slider) }} id="side-proptype-section" aria-label="Property type filters" aria-expanded="false" aria-controls="side-proptype-region" className="sc-11yfpl8-1 gsheHX">
 																<div className="sc-11yfpl8-3 iBnkJT">Price</div>
@@ -602,7 +629,7 @@ const Properties = ({ google }) => {
 																	range
 																	min={0}
 																	max={100000}
-																	defaultValue={[0, 100000]}
+																	value={[priceRange.min, priceRange.max]}
 																	onChange={handleSliderChange}
 																/>
 																<div className='range-number'>
@@ -616,7 +643,7 @@ const Properties = ({ google }) => {
 
 													</div>
 
-													<div class={`sc-11yfpl8-0  ${toogle1 ? 'ikzRsx' : 'kKonjn'}`}>
+													<div className={`sc-11yfpl8-0  ${toogle1 ? 'ikzRsx' : 'kKonjn'}`}>
 														<h3 className="sc-11yfpl8-2 kPUAQh">
 															<button type="button" onClick={() => { setToggle1(!toogle1) }} id="side-proptype-section" aria-label="Property type filters" aria-expanded="false" aria-controls="side-proptype-region" className="sc-11yfpl8-1 gsheHX">
 																<div className="sc-11yfpl8-3 iBnkJT">Property type</div>
@@ -652,7 +679,7 @@ const Properties = ({ google }) => {
 														}
 
 													</div>
-													<div class={`sc-11yfpl8-0  ${toogle2 ? 'ikzRsx' : 'kKonjn'}`}>
+													<div className={`sc-11yfpl8-0  ${toogle2 ? 'ikzRsx' : 'kKonjn'}`}>
 														<h3 className="sc-11yfpl8-2 kPUAQh">
 															<button type="button" onClick={() => { setToggle2(!toogle2) }} id="side-proptype-section" aria-label="Property type filters" aria-expanded="false" aria-controls="side-proptype-region" className="sc-11yfpl8-1 gsheHX">
 																<div className="sc-11yfpl8-3 iBnkJT">BedRooms</div>
@@ -719,6 +746,7 @@ const Properties = ({ google }) => {
 
 
 				</div>
+				{/* Filter */}
 			</article>
 
 
