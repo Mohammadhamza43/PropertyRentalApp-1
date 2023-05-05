@@ -1411,3 +1411,228 @@ color: #fff;
     width: 24px;
     height: 24px;
 }
+
+.IGHUE {
+    position: absolute;
+    bottom: 92px;
+    left: 0px;
+    right: 0px;
+    margin: 0px auto;
+    max-width: 530px;
+    max-height: 420px;
+    pointer-events: all;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 6px 16px 0px;
+    border-radius: 12px;
+    background-color: rgb(255, 255, 255);
+    padding: 16px 16px 4px;
+    overflow: auto;
+}
+
+.IGHUE article {
+    margin-bottom: 12px;
+}
+
+.kpjXrq {
+    position: relative;
+    width: 100%;
+    background-color: rgb(255, 255, 255);
+    user-select: none;
+    border-radius: 12px;
+    border: 1px solid rgb(224, 227, 229);
+}
+
+.kpjXrq > a {
+    border-radius: 12px;
+}
+
+
+.eRPHdN {
+    width: 100%;
+    height: 100%;
+    color: rgb(52, 61, 66);
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: transparent;
+    display: flex;
+}
+
+.gOrroY {
+    display: inline-flex;
+    -webkit-box-align: center;
+    align-items: center;
+    position: absolute;
+    right: 6px;
+    bottom: 86px;
+}
+
+.bToTeF {
+    position: relative;
+    margin: 0px;
+    padding: 8px;
+    line-height: 24px;
+    color: rgb(52, 61, 66);
+    overflow: hidden;
+    outline: 0px;
+    border: 0px;
+    border-radius: 24px;
+    background: transparent;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+.exDrMm {
+    position: relative;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    pointer-events: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.exDrMm .icon {
+    vertical-align: top;
+}
+
+.exDrMm svg {
+    vertical-align: top;
+    stroke: currentcolor;
+}
+svg:not(:root) {
+    overflow: hidden;
+}
+.fKOyQl {
+    display: inline-block;
+    fill: currentcolor;
+    pointer-events: none;
+    width: 24px;
+    height: 24px;
+}
+
+.bXIqeS {
+    position: relative;
+    overflow: hidden;
+    color: rgb(255, 255, 255);
+    background-color: rgb(224, 227, 229);
+    background-size: cover;
+    background-position: 50% center;
+    border-radius: 12px 0px 0px 12px;
+    flex-shrink: 0;
+    width: 180px;
+    height: 131px;
+    will-change: transform;
+}
+
+.fade.in {
+    opacity: 1;
+}
+
+.bIhZyK {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    padding-bottom: 72.77%;
+    border-radius: 0px;
+}
+.fade {
+    opacity: 0;
+    transition: opacity 0.15s linear 0s;
+}
+
+.bIhZyK img {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: inherit;
+    width: auto;
+    height: 100%;
+    -webkit-user-drag: none;
+    position: absolute !important;
+}
+
+
+img {
+    display: inline-block;
+    vertical-align: middle;
+    max-width: 100%;
+    height: auto;
+}
+
+.dOPMYK {
+    padding: 20px 16px 20px 20px;
+    height: auto;
+    min-width: 0px;
+    position: inherit;
+    border-radius: 0px 0px 12px 12px;
+}
+
+.swIbZ {
+    margin-bottom: 6px;
+    margin-right: 40px;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 25px;
+    color: rgb(16, 16, 16);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+}
+
+.gWTwZn {
+    line-height: 20px;
+    font-size: 14px;
+    color: rgb(52, 61, 66);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.bjJoNh {
+    margin: 0px 40px 6px 0px;
+    font-size: 14px;
+    line-height: 25px;
+    color: rgb(52, 61, 66);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.iZuNeb {
+    display: inline;
+}
+
+.doqKNP {
+    display: flex;
+    margin: 0px;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 25px;
+}
+
+.ddpQTN {
+    display: inline-flex;
+    -webkit-box-align: center;
+    align-items: center;
+    list-style-type: none;
+}
+
+.iMDBSi {
+    display: inline-block;
+    margin-right: 4px;
+    width: 24px;
+    height: 24px;
+    color: rgb(16, 16, 16);
+}
+
+.fKOyQl {
+    display: inline-block;
+    fill: currentcolor;
+    pointer-events: none;
+    width: 24px;
+    height: 24px;
+}
