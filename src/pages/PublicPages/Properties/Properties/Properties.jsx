@@ -1,38 +1,36 @@
-import React, { useEffect, useRef } from 'react'
-import Carousel from 'react-multi-carousel';
-import Header from '../../../../shared/Header/Header'
-import { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { RxCross2 } from 'react-icons/rx';
-import { GrFormSearch } from 'react-icons/gr';
-import { BiFilter } from 'react-icons/bi';
-import { HiOutlineBellAlert } from 'react-icons/hi2'
-import { BiBed } from 'react-icons/bi'
-import { BsArrowDownUp, BsFillCheckSquareFill } from 'react-icons/bs'
-import { FiPlayCircle } from 'react-icons/fi'
-import { TbBath } from 'react-icons/tb'
-import { BiBath } from 'react-icons/bi'
-import { AiOutlineCar, AiOutlineHeart } from 'react-icons/ai'
-import { IoIosArrowDown } from 'react-icons/io'
-import { GrCheckboxSelected, GrCheckbox } from 'react-icons/gr'
-import image1 from '.././../../../assets/media/images/image_1.jpg'
-import Dropdown from 'react-dropdown';
-import 'react-dropdown/style.css';
-import './Properties.css';
-import 'react-multi-carousel/lib/styles.css';
-import Slider, { Range } from 'rc-slider';
-import 'rc-slider/assets/index.css';
+import React, { useEffect, useRef } from "react";
+import Carousel from "react-multi-carousel";
+import Header from "../../../../shared/Header/Header";
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { RxCross2 } from "react-icons/rx";
+import { GrFormSearch } from "react-icons/gr";
+import { BiFilter } from "react-icons/bi";
+import { HiOutlineBellAlert } from "react-icons/hi2";
+import { BiBed } from "react-icons/bi";
+import { BsArrowDownUp, BsFillCheckSquareFill } from "react-icons/bs";
+import { FiPlayCircle } from "react-icons/fi";
+import { TbBath } from "react-icons/tb";
+import { BiBath } from "react-icons/bi";
+import { AiOutlineCar, AiOutlineHeart } from "react-icons/ai";
+import { IoIosArrowDown } from "react-icons/io";
+import { GrCheckboxSelected, GrCheckbox } from "react-icons/gr";
+import image1 from ".././../../../assets/media/images/image_1.jpg";
+import Dropdown from "react-dropdown";
+import "react-dropdown/style.css";
+import "./Properties.css";
+import "react-multi-carousel/lib/styles.css";
+import Slider, { Range } from "rc-slider";
+import "rc-slider/assets/index.css";
 
-import { Map, InfoWindow, Marker, GoogleApiWrapper } from 'google-maps-react';
-import axios from 'axios';
-
+import { Map, InfoWindow, Marker, GoogleApiWrapper } from "google-maps-react";
+import axios from "axios";
 
 const apiKey = process.env.REACT_APP_API_KEY;
 const mapApiJs = process.env.REACT_APP_MAP_API_JS;
 const geocodeJson = process.env.REACT_APP_GEOCODE_JSON;
 
 const Properties = ({ google }) => {
-
   const location = useLocation();
   var purpose,
     propertyType,
@@ -121,7 +119,6 @@ const Properties = ({ google }) => {
         const zip = this.zip ? this.zip + ", " : "";
         const state = this.state ? this.state + ", " : "";
         return city + zip + state + this.country;
-
       },
     };
 
@@ -130,7 +127,6 @@ const Properties = ({ google }) => {
     }
 
     place.address_components.forEach((component) => {
-
       const types = component.types;
       //   console.log(component.types);
       const value = component.long_name;
@@ -144,7 +140,6 @@ const Properties = ({ google }) => {
 
       // Extract state
       if (types.includes("administrative_area_level_1")) {
-
         address.state = value;
         console.log(address.state + "state");
       }
@@ -166,16 +161,13 @@ const Properties = ({ google }) => {
     });
 
     return address;
-
   };
-
 
   //init autocomplete
   const initAutocomplete = () => {
     if (!searchInput.current) return;
 
     var options = {
-
       types: ["(cities)"],
       // componentRestrictions: {country: "us"}
     };
@@ -201,7 +193,7 @@ const Properties = ({ google }) => {
 
   useEffect(() => {
     setLoading(true);
-    const filterData = () => {
+    const filterData = async () => {
       var url = `https://walrus-app-ovpy2.ondigitalocean.app/property/list`;
       if (priceRange) {
         url += `?&priceFrom=${priceRange["min"]}&priceTo=${priceRange["max"]}`;
@@ -248,8 +240,20 @@ const Properties = ({ google }) => {
       axios({
         method: "get",
         url: url,
-      }).then(function (response) {
-        setFilteredData(response.data.data);
+      }).then(async function (response) {
+        var res = response.data.data;
+        const uploadedfiles = await Promise.all(
+          res.map(async (item, index) => {
+            var latlng = await getLatLong(item.location.address);
+            latlng = latlng.data.results[0].geometry.location;
+            item["location"]["position"] = {
+              lat: latlng["lat"],
+              ln: latlng["lng"],
+            };
+          })
+        );
+
+        setFilteredData(res);
         setLoading(false);
       });
     };
@@ -264,17 +268,18 @@ const Properties = ({ google }) => {
     sortingFilter,
   ]);
 
-
   const locations = [
     {
       id: 1,
       name: "Chicago, Illinois",
-      position: { lat: 37.778519, lng: -122.40564 }
+      position: { lat: 37.778519, lng: -122.40564 },
+      full_address: "asdfasdfasdf asdf",
     },
     {
       id: 2,
       name: "Denver, Colorado",
       position: { lat: 37.759703, lng: -122.428093 },
+      full_address: "ABC 1234567",
     },
   ];
 
@@ -282,7 +287,7 @@ const Properties = ({ google }) => {
   const [loader, setLoader] = useState(true);
   const [proData, setProData] = useState("");
   const [activeMarker, setActiveMarker] = useState(null);
-
+  const [markerDetail, setMarkerDetail] = useState(null);
   const sortOptions = [
     { value: "city", label: "City" },
     { value: "type", label: "Type" },
@@ -297,38 +302,37 @@ const Properties = ({ google }) => {
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
-      items: 1
+      items: 1,
     },
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
-      items: 1
+      items: 1,
     },
     tablet: {
       breakpoint: { max: 1024, min: 464 },
-      items: 1
+      items: 1,
     },
     mobile: {
       breakpoint: { max: 464, min: 0 },
-      items: 1
-    }
+      items: 1,
+    },
   };
 
-  const [toogle1, setToggle1] = useState(false)
-  const [toogle2, setToggle2] = useState(false)
+  const [toogle1, setToggle1] = useState(false);
+  const [toogle2, setToggle2] = useState(false);
 
-
-  const [slider, setSlider] = useState(false)
+  const [slider, setSlider] = useState(false);
   const propertydata = [
-    { name: 'All', value: 'all', count: 1876 },
-    { name: 'New Home', value: 'newHome', count: 0 },
-    { name: 'Room', value: 'room', count: 20 },
-    { name: 'Office', value: 'office', count: 20 },
-    { name: 'Land', value: 'land', count: 200 },
-    { name: 'Building', value: 'building', count: 1 },
-    { name: 'Garage', value: 'garage', count: 20 },
-    { name: 'Commercial Properties', value: 'commercialProperties', count: 23 },
-    { name: 'Home', value: 'home', count: 10 }
-  ]
+    { name: "All", value: "all", count: 1876 },
+    { name: "New Home", value: "newHome", count: 0 },
+    { name: "Room", value: "room", count: 20 },
+    { name: "Office", value: "office", count: 20 },
+    { name: "Land", value: "land", count: 200 },
+    { name: "Building", value: "building", count: 1 },
+    { name: "Garage", value: "garage", count: 20 },
+    { name: "Commercial Properties", value: "commercialProperties", count: 23 },
+    { name: "Home", value: "home", count: 10 },
+  ];
   const bedRoomdata = [
     { name: 1, count: 333 },
     { name: 2, count: 22 },
@@ -338,7 +342,6 @@ const Properties = ({ google }) => {
   ];
   const intresteddata = ["Buy", "Rent"];
 
-
   const handleSliderChange = (value) => {
     // update the price range when slider value changes
     setPriceRange({
@@ -347,11 +350,13 @@ const Properties = ({ google }) => {
     });
   };
 
-  const handleActiveMarker = (marker) => {
+  const handleActiveMarker = (props, marker) => {
+    console.log(props);
     if (marker === activeMarker) {
       return;
     }
     setActiveMarker(marker);
+    setMarkerDetail(props);
   };
 
   const handleOnLoad = (map) => {
@@ -381,6 +386,17 @@ const Properties = ({ google }) => {
 
   const sortingHandler = (e) => {
     setSortingFilter(e.value);
+  };
+  const getLatLong = (address) => {
+    var apiUrl =
+      "https://maps.googleapis.com/maps/api/geocode/json?address=" +
+      address +
+      "&key=" +
+      apiKey;
+
+    var res = axios.get(apiUrl);
+    console.log(res);
+    return res;
   };
 
   return (
@@ -419,7 +435,6 @@ const Properties = ({ google }) => {
                             onClick={() => searchHandler()}
                           >
                             <GrFormSearch className="clDIaZ" />
-
                             Search
                           </button>
                         </div>
@@ -508,7 +523,7 @@ const Properties = ({ google }) => {
                 <div className="u8rllx-2 iHZmYi">
                   <h2 className="u8rllx-3 gCIxxJ">
                     {filteredData.length} properties including surrounding and
-                    nearby suburbs
+                    nearby suburbs {JSON.stringify(filteredData)}
                   </h2>
                 </div>
               </header>
@@ -664,115 +679,162 @@ const Properties = ({ google }) => {
             <div className="r0xktz-2 gPahXz">
               <div style={{ position: "relative", height: "100%" }}>
                 <div style={{ width: 600, height: 450 }}>
-                  <Map
-                    google={google}
-                    containerStyle={{
-                      position: "static",
-                      width: "100%",
-                      height: "100%",
-                    }}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                    }}
-                    center={locations[0]['position']}
-                    initialCenter={locations[0]['position']}
-                    zoom={locations.length === 1 ? 15 : 13}
-                    disableDefaultUI={true}
-                  >
-                    {
-                      locations.map(({ id, name, position }) => {
-                        return (
+                  {typeof filteredData !== "undefined" &&
+                  filteredData !== null &&
+                  filteredData.length > 0 ? (
+                    <Map
+                      google={google}
+                      containerStyle={{
+                        position: "static",
+                        width: "100%",
+                        height: "100%",
+                      }}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                      }}
+                      center={filteredData[0]["location"]["position"]}
+                      initialCenter={filteredData[0]["location"]["position"]}
+                      zoom={filteredData.length === 1 ? 15 : 13}
+                      disableDefaultUI={true}
+                      streetViewControl={true}
+                    >
+                      {filteredData.map(
+                        ({ id, name, location, full_address }) => {
+                          return (
+                            <Marker
+                              onClick={handleActiveMarker}
+                              title={name}
+                              name={name}
+                              position={location.position}
+                              address={full_address}
+                              // icon={{
+                              //   title:"Test",
 
-                          <Marker
-                            onClick={() => handleActiveMarker(id)}
-                            title={name}
-                            name={name}
-                            position={position}
+                              //   // url: "https://www.svgrepo.com/show/1276/map-pin.svg",
+                              //   anchor: new google.maps.Point(20, 20),
+                              //   scaledSize: new google.maps.Size(20, 20),
+                              // }}
+                            ></Marker>
+                          );
+                        }
+                      )}
 
-                            icon={{
-                              url: "https://www.svgrepo.com/show/1276/map-pin.svg",
-                              anchor: new google.maps.Point(20, 20),
-                              scaledSize: new google.maps.Size(20, 20)
-                            }}
+                      <InfoWindow marker={activeMarker} visible={true}>
+                        <div className="v95puu-6">
+                          <article
+                            aria-label="Property Listing"
+                            data-listing-id="9896476"
+                            className="sc-1e63uev-0 kpjXrq"
                           >
-                          </Marker>
-                        )
-                      })
-                    }
-                  </Map>
+                            <a
+                              aria-label="609/228 Abeckett Street, Melbourne VIC 3000"
+                              href="/homes/609-228-abeckett-street-melbourne-vic-3000/9896476"
+                              className="sc-1fvt3tm-0 eRPHdN"
+                            >
+                              <div className="sc-3i257o-0 bXIqeS">
+                                <div className="sc-1qqt7z5-0 bIhZyK fade in">
+                                  <img
+                                    src={image1}
+                                    loading="lazy"
+                                    alt="609/228 Abeckett Street, Melbourne VIC 3000"
+                                  />
+                                </div>
+                              </div>
+                              <div className="sc-1e63uev-1 dOPMYK">
+                                <h3 className="sc-1e63uev-3 swIbZ">
+                                  $290,000 -$319,000
+                                </h3>
+                                <div className="ijsdcd-0 gWTwZn">
+                                  <h2 className="ijsdcd-1 bjJoNh">
+                                    {markerDetail?.address}
+                                  </h2>
+                                  <ul className="rkh7f0-0 doqKNP">
+                                    <li className="rkh7f0-1 ddpQTN">
+                                      <span
+                                        role="img"
+                                        aria-label="Bed"
+                                        className="rkh7f0-2 iMDBSi"
+                                      >
+                                        <BiBed className="sc-1h490wc-1 fKOyQl icon" />
+                                      </span>{" "}
+                                      1
+                                    </li>
+                                    <li className="rkh7f0-1 ddpQTN">
+                                      <span
+                                        role="img"
+                                        aria-label="Bath"
+                                        className="rkh7f0-2 iMDBSi"
+                                      >
+                                        <BiBath className="sc-1h490wc-1 fKOyQl icon" />
+                                      </span>{" "}
+                                      1
+                                    </li>
+                                    <li className="rkh7f0-1 ddpQTN">
+                                      <span
+                                        role="img"
+                                        aria-label="Car"
+                                        className="rkh7f0-2 iMDBSi"
+                                      >
+                                        <AiOutlineCar className="sc-1h490wc-1 fKOyQl icon" />
+                                      </span>{" "}
+                                      0
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </a>
+                            <div className="ou1x8i-0 gOrroY">
+                              <button
+                                type="button"
+                                title="Add to collection"
+                                aria-label="Add to collection"
+                                className="sc-1pk2hw7-0 bToTeF"
+                              >
+                                <span
+                                  width="24px"
+                                  stroke="currentColor"
+                                  role="presentation"
+                                  className="suraxk-0 exDrMm"
+                                >
+                                  <AiOutlineHeart className="sc-1h490wc-1 fKOyQl icon" />
+                                </span>
+                              </button>
+                            </div>
+                          </article>
+                        </div>
+                      </InfoWindow>
+                    </Map>
+                  ) : null}
                 </div>
                 <div className="v95puu-4 fuUXys">
-
-                  <span className="LoadingFade" style={{ opacity: 1, display: "inline-block" }}>
-                    <button type="button" className="sc-2vypzd-0 RMyYB">Search this area</button>
+                  <span
+                    className="LoadingFade"
+                    style={{ opacity: 1, display: "inline-block" }}
+                  >
+                    <button type="button" className="sc-2vypzd-0 RMyYB">
+                      Search this area
+                    </button>
                   </span>
-                  <span className="LoadingFade" style={{ opacity: 1, display: "inline-block" }}>
-                    <button type="button" className="sc-2vypzd-0 boRNLg">Show more pins</button>
+                  <span
+                    className="LoadingFade"
+                    style={{ opacity: 1, display: "inline-block" }}
+                  >
+                    <button type="button" className="sc-2vypzd-0 boRNLg">
+                      Show more pins
+                    </button>
                   </span>
                 </div>
 
                 {/* property market tooltip */}
                 {/* Start */}
 
-
-                <div class="v95puu-6 IGHUE">
-                  <article aria-label="Property Listing" data-listing-id="9896476" class="sc-1e63uev-0 kpjXrq">
-                    <a aria-label="609/228 Abeckett Street, Melbourne VIC 3000" href="/homes/609-228-abeckett-street-melbourne-vic-3000/9896476" class="sc-1fvt3tm-0 eRPHdN">
-                      <div class="sc-3i257o-0 bXIqeS">
-                        <div class="sc-1qqt7z5-0 bIhZyK fade in">
-                          <img src={image1} loading="lazy" alt="609/228 Abeckett Street, Melbourne VIC 3000" />
-                        </div>
-                      </div>
-                      <div class="sc-1e63uev-1 dOPMYK">
-                        <h3 class="sc-1e63uev-3 swIbZ">$290,000 -$319,000</h3>
-                        <div class="ijsdcd-0 gWTwZn">
-                          <h2 class="ijsdcd-1 bjJoNh">609/228 Abeckett Street,
-                            <span class="ijsdcd-2 iZuNeb">Melbourne VIC 3000</span>
-                          </h2>
-                          <ul class="rkh7f0-0 doqKNP">
-                            <li class="rkh7f0-1 ddpQTN">
-                              <span role="img" aria-label="Bed" class="rkh7f0-2 iMDBSi">
-                                {/* <svg class="sc-1h490wc-1 fKOyQl icon" aria-hidden="false" rotate="0">
-                                  <use xlink:href="#icon-bed"></use></svg> */}
-                                  <BiBed className='sc-1h490wc-1 fKOyQl icon'/>
-                              </span> 1</li>
-                            <li class="rkh7f0-1 ddpQTN">
-                              <span role="img" aria-label="Bath" class="rkh7f0-2 iMDBSi">
-                                {/* <svg class="sc-1h490wc-1 fKOyQl icon" aria-hidden="false" rotate="0">
-                                  <use xlink:href="#icon-bath"></use></svg> */}
-                                  <BiBath className='sc-1h490wc-1 fKOyQl icon'/>
-                              </span> 1</li>
-                            <li class="rkh7f0-1 ddpQTN">
-                              <span role="img" aria-label="Car" class="rkh7f0-2 iMDBSi">
-                                {/* <svg class="sc-1h490wc-1 fKOyQl icon" aria-hidden="false" rotate="0">
-                                  <use xlink:href="#icon-car"></use>
-                                </svg> */}
-                                <AiOutlineCar className='sc-1h490wc-1 fKOyQl icon'/>
-                              </span> 0</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </a>
-                    <div class="ou1x8i-0 gOrroY">
-                      <button type="button" title="Add to collection" aria-label="Add to collection" class="sc-1pk2hw7-0 bToTeF">
-                        <span width="24px" stroke="currentColor" role="presentation" class="suraxk-0 exDrMm">
-                          {/* <svg class="sc-1h490wc-1 fKOyQl icon" aria-hidden="false" rotate="0">
-                            <use xlink:href="#icon-heart-24"></use>
-                            </svg> */}
-                            <AiOutlineHeart className='sc-1h490wc-1 fKOyQl icon' />
-                        </span>
-                      </button>
-                    </div>
-                  </article>
-                </div>
-
-
                 {/* End */}
 
-
                 <div className="v95puu-2 dTmuAW">
-                  <h2 className="nf405-0 jFAjTY">50 of 1,314 properties · Median list price $650</h2>
+                  <h2 className="nf405-0 jFAjTY">
+                    50 of 1,314 properties · Median list price $650
+                  </h2>
                 </div>
               </div>
             </div>
@@ -780,202 +842,319 @@ const Properties = ({ google }) => {
         </div>
         {/* Filter */}
         <div className="container demo">
-
-          <div className="modal right fade" id="myModal2" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel2">
+          <div
+            className="modal right fade"
+            id="myModal2"
+            tabIndex="-1"
+            role="dialog"
+            aria-labelledby="myModalLabel2"
+          >
             <div className="modal-dialog" role="document">
               <div className="modal-content">
-                <div className='sc-1kr6rly-2 fycLmA'>
-                  <div className='sc-1y0l0ze-0 jOespU'>
+                <div className="sc-1kr6rly-2 fycLmA">
+                  <div className="sc-1y0l0ze-0 jOespU">
                     <header className="sc-1y0l0ze-1 etQrqG">
                       <div className="sc-1y0l0ze-2 hktXrC">
                         <h2 className="sc-1y0l0ze-3 cbRSA">Filters</h2>
-                        <button className="sc-1y0l0ze-4 lcxzRD" data-dismiss="modal" aria-label="Close">
-                          <RxCross2 className='sc-1h490wc-1 fKOyQl icon' />
+                        <button
+                          className="sc-1y0l0ze-4 lcxzRD"
+                          data-dismiss="modal"
+                          aria-label="Close"
+                        >
+                          <RxCross2 className="sc-1h490wc-1 fKOyQl icon" />
                         </button>
                       </div>
                     </header>
-                    <div className='if8eux-0 hbxTUi'>
-                      <div className='sc-1y0l0ze-5 gOGxgr'>
-                        <div className='sc-136vf55-0 equYRv'>
-                          <div className='sc-11yfpl8-0 cZxCSd'>
-                            <h3 className='sc-11yfpl8-2 kvGcLL'>
-                              <button type="button" id="side-mode-section" className="sc-11yfpl8-1 jcRztj">
-                                <div className="sc-11yfpl8-3 iBnkJT">I'm interested in...</div>
+                    <div className="if8eux-0 hbxTUi">
+                      <div className="sc-1y0l0ze-5 gOGxgr">
+                        <div className="sc-136vf55-0 equYRv">
+                          <div className="sc-11yfpl8-0 cZxCSd">
+                            <h3 className="sc-11yfpl8-2 kvGcLL">
+                              <button
+                                type="button"
+                                id="side-mode-section"
+                                className="sc-11yfpl8-1 jcRztj"
+                              >
+                                <div className="sc-11yfpl8-3 iBnkJT">
+                                  I'm interested in...
+                                </div>
                               </button>
                             </h3>
-                            <div id="side-mode-region" role="region" aria-labelledby="side-mode-section">
-                              <div aria-label="Search mode"><div className="sc-10mewe-0 fXoFer">
-                                {intresteddata.map((item, i) => {
-                                  return (
-                                    <button
-                                      type="button"
-                                      className={`sc-1oven2p-0 ${interested === item ? 'gZszZo' : 'jUPYmK'} `}
-                                      onClick={() => setInterested(item)}
-                                    >{item}
-                                    </button>
-                                  )
-                                })}
-                              </div>
+                            <div
+                              id="side-mode-region"
+                              role="region"
+                              aria-labelledby="side-mode-section"
+                            >
+                              <div aria-label="Search mode">
+                                <div className="sc-10mewe-0 fXoFer">
+                                  {intresteddata.map((item, i) => {
+                                    return (
+                                      <button
+                                        type="button"
+                                        className={`sc-1oven2p-0 ${
+                                          interested === item
+                                            ? "gZszZo"
+                                            : "jUPYmK"
+                                        } `}
+                                        onClick={() => setInterested(item)}
+                                      >
+                                        {item}
+                                      </button>
+                                    );
+                                  })}
+                                </div>
                               </div>
                             </div>
                           </div>
-                          <div className={`sc-11yfpl8-0  ${slider ? 'ikzRsx' : 'kKonjn'}`}>
+                          <div
+                            className={`sc-11yfpl8-0  ${
+                              slider ? "ikzRsx" : "kKonjn"
+                            }`}
+                          >
                             <h3 className="sc-11yfpl8-2 kPUAQh">
-                              <button type="button" onClick={() => { setSlider(!slider) }} id="side-proptype-section" aria-label="Property type filters" aria-expanded="false" aria-controls="side-proptype-region" className="sc-11yfpl8-1 gsheHX">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setSlider(!slider);
+                                }}
+                                id="side-proptype-section"
+                                aria-label="Property type filters"
+                                aria-expanded="false"
+                                aria-controls="side-proptype-region"
+                                className="sc-11yfpl8-1 gsheHX"
+                              >
                                 <div className="sc-11yfpl8-3 iBnkJT">Price</div>
                                 <div className="sc-11yfpl8-4 kpgnTE">
-                                  <span className="sc-1h490wc-0 cZohV icon-wrapper" role="presentation">
-                                    <IoIosArrowDown className='sc-1h490wc-1 clDIaZ icon' />
+                                  <span
+                                    className="sc-1h490wc-0 cZohV icon-wrapper"
+                                    role="presentation"
+                                  >
+                                    <IoIosArrowDown className="sc-1h490wc-1 clDIaZ icon" />
                                   </span>
                                 </div>
                               </button>
                             </h3>
                             <div className="sc-11yfpl8-5 gbsVeP"></div>
 
-                            {slider &&
-                              <div id="side-proptype-region" role="region" aria-labelledby="side-proptype-section" className="hide"><div>
-                                <Slider
-                                  range
-                                  min={0}
-                                  max={100000}
-                                  value={[priceRange.min, priceRange.max]}
-                                  onChange={handleSliderChange}
-                                />
-                                <div className='range-number'>
-                                  <div>0</div>
-                                  <div>${priceRange.min} - ${priceRange.max}</div>
-                                  <div>100000</div>
+                            {slider && (
+                              <div
+                                id="side-proptype-region"
+                                role="region"
+                                aria-labelledby="side-proptype-section"
+                                className="hide"
+                              >
+                                <div>
+                                  <Slider
+                                    range
+                                    min={0}
+                                    max={100000}
+                                    value={[priceRange.min, priceRange.max]}
+                                    onChange={handleSliderChange}
+                                  />
+                                  <div className="range-number">
+                                    <div>0</div>
+                                    <div>
+                                      ${priceRange.min} - ${priceRange.max}
+                                    </div>
+                                    <div>100000</div>
+                                  </div>
                                 </div>
                               </div>
-                              </div>
-                            }
-
+                            )}
                           </div>
 
-                          <div className={`sc-11yfpl8-0  ${toogle1 ? 'ikzRsx' : 'kKonjn'}`}>
+                          <div
+                            className={`sc-11yfpl8-0  ${
+                              toogle1 ? "ikzRsx" : "kKonjn"
+                            }`}
+                          >
                             <h3 className="sc-11yfpl8-2 kPUAQh">
-                              <button type="button" onClick={() => { setToggle1(!toogle1) }} id="side-proptype-section" aria-label="Property type filters" aria-expanded="false" aria-controls="side-proptype-region" className="sc-11yfpl8-1 gsheHX">
-                                <div className="sc-11yfpl8-3 iBnkJT">Property type</div>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setToggle1(!toogle1);
+                                }}
+                                id="side-proptype-section"
+                                aria-label="Property type filters"
+                                aria-expanded="false"
+                                aria-controls="side-proptype-region"
+                                className="sc-11yfpl8-1 gsheHX"
+                              >
+                                <div className="sc-11yfpl8-3 iBnkJT">
+                                  Property type
+                                </div>
                                 <div className="sc-11yfpl8-4 kpgnTE">
-                                  <span className="sc-1h490wc-0 cZohV icon-wrapper" role="presentation">
-                                    <IoIosArrowDown className='sc-1h490wc-1 clDIaZ icon' />
-
+                                  <span
+                                    className="sc-1h490wc-0 cZohV icon-wrapper"
+                                    role="presentation"
+                                  >
+                                    <IoIosArrowDown className="sc-1h490wc-1 clDIaZ icon" />
                                   </span>
                                 </div>
                               </button>
                             </h3>
                             <div className="sc-11yfpl8-5 gbsVeP"></div>
 
-                            {toogle1 &&
-                              <div id="side-proptype-region" role="region" aria-labelledby="side-proptype-section" className="hide"><div>
-                                <ul role="group" className="sc-316fzr-0 jDEIHe">
-                                  {propertydata.map((item, i) => {
-                                    return (
-                                      <li className="sc-1tyddxu-0 hRTczC">
-                                        <button type="button" className="sc-10375bz-0 inAQUt" onClick={() => { setPropertyDT(item.value) }}>
-                                          {PropertyDT === item.value ?
-                                            <GrCheckboxSelected className='chack-icons' />
-                                            :
-                                            <GrCheckbox className='sc-1h490wc-1 clDIaZ icon' />
-                                          }
-                                          <span aria-label="All Property Types">{item.name}</span>
-                                          <span aria-label="1873 properties" className="sc-1uzywjh-0 emTcCo">{item.count}</span>
-                                        </button>
-                                      </li>
-                                    )
-                                  })}
-                                </ul>
+                            {toogle1 && (
+                              <div
+                                id="side-proptype-region"
+                                role="region"
+                                aria-labelledby="side-proptype-section"
+                                className="hide"
+                              >
+                                <div>
+                                  <ul
+                                    role="group"
+                                    className="sc-316fzr-0 jDEIHe"
+                                  >
+                                    {propertydata.map((item, i) => {
+                                      return (
+                                        <li className="sc-1tyddxu-0 hRTczC">
+                                          <button
+                                            type="button"
+                                            className="sc-10375bz-0 inAQUt"
+                                            onClick={() => {
+                                              setPropertyDT(item.value);
+                                            }}
+                                          >
+                                            {PropertyDT === item.value ? (
+                                              <GrCheckboxSelected className="chack-icons" />
+                                            ) : (
+                                              <GrCheckbox className="sc-1h490wc-1 clDIaZ icon" />
+                                            )}
+                                            <span aria-label="All Property Types">
+                                              {item.name}
+                                            </span>
+                                            <span
+                                              aria-label="1873 properties"
+                                              className="sc-1uzywjh-0 emTcCo"
+                                            >
+                                              {item.count}
+                                            </span>
+                                          </button>
+                                        </li>
+                                      );
+                                    })}
+                                  </ul>
+                                </div>
                               </div>
-                              </div>
-                            }
-
+                            )}
                           </div>
-                          <div className={`sc-11yfpl8-0  ${toogle2 ? 'ikzRsx' : 'kKonjn'}`}>
+                          <div
+                            className={`sc-11yfpl8-0  ${
+                              toogle2 ? "ikzRsx" : "kKonjn"
+                            }`}
+                          >
                             <h3 className="sc-11yfpl8-2 kPUAQh">
-                              <button type="button" onClick={() => { setToggle2(!toogle2) }} id="side-proptype-section" aria-label="Property type filters" aria-expanded="false" aria-controls="side-proptype-region" className="sc-11yfpl8-1 gsheHX">
-                                <div className="sc-11yfpl8-3 iBnkJT">BedRooms</div>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setToggle2(!toogle2);
+                                }}
+                                id="side-proptype-section"
+                                aria-label="Property type filters"
+                                aria-expanded="false"
+                                aria-controls="side-proptype-region"
+                                className="sc-11yfpl8-1 gsheHX"
+                              >
+                                <div className="sc-11yfpl8-3 iBnkJT">
+                                  BedRooms
+                                </div>
                                 <div className="sc-11yfpl8-4 kpgnTE">
-                                  <span className="sc-1h490wc-0 cZohV icon-wrapper" role="presentation">
-                                    <IoIosArrowDown className='sc-1h490wc-1 clDIaZ icon' />
-
+                                  <span
+                                    className="sc-1h490wc-0 cZohV icon-wrapper"
+                                    role="presentation"
+                                  >
+                                    <IoIosArrowDown className="sc-1h490wc-1 clDIaZ icon" />
                                   </span>
                                 </div>
                               </button>
                             </h3>
                             <div className="sc-11yfpl8-5 gbsVeP"></div>
 
-                            {toogle2 &&
-                              <div id="side-proptype-region" role="region" aria-labelledby="side-proptype-section" className="hide"><div>
-                                <ul role="group" className="sc-316fzr-0 jDEIHe">
-                                  {bedRoomdata.map((item, i) => {
-                                    return (
-                                      <li className="sc-1tyddxu-0 hRTczC">
-                                        <button type="button" className="sc-10375bz-0 inAQUt" onClick={() => { setBedRoomDT(item.name) }}>
-                                          {bedRoomDT === item.name ?
-                                            <GrCheckboxSelected className='chack-icons' />
-                                            :
-                                            <GrCheckbox className='sc-1h490wc-1 clDIaZ icon' />
-                                          }
-                                          <span aria-label="All Property Types">{item.name}</span>
-                                          <span aria-label="1873 properties" className="sc-1uzywjh-0 emTcCo">{item.count}</span>
-                                        </button>
-                                      </li>
-                                    )
-                                  })}
-
-                                </ul>
+                            {toogle2 && (
+                              <div
+                                id="side-proptype-region"
+                                role="region"
+                                aria-labelledby="side-proptype-section"
+                                className="hide"
+                              >
+                                <div>
+                                  <ul
+                                    role="group"
+                                    className="sc-316fzr-0 jDEIHe"
+                                  >
+                                    {bedRoomdata.map((item, i) => {
+                                      return (
+                                        <li className="sc-1tyddxu-0 hRTczC">
+                                          <button
+                                            type="button"
+                                            className="sc-10375bz-0 inAQUt"
+                                            onClick={() => {
+                                              setBedRoomDT(item.name);
+                                            }}
+                                          >
+                                            {bedRoomDT === item.name ? (
+                                              <GrCheckboxSelected className="chack-icons" />
+                                            ) : (
+                                              <GrCheckbox className="sc-1h490wc-1 clDIaZ icon" />
+                                            )}
+                                            <span aria-label="All Property Types">
+                                              {item.name}
+                                            </span>
+                                            <span
+                                              aria-label="1873 properties"
+                                              className="sc-1uzywjh-0 emTcCo"
+                                            >
+                                              {item.count}
+                                            </span>
+                                          </button>
+                                        </li>
+                                      );
+                                    })}
+                                  </ul>
+                                </div>
                               </div>
-                              </div>
-                            }
-
+                            )}
                           </div>
-
-
-
-
-
-
                         </div>
                       </div>
                     </div>
                     <footer className="sc-1y0l0ze-6 epnMmH">
                       <div className="sc-1y0l0ze-7 ipxbJD">
                         <div className="sc-1y0l0ze-8 ikpcuX">
-
-                          <button type="button" className="sc-1lxqdjp-0 bkTCAh" onClick={() => clearFilterHandler()}>Clear all</button>
+                          <button
+                            type="button"
+                            className="sc-1lxqdjp-0 bkTCAh"
+                            onClick={() => clearFilterHandler()}
+                          >
+                            Clear all
+                          </button>
                         </div>
                         <div className="sc-1y0l0ze-9 iuAQpx">
-                          <button type="button" className="sc-9rc7kn-0 hyeZAL">Search 1,873 properties</button>
-
+                          <button type="button" className="sc-9rc7kn-0 hyeZAL">
+                            Search 1,873 properties
+                          </button>
                         </div>
                       </div>
                     </footer>
                   </div>
                 </div>
 
-                <div>
-
-                </div>
-
+                <div></div>
               </div>
             </div>
           </div>
-
-
-
         </div>
         {/* Filter */}
       </article>
 
-
-
-
       {/* <Footer /> */}
     </>
-  )
-}
+  );
+};
 
 export default GoogleApiWrapper({
-  apiKey: (process.env.REACT_APP_API_KEY)
-})(Properties)
-
+  apiKey: process.env.REACT_APP_API_KEY,
+  version: "3.38",
+})(Properties);
