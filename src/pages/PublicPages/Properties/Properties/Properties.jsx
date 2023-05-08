@@ -441,6 +441,7 @@ const Properties = ({ google }) => {
                       </div>
                     </div>
                   </div>
+                  
                   <div className="Headroom-unfixed" style={{ height: "54px" }}>
                     <div className="filter-inline">
                       <div className="bjl0o1-3 cpRqIu">
@@ -523,7 +524,7 @@ const Properties = ({ google }) => {
                 <div className="u8rllx-2 iHZmYi">
                   <h2 className="u8rllx-3 gCIxxJ">
                     {filteredData.length} properties including surrounding and
-                    nearby suburbs {JSON.stringify(filteredData)}
+                    nearby suburbs
                   </h2>
                 </div>
               </header>
