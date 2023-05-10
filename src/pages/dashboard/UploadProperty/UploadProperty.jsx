@@ -189,6 +189,8 @@ const UploadProperty = () => {
     const [city, setCity] = useState('')
     const [country, setCountry] = useState('')
     const [areaLocation, setAreaLocation] = useState('')
+    const [longitude, setLongitude] = useState('')
+    const [latitude, setLatitude] = useState('')
     const [propertyStatus, setPropertyStatus] = useState({ value: 'active', label: 'Active' })
     const [selectedImages, setSelectedImages] = useState([]);
     const [otherFeatures, setOtherFeatures] = useState([{ id: Math.random(), name: '', value: '' }]);
@@ -366,7 +368,9 @@ const UploadProperty = () => {
                     areaLocation: values.areaLocation,
                     pinLocation: values.location,
                     postalCode: values.postalCode,
-                    streetNumber: values.streetNumber
+                    streetNumber: values.streetNumber,
+                    longitude: values.longitude,
+                    latitude: values.latitude
                 };
                 const area = { value: values.area, unit: areaUnit.value };
                 const purpose = advertising.value;
@@ -380,8 +384,8 @@ const UploadProperty = () => {
                 let commercialAmenities = {}
                 let garageAmenities = {}
                 let landAmenities = {}
-        
-        
+
+
                 switch (propertyType.value) {
                     case 'newHome' || 'home':
                         newHomeAmenities = {
@@ -446,11 +450,11 @@ const UploadProperty = () => {
                             otherAmenities: [...otherFeatures]
                         }
                         break;
-        
+
                     default:
                     //   text = "Looking forward to the Weekend";
                 }
-        
+
                 const formData = new FormData();
                 formData.append('title', title)
                 formData.append('description', description)
@@ -469,20 +473,20 @@ const UploadProperty = () => {
                 for (let i = 0; i < selectedImages.length; i++) {
                     formData.append('photos', selectedImages[i])
                 }
-        
+
                 formData.append('videos', video)
                 formData.append('tours', tour)
                 for (var pair of formData.entries()) {
                     console.log(pair[0] + ' - ' + pair[1]);
                 }
-        
+
                 setFormLoader(true)
                 if (selectedImages === '') {
                     setFormLoader(true)
                     return (
                         toast.success('Image is .',
                             { position: toast.POSITION.TOP_LEFT })
-        
+
                     )
                 }
                 await fetch('https://walrus-app-ovpy2.ondigitalocean.app/property', {
@@ -494,18 +498,18 @@ const UploadProperty = () => {
                     body: formData
                 })
                     .then((res) => {
-        
+
                         setFormLoader(false)
                         navigate('/user-properties')
                     })
                     .catch((error) => {
                         setFormLoader(false)
-        
+
                         toast.error(error, { position: toast.POSITION.TOP_LEFT })
-        
-        
+
+
                     })
-        
+
         }
     });
 
@@ -566,6 +570,7 @@ const UploadProperty = () => {
 
     // do something on address change
     const onChangeAddress = (autocomplete) => {
+        console.log({autocomplete})
         const place = autocomplete.getPlace();
         const lat = place.geometry.location.lat();
         const lng = place.geometry.location.lng();
@@ -584,6 +589,10 @@ const UploadProperty = () => {
         values.areaLocation =placeDetails.area
         setPinLocation(address)
         values.location = address
+        setLatitude(lat);
+        values.latitude = lat;
+        setLongitude(lng)
+        values.longitude = lng
 
     }
 
@@ -597,6 +606,7 @@ const UploadProperty = () => {
     }
 
     const reverseGeocode = ({ latitude: lat, longitude: lng }) => {
+        console.log(lat, lng)
         const url = `${geocodeJson}?key=${apiKey}&latlng=${lat},${lng}`;
         searchInput.current.value = "Getting your location...";
         fetch(url)
@@ -618,6 +628,10 @@ const UploadProperty = () => {
                 setPinLocation(place.formatted_address)
                 values.location = place.formatted_address
                 searchInput.current.value = place.formatted_address;
+                setLongitude(longitude);
+                values.longitude = lng;
+                setLatitude(latitude);
+                values.latitude = lat;
             })
     }
 
@@ -625,6 +639,7 @@ const UploadProperty = () => {
     const findMyLocation = () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(position => {
+                console.log(position.coords);
                 reverseGeocode(position.coords)
             })
         }
@@ -667,11 +682,11 @@ const UploadProperty = () => {
                                             <div className="col-lg-4">
                                                 <div className='password-filed'>
                                                     <label>Property Type</label>
-                                                    <Dropdown 
+                                                    <Dropdown
                                                     options={propertytypeOptions}
                                                     name='propertyType'
-                                                    onChange={(e) => {setPropertyType(e)}} 
-                                                    value={propertyType.value} 
+                                                    onChange={(e) => {setPropertyType(e)}}
+                                                    value={propertyType.value}
                                                     placeholder="Select property type" />
                                                 </div>
                                             </div>
@@ -688,7 +703,7 @@ const UploadProperty = () => {
                                                         // name='confirmNewPassword'
                                                         // id='confirmNewPassword'
                                                         // placeholder='Enter title'
-                                                        // 
+                                                        //
                                                         // onChange={(e) => { setTitle(e.target.value) }}
                                                         // value={title}
                                                         type="text"
@@ -1424,14 +1439,6 @@ const UploadProperty = () => {
                                                 <label>Location</label>
                                                 <div className='password-filed'>
                                                     <input
-                                                        // type="text"
-                                                        // className="input"
-                                                        // placeholder='Enter Location'
-                                                        // onChange={(e) => {
-                                                        //     setPinLocation(e.target.value)
-                                                        // }}
-                                                        // value={pinLocation}
-
                                                         type="text"
                                                         className="input"
                                                         name='location'
@@ -1443,6 +1450,40 @@ const UploadProperty = () => {
                                                         onBlur={handleBlur}
                                                     />
                                                     {errors.location && touched.location && <p className='error'>{errors.location}</p>}
+                                                </div>
+                                            </div>
+                                            <div className="col-lg-4 mt-4">
+                                                <label>Longitude</label>
+                                                <div className='password-filed'>
+                                                    <input
+                                                        type="text"
+                                                        className="input"
+                                                        name='longitude'
+                                                        id='longitude'
+                                                        placeholder='Enter Longitude'
+                                                        style={{ borderColor: errors.longitude && 'red' }}
+                                                        defaultValue={values.longitude}
+                                                        onChange={handleChange}
+                                                        onBlur={handleBlur}
+                                                    />
+                                                    {errors.longitude && touched.longitude && <p className='error'>{errors.longitude}</p>}
+                                                </div>
+                                            </div>
+                                            <div className="col-lg-4 mt-4">
+                                                <label>Latitude</label>
+                                                <div className='password-filed'>
+                                                    <input
+                                                        type="text"
+                                                        className="input"
+                                                        name='latitude'
+                                                        id='latitude'
+                                                        placeholder='Enter Latitude'
+                                                        style={{ borderColor: errors.latitude && 'red' }}
+                                                        defaultValue={values.latitude}
+                                                        onChange={handleChange}
+                                                        onBlur={handleBlur}
+                                                    />
+                                                    {errors.latitude && touched.latitude && <p className='error'>{errors.latitude}</p>}
                                                 </div>
                                             </div>
                                             <div className="col-lg-12 mt-4">
