@@ -697,7 +697,7 @@ const Properties = ({ google }) => {
                       disableDefaultUI={true}
                       streetViewControl={true}
                     >
-                      {/* { filteredData.map((item, index) => {
+                      { filteredData.map((item, index) => {
                         return (
                           <Marker
                             key={item['_id']+index}
@@ -712,7 +712,7 @@ const Properties = ({ google }) => {
                             }}
                           ></Marker>
                         );
-                      })} */}
+                      })}
 
                       <InfoWindow marker={activeMarker} visible={true}>
                         <div className="v95puu-6">
