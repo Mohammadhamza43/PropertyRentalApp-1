@@ -15,7 +15,7 @@ import { BiBath } from "react-icons/bi";
 import { AiOutlineCar, AiOutlineHeart } from "react-icons/ai";
 import { IoIosArrowDown } from "react-icons/io";
 import { GrCheckboxSelected, GrCheckbox } from "react-icons/gr";
-import image1 from ".././../../../assets/media/images/image_1.jpg";
+
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 import "./Properties.css";
@@ -242,16 +242,13 @@ const Properties = ({ google }) => {
         url: url,
       }).then(async function (response) {
         var res = response.data.data;
-        const uploadedfiles = await Promise.all(
-          res.map(async (item, index) => {
-            var latlng = await getLatLong(item.location.address);
-            latlng = latlng.data.results[0].geometry.location;
-            item["location"]["position"] = {
-              lat: latlng["lat"],
-              ln: latlng["lng"],
-            };
-          })
-        );
+        res.map((item, index) => {
+          var position = {
+            lat: item.location.latitude,
+            lng: item.location.longitude,
+          };
+          item["location"]["position"] = position;
+        });
 
         setFilteredData(res);
         setLoading(false);
@@ -441,7 +438,7 @@ const Properties = ({ google }) => {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="Headroom-unfixed" style={{ height: "54px" }}>
                     <div className="filter-inline">
                       <div className="bjl0o1-3 cpRqIu">
@@ -538,7 +535,7 @@ const Properties = ({ google }) => {
                   ) : filteredData.length > 0 ? (
                     filteredData.map((item, index) => {
                       return (
-                        <div className="sc-1ti9q65-0 ggJHdq">
+                        <div key={item["_id"]} className="sc-1ti9q65-0 ggJHdq">
                           <article className="sc-1e63uev-0 kydbmE">
                             <Link
                               to={`/properties/${item["_id"]}`}
@@ -552,7 +549,7 @@ const Properties = ({ google }) => {
                                   className="carosal"
                                 >
                                   {item["photos"].map((img, i) => (
-                                    <div className="body">
+                                    <div key={'img-'+i} className="body">
                                       <img
                                         src={img}
                                         loading="lazy"
@@ -700,26 +697,22 @@ const Properties = ({ google }) => {
                       disableDefaultUI={true}
                       streetViewControl={true}
                     >
-                      {filteredData.map(
-                        ({ id, name, location, full_address }) => {
-                          return (
-                            <Marker
-                              onClick={handleActiveMarker}
-                              title={name}
-                              name={name}
-                              position={location.position}
-                              address={full_address}
-                              // icon={{
-                              //   title:"Test",
-
-                              //   // url: "https://www.svgrepo.com/show/1276/map-pin.svg",
-                              //   anchor: new google.maps.Point(20, 20),
-                              //   scaledSize: new google.maps.Size(20, 20),
-                              // }}
-                            ></Marker>
-                          );
-                        }
-                      )}
+                      {/* { filteredData.map((item, index) => {
+                        return (
+                          <Marker
+                            key={item['_id']+index}
+                            onClick={handleActiveMarker}
+                            position={item.location.position}
+                            information={item}
+                            icon={{
+                              title:"Test",
+                              url: "https://www.svgrepo.com/show/1276/map-pin.svg",
+                              anchor: new google.maps.Point(20, 20),
+                              scaledSize: new google.maps.Size(20, 20),
+                            }}
+                          ></Marker>
+                        );
+                      })} */}
 
                       <InfoWindow marker={activeMarker} visible={true}>
                         <div className="v95puu-6">
@@ -736,52 +729,73 @@ const Properties = ({ google }) => {
                               <div className="sc-3i257o-0 bXIqeS">
                                 <div className="sc-1qqt7z5-0 bIhZyK fade in">
                                   <img
-                                    src={image1}
+                                    src={markerDetail?.information.photos[0]}
                                     loading="lazy"
-                                    alt="609/228 Abeckett Street, Melbourne VIC 3000"
+                                    alt={
+                                      markerDetail?.information.location.address
+                                    }
                                   />
                                 </div>
                               </div>
                               <div className="sc-1e63uev-1 dOPMYK">
                                 <h3 className="sc-1e63uev-3 swIbZ">
-                                  $290,000 -$319,000
+                                  $ {markerDetail?.information.price}
                                 </h3>
                                 <div className="ijsdcd-0 gWTwZn">
                                   <h2 className="ijsdcd-1 bjJoNh">
-                                    {markerDetail?.address}
+                                    {markerDetail?.information.location.address}
                                   </h2>
-                                  <ul className="rkh7f0-0 doqKNP">
-                                    <li className="rkh7f0-1 ddpQTN">
-                                      <span
-                                        role="img"
-                                        aria-label="Bed"
-                                        className="rkh7f0-2 iMDBSi"
-                                      >
-                                        <BiBed className="sc-1h490wc-1 fKOyQl icon" />
-                                      </span>{" "}
-                                      1
-                                    </li>
-                                    <li className="rkh7f0-1 ddpQTN">
-                                      <span
-                                        role="img"
-                                        aria-label="Bath"
-                                        className="rkh7f0-2 iMDBSi"
-                                      >
-                                        <BiBath className="sc-1h490wc-1 fKOyQl icon" />
-                                      </span>{" "}
-                                      1
-                                    </li>
-                                    <li className="rkh7f0-1 ddpQTN">
-                                      <span
-                                        role="img"
-                                        aria-label="Car"
-                                        className="rkh7f0-2 iMDBSi"
-                                      >
-                                        <AiOutlineCar className="sc-1h490wc-1 fKOyQl icon" />
-                                      </span>{" "}
-                                      0
-                                    </li>
-                                  </ul>
+                                  {typeof markerDetail?.information
+                                    .roomAmenities !== "undefined" &&
+                                  markerDetail?.information.roomAmenities ? (
+                                    <ul className="rkh7f0-0 doqKNP">
+                                      <li className="rkh7f0-1 ddpQTN">
+                                        <span
+                                          role="img"
+                                          aria-label="Bed"
+                                          className="rkh7f0-2 iMDBSi"
+                                        >
+                                          <BiBed className="sc-1h490wc-1 fKOyQl icon" />
+                                        </span>{" "}
+                                        1
+                                      </li>
+                                      {markerDetail?.information.roomAmenities
+                                        .bath ? (
+                                        <li className="rkh7f0-1 ddpQTN">
+                                          <span
+                                            role="img"
+                                            aria-label="Bath"
+                                            className="rkh7f0-2 iMDBSi"
+                                          >
+                                            <BiBath className="sc-1h490wc-1 fKOyQl icon" />
+                                          </span>{" "}
+                                          {
+                                            markerDetail?.information
+                                              .roomAmenities.bath
+                                          }
+                                        </li>
+                                      ) : (
+                                        <></>
+                                      )}
+                                      {markerDetail?.information.roomAmenities
+                                        .parking ? (
+                                        <li className="rkh7f0-1 ddpQTN">
+                                          <span
+                                            role="img"
+                                            aria-label="Car"
+                                            className="rkh7f0-2 iMDBSi"
+                                          >
+                                            <AiOutlineCar className="sc-1h490wc-1 fKOyQl icon" />
+                                          </span>{" "}
+                                          1
+                                        </li>
+                                      ) : (
+                                        <></>
+                                      )}
+                                    </ul>
+                                  ) : (
+                                    <></>
+                                  )}
                                 </div>
                               </div>
                             </a>
@@ -845,6 +859,16 @@ const Properties = ({ google }) => {
         <div className="container demo">
           <div
             className="modal right fade"
+            id="myModal22"
+            tabIndex="-1"
+            role="dialog"
+            aria-labelledby="myModalLabel22"
+          >
+            <h1>Faizi</h1>
+          </div>
+
+          <div
+            className="modal right fade"
             id="myModal2"
             tabIndex="-1"
             role="dialog"
@@ -866,6 +890,7 @@ const Properties = ({ google }) => {
                         </button>
                       </div>
                     </header>
+                    
                     <div className="if8eux-0 hbxTUi">
                       <div className="sc-1y0l0ze-5 gOGxgr">
                         <div className="sc-136vf55-0 equYRv">
@@ -891,6 +916,7 @@ const Properties = ({ google }) => {
                                   {intresteddata.map((item, i) => {
                                     return (
                                       <button
+                                      key={item+i}
                                         type="button"
                                         className={`sc-1oven2p-0 ${
                                           interested === item
@@ -1010,7 +1036,7 @@ const Properties = ({ google }) => {
                                   >
                                     {propertydata.map((item, i) => {
                                       return (
-                                        <li className="sc-1tyddxu-0 hRTczC">
+                                        <li key={item.value+i} className="sc-1tyddxu-0 hRTczC">
                                           <button
                                             type="button"
                                             className="sc-10375bz-0 inAQUt"
@@ -1087,7 +1113,7 @@ const Properties = ({ google }) => {
                                   >
                                     {bedRoomdata.map((item, i) => {
                                       return (
-                                        <li className="sc-1tyddxu-0 hRTczC">
+                                        <li key={item.name+i} className="sc-1tyddxu-0 hRTczC">
                                           <button
                                             type="button"
                                             className="sc-10375bz-0 inAQUt"
@@ -1121,6 +1147,7 @@ const Properties = ({ google }) => {
                         </div>
                       </div>
                     </div>
+
                     <footer className="sc-1y0l0ze-6 epnMmH">
                       <div className="sc-1y0l0ze-7 ipxbJD">
                         <div className="sc-1y0l0ze-8 ikpcuX">
