@@ -1537,7 +1537,7 @@ svg:not(:root) {
     border-radius: 0px;
 }
 .fade {
-    opacity: 0;
+    /* opacity: 0; */
     transition: opacity 0.15s linear 0s;
 }
 
