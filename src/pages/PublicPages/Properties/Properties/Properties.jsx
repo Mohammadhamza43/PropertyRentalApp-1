@@ -40,9 +40,7 @@ const Properties = ({ google }) => {
     pAddress = "";
   if (location.state !== null && location.state !== "") {
     if (typeof location.state.purpose !== "undefined") {
-      purpose =
-        location.state.purpose.charAt(0).toUpperCase() +
-        location.state.purpose.slice(1);
+      purpose =location.state.purpose;
     }
     propertyType = location.state.propertyType;
     cityFiltertxt = location.state.city;
@@ -73,6 +71,17 @@ const Properties = ({ google }) => {
 
   const [planAddress, setPlanAddress] = useState(pAddress);
   const [sortingFilter, setSortingFilter] = useState("");
+  const [propertydata, setPropertyData] = useState([
+    { name: "All", value: "all", count: 0 },
+    { name: "New Home", value: "newHome", count: 0 },
+    { name: "Room", value: "room", count: 0 },
+    { name: "Office", value: "office", count: 0 },
+    { name: "Land", value: "land", count: 0 },
+    { name: "Building", value: "building", count: 0 },
+    { name: "Garage", value: "garage", count: 0 },
+    { name: "Commercial Properties", value: "commercialProperties", count: 0 },
+    { name: "Home", value: "home", count: 0 },
+  ]);
 
   // do something on address change
   const onChangeAddress = (autocomplete) => {
@@ -82,7 +91,7 @@ const Properties = ({ google }) => {
     place.address_components.forEach((component) => {
       const types = component.types;
       const value = component.long_name;
-
+      
       // Extract country
       if (types.includes("country")) {
         setCountry(value);
@@ -97,6 +106,7 @@ const Properties = ({ google }) => {
       if (types.includes("locality")) {
         setCity(value);
       }
+      
     });
 
     const latitude = place.geometry.location.lat();
@@ -168,12 +178,11 @@ const Properties = ({ google }) => {
     if (!searchInput.current) return;
 
     var options = {
-      types: ["(cities)"],
+      types: ["establishment"],
       // componentRestrictions: {country: "us"}
     };
     const autocomplete = new window.google.maps.places.Autocomplete(
       searchInput.current,
-      options
     );
     autocomplete.setFields([
       "address_component",
@@ -193,6 +202,25 @@ const Properties = ({ google }) => {
 
   useEffect(() => {
     setLoading(true);
+    const loadAllData = async () => {
+      var url = `https://walrus-app-ovpy2.ondigitalocean.app/property/list`;
+      axios({
+        method: "get",
+        url: url,
+      }).then(async function (response) {
+        var res = response.data.data;
+        propertydata[0]['count'] = 100;
+        propertydata.map((item, index) => {
+          
+          var count = res.filter((curElem) => {
+            return curElem.type.toLowerCase().includes(item.value);
+          }).length;
+          item["count"] = count;
+        });
+      });
+    };
+
+
     const filterData = async () => {
       var url = `https://walrus-app-ovpy2.ondigitalocean.app/property/list`;
       if (priceRange) {
@@ -236,7 +264,7 @@ const Properties = ({ google }) => {
       ) {
         url += `&sortAttr=${sortingFilter}`;
       }
-
+console.log(url);
       axios({
         method: "get",
         url: url,
@@ -256,6 +284,7 @@ const Properties = ({ google }) => {
     };
 
     filterData();
+    loadAllData();
   }, [
     priceRange,
     interested,
@@ -315,29 +344,18 @@ const Properties = ({ google }) => {
     },
   };
 
-  const [toogle1, setToggle1] = useState(false);
-  const [toogle2, setToggle2] = useState(false);
+  const [toggle1, setToggle1] = useState(false);
+  const [toggle2, setToggle2] = useState(false);
+  const [slider, setSlider]   = useState(false);
 
-  const [slider, setSlider] = useState(false);
-  const propertydata = [
-    { name: "All", value: "all", count: 1876 },
-    { name: "New Home", value: "newHome", count: 0 },
-    { name: "Room", value: "room", count: 20 },
-    { name: "Office", value: "office", count: 20 },
-    { name: "Land", value: "land", count: 200 },
-    { name: "Building", value: "building", count: 1 },
-    { name: "Garage", value: "garage", count: 20 },
-    { name: "Commercial Properties", value: "commercialProperties", count: 23 },
-    { name: "Home", value: "home", count: 10 },
-  ];
   const bedRoomdata = [
-    { name: 1, count: 333 },
-    { name: 2, count: 22 },
-    { name: 3, count: 44 },
-    { name: 4, count: 1 },
+    { name: 1, count: 0 },
+    { name: 2, count: 0 },
+    { name: 3, count: 0 },
+    { name: 4, count: 0 },
     { name: "5+", count: 0 },
   ];
-  const intresteddata = ["Buy", "Rent"];
+  const intresteddata = [{ name: "Buy", value: "sale"} , { name: "Rent", value: "rent"}];
 
   const handleSliderChange = (value) => {
     // update the price range when slider value changes
@@ -384,17 +402,7 @@ const Properties = ({ google }) => {
   const sortingHandler = (e) => {
     setSortingFilter(e.value);
   };
-  const getLatLong = (address) => {
-    var apiUrl =
-      "https://maps.googleapis.com/maps/api/geocode/json?address=" +
-      address +
-      "&key=" +
-      apiKey;
-
-    var res = axios.get(apiUrl);
-    console.log(res);
-    return res;
-  };
+  
 
   return (
     <>
@@ -405,6 +413,7 @@ const Properties = ({ google }) => {
             <div className="bjl0o1-2 dmEQCF">
               <div className="rjsm5l-0 cLARDm">
                 <div className="rjsm5l-1 dEOkTn">
+                  
                   <div className="sc-1m7uu2m-0 lExsy">
                     <div className="sc-1m7uu2m-6 bimUfb">
                       <div className="sc-1m7uu2m-7 gPABWM">
@@ -549,7 +558,7 @@ const Properties = ({ google }) => {
                                   className="carosal"
                                 >
                                   {item["photos"].map((img, i) => (
-                                    <div key={'img-'+i} className="body">
+                                    <div key={"img-" + i} className="body">
                                       <img
                                         src={img}
                                         loading="lazy"
@@ -697,7 +706,7 @@ const Properties = ({ google }) => {
                       disableDefaultUI={true}
                       streetViewControl={true}
                     >
-                      { filteredData.map((item, index) => {
+                      {/* { filteredData.map((item, index) => {
                         return (
                           <Marker
                             key={item['_id']+index}
@@ -712,7 +721,7 @@ const Properties = ({ google }) => {
                             }}
                           ></Marker>
                         );
-                      })}
+                      })} */}
 
                       <InfoWindow marker={activeMarker} visible={true}>
                         <div className="v95puu-6">
@@ -857,16 +866,7 @@ const Properties = ({ google }) => {
         </div>
         {/* Filter */}
         <div className="container demo">
-          <div
-            className="modal right fade"
-            id="myModal22"
-            tabIndex="-1"
-            role="dialog"
-            aria-labelledby="myModalLabel22"
-          >
-            <h1>Faizi</h1>
-          </div>
-
+         
           <div
             className="modal right fade"
             id="myModal2"
@@ -890,7 +890,7 @@ const Properties = ({ google }) => {
                         </button>
                       </div>
                     </header>
-                    
+
                     <div className="if8eux-0 hbxTUi">
                       <div className="sc-1y0l0ze-5 gOGxgr">
                         <div className="sc-136vf55-0 equYRv">
@@ -916,16 +916,16 @@ const Properties = ({ google }) => {
                                   {intresteddata.map((item, i) => {
                                     return (
                                       <button
-                                      key={item+i}
+                                        key={item + i}
                                         type="button"
                                         className={`sc-1oven2p-0 ${
-                                          interested === item
+                                          interested === item.value
                                             ? "gZszZo"
                                             : "jUPYmK"
                                         } `}
-                                        onClick={() => setInterested(item)}
+                                        onClick={() => setInterested(item.value)}
                                       >
-                                        {item}
+                                        {item.name}
                                       </button>
                                     );
                                   })}
@@ -992,14 +992,14 @@ const Properties = ({ google }) => {
 
                           <div
                             className={`sc-11yfpl8-0  ${
-                              toogle1 ? "ikzRsx" : "kKonjn"
+                              toggle1 ? "ikzRsx" : "kKonjn"
                             }`}
                           >
                             <h3 className="sc-11yfpl8-2 kPUAQh">
                               <button
                                 type="button"
                                 onClick={() => {
-                                  setToggle1(!toogle1);
+                                  setToggle1(!toggle1);
                                 }}
                                 id="side-proptype-section"
                                 aria-label="Property type filters"
@@ -1022,7 +1022,7 @@ const Properties = ({ google }) => {
                             </h3>
                             <div className="sc-11yfpl8-5 gbsVeP"></div>
 
-                            {toogle1 && (
+                            {toggle1 && (
                               <div
                                 id="side-proptype-region"
                                 role="region"
@@ -1036,7 +1036,10 @@ const Properties = ({ google }) => {
                                   >
                                     {propertydata.map((item, i) => {
                                       return (
-                                        <li key={item.value+i} className="sc-1tyddxu-0 hRTczC">
+                                        <li
+                                          key={item.value + i}
+                                          className="sc-1tyddxu-0 hRTczC"
+                                        >
                                           <button
                                             type="button"
                                             className="sc-10375bz-0 inAQUt"
@@ -1069,14 +1072,14 @@ const Properties = ({ google }) => {
                           </div>
                           <div
                             className={`sc-11yfpl8-0  ${
-                              toogle2 ? "ikzRsx" : "kKonjn"
+                              toggle2 ? "ikzRsx" : "kKonjn"
                             }`}
                           >
                             <h3 className="sc-11yfpl8-2 kPUAQh">
                               <button
                                 type="button"
                                 onClick={() => {
-                                  setToggle2(!toogle2);
+                                  setToggle2(!toggle2);
                                 }}
                                 id="side-proptype-section"
                                 aria-label="Property type filters"
@@ -1099,7 +1102,7 @@ const Properties = ({ google }) => {
                             </h3>
                             <div className="sc-11yfpl8-5 gbsVeP"></div>
 
-                            {toogle2 && (
+                            {toggle2 && (
                               <div
                                 id="side-proptype-region"
                                 role="region"
@@ -1113,7 +1116,10 @@ const Properties = ({ google }) => {
                                   >
                                     {bedRoomdata.map((item, i) => {
                                       return (
-                                        <li key={item.name+i} className="sc-1tyddxu-0 hRTczC">
+                                        <li
+                                          key={item.name + i}
+                                          className="sc-1tyddxu-0 hRTczC"
+                                        >
                                           <button
                                             type="button"
                                             className="sc-10375bz-0 inAQUt"
@@ -1161,7 +1167,7 @@ const Properties = ({ google }) => {
                         </div>
                         <div className="sc-1y0l0ze-9 iuAQpx">
                           <button type="button" className="sc-9rc7kn-0 hyeZAL">
-                            Search 1,873 properties
+                            Search {filteredData?.length} properties
                           </button>
                         </div>
                       </div>
