@@ -118,7 +118,7 @@ const Search = (props) => {
       return;
     },
     options: {
-      types: ["(cities)"],
+      types: ["establishment"],
       // componentRestrictions: { country: "pk" },
     },
   });
@@ -238,7 +238,7 @@ const Search = (props) => {
         if (buy) {
           navigate("/properties", {
             state: {
-              purpose: "buy",
+              purpose: "sale",
               propertyType: propertyType.value,
               country: country,
               city: city,
