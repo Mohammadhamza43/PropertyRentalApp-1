@@ -697,23 +697,22 @@ const Properties = ({ google }) => {
                       disableDefaultUI={true}
                       streetViewControl={true}
                     >
-                      {filteredData.map((item, index) => {
+                      {/* { filteredData.map((item, index) => {
                         return (
                           <Marker
                             key={item['_id']+index}
                             onClick={handleActiveMarker}
                             position={item.location.position}
                             information={item}
-                            // icon={{
-                            //   title:"Test",
-
-                            //   // url: "https://www.svgrepo.com/show/1276/map-pin.svg",
-                            //   anchor: new google.maps.Point(20, 20),
-                            //   scaledSize: new google.maps.Size(20, 20),
-                            // }}
+                            icon={{
+                              title:"Test",
+                              url: "https://www.svgrepo.com/show/1276/map-pin.svg",
+                              anchor: new google.maps.Point(20, 20),
+                              scaledSize: new google.maps.Size(20, 20),
+                            }}
                           ></Marker>
                         );
-                      })}
+                      })} */}
 
                       <InfoWindow marker={activeMarker} visible={true}>
                         <div className="v95puu-6">
