@@ -34,9 +34,9 @@ const uploadPropertySchema = Yup.object().shape({
 
     propertyType: Yup.string().required('Property type is required'),
     title: Yup.string().required('Title is required'),
-    price: Yup.string().required('Price is required'),
+    price: Yup.number().moreThan(0, 'Number must be greater than 0').required('Price is required'),
     date: Yup.string().required('Price is required'),
-    area: Yup.string().required('Area is required'),
+    area: Yup.number().moreThan(0, 'Number must be greater than 0').required('Area is required'),
 
         room: Yup.string().test('room', 'Room is required', function(value) {
             if (["home", "newHome"].includes(this.parent.propertyType)) {
@@ -54,34 +54,34 @@ const uploadPropertySchema = Yup.object().shape({
         }),
 
     unit: Yup
-        .string()
+    .number().moreThan(0, 'Number must be greater than 0')
         .when("propertyType", {
             is: "garage",
             then: (schema) => schema.required('Unit is required')
         }),
 
     wide: Yup
-        .string()
+    .number().moreThan(0, 'Number must be greater than 0')
         .when("propertyType", {
             is: "garage",
             then: (schema) => schema.required('Wide is required')
         }),
 
     long: Yup
-        .string()
+    .number().moreThan(0, 'Number must be greater than 0')
         .when("propertyType", {
             is: "garage",
             then: (schema) => schema.required('Long is required')
         }),
 
     height: Yup
-        .string()
+    .number().moreThan(0, 'Number must be greater than 0')
         .when("propertyType", {
             is: "garage",
             then: (schema) => schema.required('height is required')
         }),
 
-        kitchen: Yup.string().test('kitchen', 'Kitchen is required', function(value) {
+        kitchen: Yup.number().moreThan(0, 'Number must be greater than 0').test('kitchen', 'Kitchen is required', function(value) {
             if (["home", "newHome", "office", "room", "building", "commercialProperties"].includes(this.parent.propertyType)) {
               return !!value;
             } else {
@@ -89,7 +89,7 @@ const uploadPropertySchema = Yup.object().shape({
             }
           }),
 
-        bath: Yup.string().test('bath', 'Bath is required', function(value) {
+        bath: Yup.number().moreThan(0, 'Number must be greater than 0').test('bath', 'Bath is required', function(value) {
             if (["home", "newHome", "office", "room", "building", "commercialProperties"].includes(this.parent.propertyType)) {
               return !!value;
             } else {
@@ -97,7 +97,7 @@ const uploadPropertySchema = Yup.object().shape({
             }
           }),
 
-          livingRoom: Yup.string().test('livingRoom', 'Living room is required', function(value) {
+          livingRoom: Yup.number().moreThan(0, 'Number must be greater than 0').test('livingRoom', 'Living room is required', function(value) {
             if (["home", "newHome"].includes(this.parent.propertyType)) {
               return !!value;
             } else {
@@ -105,7 +105,7 @@ const uploadPropertySchema = Yup.object().shape({
             }
           }),
 
-          floorNumber: Yup.string().test('floorNumber', 'Floor no is required', function(value) {
+          floorNumber: Yup.number().moreThan(0, 'Number must be greater than 0').test('floorNumber', 'Floor no is required', function(value) {
             if (["'commercialProperties', ", "office" , "building" , "room"].includes(this.parent.propertyType)) {
               return !!value;
             } else {
@@ -113,7 +113,7 @@ const uploadPropertySchema = Yup.object().shape({
             }
           }),
 
-        totalFloors: Yup.string().test('totalFloors', 'Floors is required', function(value) {
+        totalFloors: Yup.number().moreThan(0, 'Number must be greater than 0').test('totalFloors', 'Floors is required', function(value) {
             if (["home" , "newHome"].includes(this.parent.propertyType)) {
               return !!value;
             } else {
@@ -123,20 +123,20 @@ const uploadPropertySchema = Yup.object().shape({
 
 
     description: Yup.string().required('Description is required'),
-    postalCode: Yup.string().required('Postalcode is required'),
+    postalCode: Yup.number().moreThan(0, 'Number must be greater than 0').required('Postalcode is required'),
     city: Yup.string().required('City is required'),
     country: Yup.string().required('Country is required'),
     areaLocation: Yup.string().required('Area is required'),
-    streetNumber: Yup.string().required('Street no is required'),
+    streetNumber: Yup.number().moreThan(0, 'Number must be greater than 0').required('Street no is required'),
     location: Yup.string().required('Location is required'),
 });
 const updatePropertySchema = Yup.object().shape({
 
     propertyType: Yup.string().required('Property type is required'),
     title: Yup.string().required('Title is required'),
-    price: Yup.string().required('Price is required'),
+    price: Yup.number().moreThan(0, 'Number must be greater than 0').required('Price is required'),
     date: Yup.string().required('Price is required'),
-    area: Yup.string().required('Area is required'),
+    area: Yup.number().moreThan(0, 'Number must be greater than 0').required('Area is required'),
 
         room: Yup.string().test('room', 'Room is required', function(value) {
             if (["home", "newHome"].includes(this.parent.propertyType)) {
@@ -181,7 +181,7 @@ const updatePropertySchema = Yup.object().shape({
             then: (schema) => schema.required('height is required')
         }),
 
-        kitchen: Yup.string().test('kitchen', 'Kitchen is required', function(value) {
+        kitchen: Yup.number().moreThan(0, 'Number must be greater than 0').test('kitchen', 'Kitchen is required', function(value) {
             if (["home", "newHome", "office", "room", "building", "commercialProperties"].includes(this.parent.propertyType)) {
               return !!value;
             } else {
@@ -189,7 +189,7 @@ const updatePropertySchema = Yup.object().shape({
             }
           }),
 
-        bath: Yup.string().test('bath', 'Bath is required', function(value) {
+        bath: Yup.number().moreThan(0, 'Number must be greater than 0').test('bath', 'Bath is required', function(value) {
             if (["home", "newHome", "office", "room", "building", "commercialProperties"].includes(this.parent.propertyType)) {
               return !!value;
             } else {
@@ -197,7 +197,7 @@ const updatePropertySchema = Yup.object().shape({
             }
           }),
 
-          livingRoom: Yup.string().test('livingRoom', 'Living room is required', function(value) {
+          livingRoom: Yup.number().moreThan(0, 'Number must be greater than 0').test('livingRoom', 'Living room is required', function(value) {
             if (["home", "newHome"].includes(this.parent.propertyType)) {
               return !!value;
             } else {
@@ -205,7 +205,7 @@ const updatePropertySchema = Yup.object().shape({
             }
           }),
 
-          floorNumber: Yup.string().test('floorNumber', 'Floor no is required', function(value) {
+          floorNumber: Yup.number().moreThan(0, 'Number must be greater than 0').test('floorNumber', 'Floor no is required', function(value) {
             if (["'commercialProperties', ", "office" , "building" , "room"].includes(this.parent.propertyType)) {
               return !!value;
             } else {
@@ -213,7 +213,7 @@ const updatePropertySchema = Yup.object().shape({
             }
           }),
 
-        totalFloors: Yup.string().test('totalFloors', 'Floors is required', function(value) {
+        totalFloors: Yup.number().moreThan(0, 'Number must be greater than 0').test('totalFloors', 'Floors is required', function(value) {
             if (["home" , "newHome"].includes(this.parent.propertyType)) {
               return !!value;
             } else {
@@ -223,11 +223,11 @@ const updatePropertySchema = Yup.object().shape({
 
 
     description: Yup.string().required('Description is required'),
-    postalCode: Yup.string().required('Postalcode is required'),
+    postalCode: Yup.number().moreThan(0, 'Number must be greater than 0').required('Postalcode is required'),
     city: Yup.string().required('City is required'),
     country: Yup.string().required('Country is required'),
     areaLocation: Yup.string().required('Area is required'),
-    streetNumber: Yup.string().required('Street no is required'),
+    streetNumber: Yup.number().moreThan(0, 'Number must be greater than 0').required('Street no is required'),
     location: Yup.string().required('Location is required'),
 });
 
