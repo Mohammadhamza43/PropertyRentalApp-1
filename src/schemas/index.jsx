@@ -38,13 +38,13 @@ const uploadPropertySchema = Yup.object().shape({
     date: Yup.string().required('Price is required'),
     area: Yup.number().moreThan(0, 'Number must be greater than 0').required('Area is required'),
 
-        room: Yup.string().test('room', 'Room is required', function(value) {
-            if (["home", "newHome"].includes(this.parent.propertyType)) {
-              return !!value;
-            } else {
-              return true;
-            }
-          }),
+    room: Yup.string().test('room', 'Room is required', function (value) {
+        if (["home", "newHome"].includes(this.parent.propertyType)) {
+            return !!value;
+        } else {
+            return true;
+        }
+    }),
 
     landType: Yup
         .string()
@@ -129,6 +129,8 @@ const uploadPropertySchema = Yup.object().shape({
     areaLocation: Yup.string().required('Area is required'),
     streetNumber: Yup.number().moreThan(0, 'Number must be greater than 0').required('Street no is required'),
     location: Yup.string().required('Location is required'),
+    longitude: Yup.string().required('Longitude is required'),
+    latitude: Yup.string().required('Latitude is required'),
 });
 const updatePropertySchema = Yup.object().shape({
 
@@ -138,13 +140,13 @@ const updatePropertySchema = Yup.object().shape({
     date: Yup.string().required('Price is required'),
     area: Yup.number().moreThan(0, 'Number must be greater than 0').required('Area is required'),
 
-        room: Yup.string().test('room', 'Room is required', function(value) {
-            if (["home", "newHome"].includes(this.parent.propertyType)) {
-              return !!value;
-            } else {
-              return true;
-            }
-          }),
+    room: Yup.string().test('room', 'Room is required', function (value) {
+        if (["home", "newHome"].includes(this.parent.propertyType)) {
+            return !!value;
+        } else {
+            return true;
+        }
+    }),
 
     landType: Yup
         .string()
@@ -229,7 +231,17 @@ const updatePropertySchema = Yup.object().shape({
     areaLocation: Yup.string().required('Area is required'),
     streetNumber: Yup.number().moreThan(0, 'Number must be greater than 0').required('Street no is required'),
     location: Yup.string().required('Location is required'),
+    longitude: Yup.string().required('Longitude is required'),
+    latitude: Yup.string().required('Latitude is required'),
 });
 
 
-export { signUpSchema, loginSchema, resetSchema, resetPasswordSchema, changePasswordSchema, uploadPropertySchema , updatePropertySchema }
+export {
+    signUpSchema,
+    loginSchema,
+    resetSchema,
+    resetPasswordSchema,
+    changePasswordSchema,
+    uploadPropertySchema,
+    updatePropertySchema
+}
