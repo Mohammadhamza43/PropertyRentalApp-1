@@ -548,7 +548,7 @@ console.log(url);
                           <article className="sc-1e63uev-0 kydbmE">
                             <Link
                               to={`/properties/${item["_id"]}`}
-                              className="sc-1fvt3tm-0 eRPHdN"
+                              className="sc-1fvt3tm-0 eRPHdN listing"
                             >
                               <div className="sc-3i257o-0 iMMhrs">
                                 <Carousel
@@ -685,7 +685,7 @@ console.log(url);
             </div>
             <div className="r0xktz-2 gPahXz">
               <div style={{ position: "relative", height: "100%" }}>
-                <div style={{ width: 600, height: 450 }}>
+                <div style={{ width: 600, height: 450 }} className="map-width-mobile">
                   {typeof filteredData !== "undefined" &&
                   filteredData !== null &&
                   filteredData.length > 0 ? (
@@ -706,7 +706,7 @@ console.log(url);
                       disableDefaultUI={true}
                       streetViewControl={true}
                     >
-                      {/* { filteredData.map((item, index) => {
+                      { filteredData.map((item, index) => {
                         return (
                           <Marker
                             key={item['_id']+index}
@@ -721,10 +721,10 @@ console.log(url);
                             }}
                           ></Marker>
                         );
-                      })} */}
+                      })}
 
                       <InfoWindow marker={activeMarker} visible={true}>
-                        <div className="v95puu-6">
+                        <div className="v95puu-6 ">
                           <article
                             aria-label="Property Listing"
                             data-listing-id="9896476"
