@@ -221,7 +221,12 @@ const Properties = ({ google }) => {
     searchInput.current.value = pAddress;
     let newArr = [...PropertyDT]
     // setPropertyDT(['room','newHome','office','land','building','garage','home','commercialProperties'])
+    let tempObj = {
+      key:'all',
+      checked:true
+    }
     setPropertyDT(['all'])
+    setSelectedOptions([...selectedOptions,tempObj])
   }, []);
 
   useEffect(() => {
@@ -274,8 +279,11 @@ const Properties = ({ google }) => {
       //   url += `&type=${PropertyDT}`;
       // }
       // console.log
+      // url += `&type=room&type=newHome&type=office&type=land&type=building&type=garage&home=room&type=commercialProperties`
+
       if(PropertyDT[0] == 'all'){
-        url += `&type=${['room','newHome','office','land','building','garage','home','commercialProperties']}`
+        url += `&type=room&type=newHome&type=office&type=land&type=building&type=garage&home=room&type=commercialProperties`
+        // ['room','newHome','office','land','building','garage','home','commercialProperties']
       }else{
       if (PropertyDT.length > 0) {
         console.log(PropertyDT, "check PropertyDT")
@@ -283,8 +291,13 @@ const Properties = ({ google }) => {
         if (PropertyDT.length == 1) {
           url += `&type=${PropertyDT[0]}`;
         } else {
+          let newUrl = url
+          let sendUrl = PropertyDT.forEach((el)=>{
+            newUrl +=`&type=${el}`
+          })
           console.log(PropertyDT + typeof PropertyDT, "PropertyDT in else")
-          url += `&type=${PropertyDT}`;
+          // url += `&type=${PropertyDT}`;
+          url += newUrl;
         }
       }
     }
@@ -1429,7 +1442,7 @@ const Properties = ({ google }) => {
                                             id={i}
                                             name={item.name}
                                             handleCheckboxChange={(e) => handleCheckboxChange(e, item.value)}
-                                            // checked={selectedOptions.find((ml) => ml.key == item.name) ? selectedOptions.find((ml) => ml.key == item.name).checked : false}
+                                            checked={PropertyDT.find((ml) => ml == item.value)?true : false}
                                           />
                                           {/* <button
                                             type="button"

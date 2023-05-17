@@ -7,7 +7,7 @@ export function CheckBox(props){
   <input 
     // {...props.rest}
     onChange={props.handleCheckboxChange}
-    // checked = {props.checked}
+    checked = {props.checked}
     type="checkbox" 
     class="custom-control-input" 
     id={props.id}
