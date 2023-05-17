@@ -10,7 +10,7 @@ import { HiOutlineBellAlert } from "react-icons/hi2";
 import { BiBed } from "react-icons/bi";
 import { BsArrowDownUp, BsFillCheckSquareFill } from "react-icons/bs";
 import { FiPlayCircle } from "react-icons/fi";
-import { TbBath } from "react-icons/tb";
+import { TbBath,T } from "react-icons/tb";
 import { BiBath } from "react-icons/bi";
 import { AiOutlineCar, AiOutlineHeart } from "react-icons/ai";
 import { IoIosArrowDown } from "react-icons/io";
@@ -26,6 +26,7 @@ import "rc-slider/assets/index.css";
 import { Map, InfoWindow, Marker, GoogleApiWrapper } from "google-maps-react";
 import axios from "axios";
 import MultiSelectCheckbox, { CheckBox } from "../../../../shared/components/checkbox";
+import Pagination from "../../../../shared/components/pagination";
 
 const apiKey = process.env.REACT_APP_API_KEY;
 const mapApiJs = process.env.REACT_APP_MAP_API_JS;
@@ -103,6 +104,12 @@ const Properties = ({ google }) => {
     { name: "Commercial Properties", value: "commercialProperties", count: 0 },
     { name: "Home", value: "home", count: 0 },
   ]);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [count,setCount] = useState()
+  const [limit , setLimit] = useState(15);
+  const [searchValue, setSearchValue] = useState('')
+
 
   // do something on address change
   const onChangeAddress = (autocomplete) => {
@@ -226,13 +233,14 @@ const Properties = ({ google }) => {
       checked:true
     }
     setPropertyDT(['all'])
-    setSelectedOptions([...selectedOptions,tempObj])
+    setSelectedOptions([tempObj])
   }, []);
 
   useEffect(() => {
     setLoading(true);
     const loadAllData = async () => {
-      var url = `https://walrus-app-ovpy2.ondigitalocean.app/property/list`;
+      // var url = `https://walrus-app-ovpy2.ondigitalocean.app/property/list`;
+      var url = `http://localhost:3000/property/list`;
       axios({
         method: "get",
         url: url,
@@ -252,7 +260,9 @@ const Properties = ({ google }) => {
 
 
     const filterData = async () => {
-      var url = `https://walrus-app-ovpy2.ondigitalocean.app/property/list`;
+      // var url = `https://walrus-app-ovpy2.ondigitalocean.app/property/list`;
+      var url = `http://localhost:3000/property/list`;
+      
       if (priceRange) {
         url += `?&priceFrom=${priceRange["min"]}&priceTo=${priceRange["max"]}`;
       }
@@ -282,7 +292,7 @@ const Properties = ({ google }) => {
       // url += `&type=room&type=newHome&type=office&type=land&type=building&type=garage&home=room&type=commercialProperties`
 
       if(PropertyDT[0] == 'all'){
-        url += `&type=room&type=newHome&type=office&type=land&type=building&type=garage&home=room&type=commercialProperties`
+        url += `&type=room&type=newHome&type=office&type=land&type=building&type=garage&type=home&type=commercialProperties`
         // ['room','newHome','office','land','building','garage','home','commercialProperties']
       }else{
       if (PropertyDT.length > 0) {
@@ -292,12 +302,12 @@ const Properties = ({ google }) => {
           url += `&type=${PropertyDT[0]}`;
         } else {
           let newUrl = url
-          let sendUrl = PropertyDT.forEach((el)=>{
+          PropertyDT.forEach((el)=>{
             newUrl +=`&type=${el}`
           })
           console.log(PropertyDT + typeof PropertyDT, "PropertyDT in else")
           // url += `&type=${PropertyDT}`;
-          url += newUrl;
+          url = newUrl;
         }
       }
     }
@@ -335,8 +345,13 @@ const Properties = ({ google }) => {
         if (bedRoomDT.length == 1) {
           url += `&rooms=${bedRoomDT[0]}`;
         } else {
+          let newUrl = url
           console.log(bedRoomDT + typeof bedRoomDT, "bedRoomDT in else")
-          url += `&rooms=${bedRoomDT}`;
+          bedRoomDT.forEach((el)=>{
+            newUrl += `&rooms=${el}`
+          })
+          // url += `&rooms=${bedRoomDT}`;
+          url = newUrl;
         }
       }
       // if (
@@ -351,8 +366,12 @@ const Properties = ({ google }) => {
         if (bathRoomDt.length == 1) {
           url += `&bath=${bathRoomDt[0]}`;
         } else {
+          let newUrl = url
           console.log(bathRoomDt + typeof bathRoomDt, "bathRoomDt in else")
-          url += `&bath=${bathRoomDt}`;
+          bathRoomDt.forEach((el)=>{
+            newUrl += `&bath=${el}`
+          })
+          url = newUrl;
         }
       }
 
@@ -369,8 +388,10 @@ const Properties = ({ google }) => {
         if (parkingDt.length == 1) {
           url += `&parking=${parkingDt[0]}`;
         } else {
+          let newUrl = url
           console.log(parkingDt + typeof parkingDt, "parkingDt in else")
-          url += `&parking=${parkingDt}`;
+          newUrl += `&parking=${parkingDt}`
+          url = newUrl
         }
       }
 
@@ -395,10 +416,14 @@ const Properties = ({ google }) => {
         url += `&sortAttr=${sortingFilter}`;
       }
       console.log(url);
+      
+      url += `&limit=${limit}&skip=${(currentPage*limit)-limit}`;
+      // url += `&limit=2&skip=2`;
       axios({
         method: "get",
         url: url,
       }).then(async function (response) {
+        console.log(response,"check response for count");
         var res = response.data.data;
         res.map((item, index) => {
           var position = {
@@ -409,8 +434,10 @@ const Properties = ({ google }) => {
         });
 
         setFilteredData(res);
+        setCount(response.data.count)
         setLoading(false);
       });
+      
     };
 
     filterData();
@@ -425,6 +452,7 @@ const Properties = ({ google }) => {
     parkingDt,
     filtersDt,
     sortingFilter,
+    currentPage
   ]);
 
   const locations = [
@@ -611,13 +639,19 @@ const Properties = ({ google }) => {
     }
   }
   const handleCheckboxChange = async (e, key) => {
-    console.log("checkbox", e.target.checked)
     console.log("checkbox", key)
+    console.log("checkbox", PropertyDT[0])
     if(PropertyDT[0]== 'all'){
       PropertyDT.splice(0,1)
-    }
-    let array = []
-    setPropertyDT(array)
+      selectedOptions.splice(0,1)
+      console.log(selectedOptions,"selected OPtions")
+      console.log(PropertyDT,"property Dt")
+    } 
+    // else{
+      console.log("else block cant find at index 0")
+    
+    // let array = []
+    // setPropertyDT(array)
     let tempObj = {
       key: key,
       checked: e.target.checked
@@ -636,6 +670,8 @@ const Properties = ({ google }) => {
       setSelectedOptions([...chec, tempObj])
       setPropertyDT([...initArr,tempObj.key])
     }
+    
+  // }
     
     // let arrayToSend = selectedOptions?selectedOptions.map((el)=>{
     //   return el.value
@@ -799,6 +835,22 @@ const Properties = ({ google }) => {
       }])
     }
   }
+  const totalPages = Math.ceil(count/limit);
+  console.log(totalPages, "total [ages")
+  const handlePageChange = (e, pageNumber) => {
+    console.log(e,"handle page working")
+    console.log(e.target.dataset.value,"handle page working")
+    setCurrentPage(parseFloat(e.target.dataset.value));
+console.log(currentPage)
+    // console.log(pageNumber);
+    // get((pageNumber)*limit-limit,limit,searchValue,`id`,'DESC')
+    // console.log("first",property)
+  };
+  const handlePageSizeChange = (event) => {
+    setLimit(parseInt(event.target.value))
+    // get((currentPage)*parseInt(event.target.value)-parseInt(event.target.value),parseInt(event.target.value),searchValue,'id','DESC')
+    console.log(limit);
+  };
 
   console.log(bedRoomDT,"check bedRoomDt")
   // console.log(,"check bedRoomDt")
@@ -939,7 +991,7 @@ const Properties = ({ google }) => {
                     <div>
                       <h2>Loading...</h2>
                     </div>
-                  ) : filteredData.length > 0 ? (
+                  ) : filteredData&&filteredData.length > 0 ? (
                     filteredData.map((item, index) => {
                       return (
                         <div key={item["_id"]} className="sc-1ti9q65-0 ggJHdq">
@@ -1078,6 +1130,17 @@ const Properties = ({ google }) => {
                       <h3>No Record Found</h3>
                     </>
                   )}
+                </div>
+                <div style={{width:"80%"}} className="mx-auto d-flex justify-content-between align-items-center">
+                  <h6>
+                  Displaying results 1-{filteredData.length<limit?filteredData.length:limit} of {filteredData.length}
+                  </h6>
+                <Pagination
+                currentPage={Number(currentPage)}
+                totalPages={totalPages}
+                handlePageChange={(e)=>handlePageChange(e)}
+                count={totalPages}
+                />
                 </div>
               </section>
             </div>

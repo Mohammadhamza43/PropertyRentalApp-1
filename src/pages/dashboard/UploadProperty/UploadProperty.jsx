@@ -501,6 +501,7 @@ const UploadProperty = () => {
 
                         setFormLoader(false)
                         navigate('/user-properties')
+                        console.log(res)
                     })
                     .catch((error) => {
                         setFormLoader(false)
