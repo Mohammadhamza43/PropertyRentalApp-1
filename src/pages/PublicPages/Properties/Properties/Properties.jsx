@@ -220,7 +220,8 @@ const Properties = ({ google }) => {
     initAutocomplete();
     searchInput.current.value = pAddress;
     let newArr = [...PropertyDT]
-    // setPropertyDT['room','newHome','office','land','building','garage','home','commercialProperties']
+    // setPropertyDT(['room','newHome','office','land','building','garage','home','commercialProperties'])
+    setPropertyDT(['all'])
   }, []);
 
   useEffect(() => {
@@ -240,6 +241,7 @@ const Properties = ({ google }) => {
           }).length;
           item["count"] = count;
         });
+
       });
     };
 
@@ -272,7 +274,9 @@ const Properties = ({ google }) => {
       //   url += `&type=${PropertyDT}`;
       // }
       // console.log
-
+      if(PropertyDT[0] == 'all'){
+        url += `&type=${['room','newHome','office','land','building','garage','home','commercialProperties']}`
+      }else{
       if (PropertyDT.length > 0) {
         console.log(PropertyDT, "check PropertyDT")
         // let newArr = PropertyDT.filter((el)=>el !== undefined)
@@ -283,7 +287,9 @@ const Properties = ({ google }) => {
           url += `&type=${PropertyDT}`;
         }
       }
+    }
 
+      
       if (filtersDt.length > 0) {
         const checkIfAnyFiltersTrue = filtersDt.filter((el) => el.filtersType !== null && el.filtersType !== false);
         console.log(checkIfAnyFiltersTrue, "checkIfAnyFiltersTrue")
@@ -301,6 +307,7 @@ const Properties = ({ google }) => {
           url += `&${filtersDt[0].dbName}=${filtersDt[0].filtersType}`
         }
       }
+    
       // if(
       //   typeof filtersDt.filtersType != null &&
       //   filtersDt.filtersType != undefined,
@@ -593,6 +600,9 @@ const Properties = ({ google }) => {
   const handleCheckboxChange = async (e, key) => {
     console.log("checkbox", e.target.checked)
     console.log("checkbox", key)
+    if(PropertyDT[0]== 'all'){
+      PropertyDT.splice(0,1)
+    }
     let array = []
     setPropertyDT(array)
     let tempObj = {
@@ -639,8 +649,9 @@ const Properties = ({ google }) => {
     // } else {
     //   setSelectedOptions([...selectedOptions, option]);
     // }
-    console.log(selectedOptions, "selected options")
   };
+  console.log(selectedOptions, "selected options")
+  console.log(PropertyDT, "PropertyDT")
 
   const handleBedRoomDropdownChange = (e,key)=>{
     let array = []
