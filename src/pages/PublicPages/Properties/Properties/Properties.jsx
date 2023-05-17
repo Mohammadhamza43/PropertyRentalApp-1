@@ -25,6 +25,7 @@ import "rc-slider/assets/index.css";
 
 import { Map, InfoWindow, Marker, GoogleApiWrapper } from "google-maps-react";
 import axios from "axios";
+import MultiSelectCheckbox, { CheckBox } from "../../../../shared/components/checkbox";
 
 const apiKey = process.env.REACT_APP_API_KEY;
 const mapApiJs = process.env.REACT_APP_MAP_API_JS;
@@ -37,31 +38,51 @@ const Properties = ({ google }) => {
     cityFiltertxt,
     latFiltertxt,
     lngFiltertxt,
+    filtersType,
     pAddress = "";
   if (location.state !== null && location.state !== "") {
     if (typeof location.state.purpose !== "undefined") {
-      purpose =location.state.purpose;
+      purpose = location.state.purpose;
     }
     propertyType = location.state.propertyType;
     cityFiltertxt = location.state.city;
     latFiltertxt = location.state.lat;
     lngFiltertxt = location.state.lng;
     pAddress = location.state.planAddress;
+    // filtersType = locations.state.filtersType;
   }
   const [isLoading, setLoading] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
   const [priceRange, setPriceRange] = useState({ min: 0, max: 100000 }); // initial price range
   const [interested, setInterested] = useState(purpose);
-  const [PropertyDT, setPropertyDT] = useState(propertyType);
+  const [PropertyDT, setPropertyDT] = useState([propertyType]);
+  const [filtersDt, setFiltersDt] = useState([]);
 
   const [cityFilter, setCityFilter] = useState(cityFiltertxt);
   const [latFilter, setLatFilter] = useState(latFiltertxt);
   const [longFilter, setLongFilter] = useState(lngFiltertxt);
 
-  const [bedRoomDT, setBedRoomDT] = useState("");
+  const [bedRoomDT, setBedRoomDT] = useState([]);
   const searchInput = useRef(null);
   const [country, setCountry] = useState("");
 
+  const [bathRoomDt, setBathRoomDT] = useState([]);
+  const [parkingDt, setparkingDt] = useState([]);
+  const [filtersData, setFiltersData] = useState([
+    { name: "Furnished", dbName: "furnished", value: null, count: 0 },
+    { name: "Air Conditioning", dbName: "airConditioning", value: null, count: 0 },
+    { name: "Security", dbName: "security", value: null, count: 0 },
+    { name: "Elevator", dbName: "elevator", value: null, count: 0 },
+    { name: "Balcony", dbName: "balcony", value: null, count: 0 },
+    { name: "Fenced", dbName: "fenced", value: null, count: 0 },
+  ]);
+
+
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [bedRoomOptions, setBedRoomOptions] = useState([]);
+  const [bathRoomOptions, setBathRoomOptions] = useState([]);
+  const [parkingOptions, setParkingOptions] = useState([]);
+  const [moreFilterOptions, setMoreFiltersOptions] = useState([]);
   const [addressFilter, setAddressFilter] = useState("");
 
   const [city, setCity] = useState("");
@@ -91,7 +112,7 @@ const Properties = ({ google }) => {
     place.address_components.forEach((component) => {
       const types = component.types;
       const value = component.long_name;
-      
+
       // Extract country
       if (types.includes("country")) {
         setCountry(value);
@@ -106,7 +127,7 @@ const Properties = ({ google }) => {
       if (types.includes("locality")) {
         setCity(value);
       }
-      
+
     });
 
     const latitude = place.geometry.location.lat();
@@ -198,6 +219,8 @@ const Properties = ({ google }) => {
   useEffect(() => {
     initAutocomplete();
     searchInput.current.value = pAddress;
+    let newArr = [...PropertyDT]
+    // setPropertyDT['room','newHome','office','land','building','garage','home','commercialProperties']
   }, []);
 
   useEffect(() => {
@@ -211,7 +234,7 @@ const Properties = ({ google }) => {
         var res = response.data.data;
         propertydata[0]['count'] = 100;
         propertydata.map((item, index) => {
-          
+
           var count = res.filter((curElem) => {
             return curElem.type.toLowerCase().includes(item.value);
           }).length;
@@ -240,22 +263,109 @@ const Properties = ({ google }) => {
       ) {
         url += `&search=${cityFilter}`;
       }
-      if (
-        typeof PropertyDT !== "undefined" &&
-        PropertyDT !== null &&
-        PropertyDT !== "" &&
-        PropertyDT !== "all"
-      ) {
-        url += `&type=${PropertyDT}`;
+      // if (
+      //   typeof PropertyDT !== "undefined" &&
+      //   PropertyDT !== null &&
+      //   PropertyDT !== "" &&
+      //   PropertyDT !== "all"
+      // ) {
+      //   url += `&type=${PropertyDT}`;
+      // }
+      // console.log
+
+      if (PropertyDT.length > 0) {
+        console.log(PropertyDT, "check PropertyDT")
+        // let newArr = PropertyDT.filter((el)=>el !== undefined)
+        if (PropertyDT.length == 1) {
+          url += `&type=${PropertyDT[0]}`;
+        } else {
+          console.log(PropertyDT + typeof PropertyDT, "PropertyDT in else")
+          url += `&type=${PropertyDT}`;
+        }
       }
 
-      if (
-        typeof bedRoomDT !== "undefined" &&
-        bedRoomDT !== null &&
-        bedRoomDT !== ""
-      ) {
-        url += `&rooms=${bedRoomDT}`;
+      if (filtersDt.length > 0) {
+        const checkIfAnyFiltersTrue = filtersDt.filter((el) => el.filtersType !== null && el.filtersType !== false);
+        console.log(checkIfAnyFiltersTrue, "checkIfAnyFiltersTrue")
+        checkIfAnyFiltersTrue.forEach((el) => {
+          console.log(el, "check el")
+          console.log(el.dbName, "el.dbName")
+          console.log(el.filtersType, "el.filtersType")
+          url += `&${el.dbName}=${el.filtersType}`
+        })
+      } else {
+        if (
+          filtersDt[0] !== null && filtersDt[0] != undefined
+        ) {
+          console.log("single filterDt")
+          url += `&${filtersDt[0].dbName}=${filtersDt[0].filtersType}`
+        }
       }
+      // if(
+      //   typeof filtersDt.filtersType != null &&
+      //   filtersDt.filtersType != undefined,
+      //   filtersDt.filtersType != ""
+      // ){
+      //   console.log(filtersDt,"check filtersDt")
+      //   url += `&${filtersDt.dbName}=${filtersDt.filtersType}`
+      //   console.log(url)
+      // }
+      if (bedRoomDT.length > 0) {
+        console.log(bedRoomDT, "check bedRoomDt")
+        if (bedRoomDT.length == 1) {
+          url += `&rooms=${bedRoomDT[0]}`;
+        } else {
+          console.log(bedRoomDT + typeof bedRoomDT, "bedRoomDT in else")
+          url += `&rooms=${bedRoomDT}`;
+        }
+      }
+      // if (
+      //   typeof bedRoomDT !== "undefined" &&
+      //   bedRoomDT !== null &&
+      //   bedRoomDT !== ""
+      // ) {
+      //   url += `&rooms=${bedRoomDT}`;
+      // }
+      if (bathRoomDt.length > 0) {
+        console.log(bathRoomDt, "check bathRoomDt")
+        if (bathRoomDt.length == 1) {
+          url += `&bath=${bathRoomDt[0]}`;
+        } else {
+          console.log(bathRoomDt + typeof bathRoomDt, "bathRoomDt in else")
+          url += `&bath=${bathRoomDt}`;
+        }
+      }
+
+      // if (
+      //   typeof bathRoomDt !== "undefined" &&
+      //   bathRoomDt !== null &&
+      //   bathRoomDt !== ""
+      // ) {
+      //   url += `&bath=${bathRoomDt}`;
+      // }
+
+      if (parkingDt.length > 0) {
+        console.log(parkingDt, "check parkingDt")
+        if (parkingDt.length == 1) {
+          url += `&parking=${parkingDt[0]}`;
+        } else {
+          console.log(parkingDt + typeof parkingDt, "parkingDt in else")
+          url += `&parking=${parkingDt}`;
+        }
+      }
+
+      // if (
+      //   typeof parkingDt !== "undefined" &&
+      //   parkingDt !== null &&
+      //   parkingDt !== ""
+      // ) {
+      //   url += `&parking=${parkingDt}`;
+      // }
+
+      // if(typeof filtersDt != null){
+      //   if(filtersDt.)
+      // }
+
 
       if (
         typeof sortingFilter !== "undefined" &&
@@ -264,7 +374,7 @@ const Properties = ({ google }) => {
       ) {
         url += `&sortAttr=${sortingFilter}`;
       }
-console.log(url);
+      console.log(url);
       axios({
         method: "get",
         url: url,
@@ -291,6 +401,9 @@ console.log(url);
     PropertyDT,
     cityFilter,
     bedRoomDT,
+    bathRoomDt,
+    parkingDt,
+    filtersDt,
     sortingFilter,
   ]);
 
@@ -346,16 +459,36 @@ console.log(url);
 
   const [toggle1, setToggle1] = useState(false);
   const [toggle2, setToggle2] = useState(false);
-  const [slider, setSlider]   = useState(false);
+  const [toggle3, setToggle3] = useState(false);
+  const [toggle4, setToggle4] = useState(false);
+  const [toggle5, setToggle5] = useState(false);
+  const [slider, setSlider] = useState(false);
 
   const bedRoomdata = [
     { name: 1, count: 0 },
     { name: 2, count: 0 },
     { name: 3, count: 0 },
     { name: 4, count: 0 },
-    { name: "5+", count: 0 },
+    { name: 5, count: 0 },
   ];
-  const intresteddata = [{ name: "Buy", value: "sale"} , { name: "Rent", value: "rent"}];
+  const intresteddata = [{ name: "Buy", value: "sale" }, { name: "Rent", value: "rent" }];
+
+  const bathRoomData = [
+    { name: 1, count: 0 },
+    { name: 2, count: 0 },
+    { name: 3, count: 0 },
+    { name: 4, count: 0 },
+    { name: "5+", count: 0 },
+  ]
+
+  const parkingData = [
+    { name: 1, count: 0 },
+    { name: 2, count: 0 },
+    { name: 3, count: 0 },
+    { name: 4, count: 0 },
+    { name: "5+", count: 0 },
+  ]
+
 
   const handleSliderChange = (value) => {
     // update the price range when slider value changes
@@ -393,7 +526,7 @@ console.log(url);
       max: 100000,
     });
     setInterested("");
-    setPropertyDT("all");
+    setPropertyDT(["all"]);
     setCityFilter("");
     setCity("");
     searchInput.current.value = "";
@@ -402,8 +535,249 @@ console.log(url);
   const sortingHandler = (e) => {
     setSortingFilter(e.value);
   };
-  
+ 
 
+  const handlePropertyType = (item) => {
+    console.log(item, "check property item")
+    let array = []
+    setPropertyDT(array)
+    if (PropertyDT.length > 0) {
+      const findIndex = PropertyDT.findIndex((el) => el == item.value)
+      if (findIndex == -1) {
+        let initArr = [...PropertyDT]
+        setPropertyDT([...initArr, item.value])
+      }
+    } else {
+      let initArr = [...PropertyDT]
+      setPropertyDT([...initArr, item.value])
+    }
+  }
+  console.log(PropertyDT, "check property Dt")
+  const handleBedRoom = (item) => {
+    if (bedRoomDT.length > 0) {
+      const findIndex = bedRoomDT.findIndex((el) => el == item.name)
+      if (findIndex == -1) {
+        let initArr = [...bedRoomDT]
+        setBedRoomDT([...initArr, item.name])
+      }
+    } else {
+      let init = [...bedRoomDT]
+      setBedRoomDT([...init, item.name])
+    }
+  }
+  const handleBathRoom = (item) => {
+    if (bathRoomDt.length > 0) {
+      const findIndex = bathRoomDt.findIndex((el) => el == item.name)
+      if (findIndex == -1) {
+        let initArr = [...bathRoomDt]
+        setBathRoomDT([...initArr, item.name])
+      }
+    } else {
+      let init = [...bathRoomDt]
+      setBathRoomDT([...init, item.name])
+    }
+  }
+
+  const handleParking = (item) => {
+    if (parkingDt.length > 0) {
+      const findIndex = parkingDt.findIndex((el) => el == item.name)
+      if (findIndex == -1) {
+        let initArr = [...parkingDt]
+        setparkingDt([...initArr, item.name])
+      }
+    } else {
+      let init = [...bathRoomDt]
+      setparkingDt([...init, item.name])
+    }
+  }
+  const handleCheckboxChange = async (e, key) => {
+    console.log("checkbox", e.target.checked)
+    console.log("checkbox", key)
+    let array = []
+    setPropertyDT(array)
+    let tempObj = {
+      key: key,
+      checked: e.target.checked
+    }
+    let chec = [...selectedOptions]
+    let initArr = [...PropertyDT]
+    const findIndex = chec.findIndex((el) => el.key === key)
+    if (findIndex != -1) {
+      chec[findIndex].value = e.target.checked
+      setSelectedOptions([...chec])
+      initArr.splice(findIndex,1)
+      setPropertyDT([...initArr])
+      chec.splice(findIndex,1)
+    } else {
+      console.log("asdf")
+      setSelectedOptions([...chec, tempObj])
+      setPropertyDT([...initArr,tempObj.key])
+    }
+    
+    // let arrayToSend = selectedOptions?selectedOptions.map((el)=>{
+    //   return el.value
+    // }):[]
+    // .then((res)=>{
+    //   console.log(res,"check response")
+    //   setPropertyDT(arrayToSend)
+    // })
+
+    // if(selectedOptions.length < 1){
+    //   setSelectedOptions([...tempObj])
+    // }else{
+    //   const findIndex = selectedOptions.findIndex((el)=>e.target.checked === el.checked)
+    //   if(findIndex != -1){
+    //     selectedOptions[findIndex].value = !selectedOptions[findIndex].value 
+    //   } else{
+    //     setSelectedOptions([...selectedOptions,tempObj])
+    //   }
+    // }
+
+
+    // if (selectedOptions) {
+    //   setSelectedOptions();
+    // } else {
+    //   setSelectedOptions([...selectedOptions, option]);
+    // }
+    console.log(selectedOptions, "selected options")
+  };
+
+  const handleBedRoomDropdownChange = (e,key)=>{
+    let array = []
+    setBedRoomDT(array)
+    let tempObj = {
+      key: key,
+      checked: e.target.checked
+    }
+    let chec = [...bedRoomOptions]
+    let initArr = [...bedRoomDT]
+    const findIndex = chec.findIndex((el) => el.key == key)
+    if (findIndex != -1) {
+      chec[findIndex].value = e.target.checked
+      chec.splice(findIndex,1)
+      setBedRoomOptions([...chec])
+      initArr.splice(findIndex,1)
+      setBedRoomDT([...initArr])
+    } else {
+      console.log("asdf")
+      setBedRoomOptions([...chec, tempObj])
+      setBedRoomDT([...initArr,tempObj.key])
+    }
+  }
+
+  const handleBathRoomDropdownChange = (e,key)=>{
+    let array = []
+    setBathRoomDT(array)
+    let tempObj = {
+      key: key,
+      checked: e.target.checked
+    }
+    let chec = [...bathRoomOptions]
+    let initArr = [...bathRoomDt]
+    const findIndex = chec.findIndex((el) => el.key == key)
+    if (findIndex != -1) {
+      chec[findIndex].value = e.target.checked
+      chec.splice(findIndex,1)
+      setBathRoomOptions([...chec])
+      initArr.splice(findIndex,1)
+      setBathRoomDT([...initArr])
+    } else {
+      console.log("asdf")
+      setBathRoomOptions([...chec, tempObj])
+      setBathRoomDT([...initArr,tempObj.key])
+    }
+  }
+
+  const handleParkingDropdownChange = (e,key)=>{
+    let array = []
+    setparkingDt(array)
+    let tempObj = {
+      key: key,
+      checked: e.target.checked
+    }
+    let chec = [...parkingOptions]
+    let initArr = [...parkingDt]
+    const findIndex = chec.findIndex((el) => el.key == key)
+    if (findIndex != -1) {
+      chec[findIndex].value = e.target.checked
+      chec.splice(findIndex,1)
+      setParkingOptions([...chec])
+      initArr.splice(findIndex,1)
+      setparkingDt([...initArr])
+    } else {
+      console.log("asdf")
+      setParkingOptions([...chec, tempObj])
+      setparkingDt([...initArr,tempObj.key])
+    }
+  }
+  const moreFilters = (item) => {
+    console.log(item, "item in moreFilters")
+    console.log("moreFilters function")
+    if (filtersDt.length > 0) {
+      const findIndex = filtersDt.findIndex((el) => {
+        console.log(el.field, "el.field")
+        return el.field == item.name
+      })
+      console.log(findIndex, "findINdex")
+      if (findIndex != -1) {
+        console.log("findIndex found block")
+
+        // filtersDt.splice(findIndex,1)
+        let tempFiltersDt = [...filtersDt]
+        tempFiltersDt[findIndex].filtersType = !tempFiltersDt[findIndex].filtersType
+        setFiltersDt([...filtersDt, tempFiltersDt])
+        console.log(filtersDt)
+        console.log("504")
+
+      } else {
+        setFiltersDt([...filtersDt, {
+          filtersType: true,
+          field: item.name,
+          dbName: item.dbName
+        }])
+      }
+    } else {
+      console.log("first ")
+      let init = [...filtersDt]
+      let firstFilter = {
+        filtersType: true,
+        field: item.name,
+        dbName: item.dbName
+      }
+      setFiltersDt([...init, firstFilter])
+      console.log(filtersDt, "filtersDt")
+    }
+
+  }
+  const handleMoreFiltersDropdownChange = (e,item)=>{
+    // let array = []
+    // setFiltersDt(array)
+    let tempObj = {
+      key: item.name,
+      checked: e.target.checked
+    }
+    let chec = [...moreFilterOptions]
+    let initArr = [...filtersDt]
+    const findIndex = chec.findIndex((el) => el.key == item.name)
+    if (findIndex != -1) {
+      chec[findIndex].value = e.target.checked
+      chec.splice(findIndex,1)
+      setMoreFiltersOptions([...chec])
+      initArr.splice(findIndex,1)
+      setFiltersDt([...initArr])
+    } else {
+      console.log("asdf")
+      setMoreFiltersOptions([...chec, tempObj])
+      setFiltersDt([...initArr,{
+        filtersType: true,
+        field: item.name,
+        dbName: item.dbName
+      }])
+    }
+  }
+
+  console.log(bedRoomDT,"check bedRoomDt")
+  // console.log(,"check bedRoomDt")
   return (
     <>
       <Header />
@@ -413,7 +787,7 @@ console.log(url);
             <div className="bjl0o1-2 dmEQCF">
               <div className="rjsm5l-0 cLARDm">
                 <div className="rjsm5l-1 dEOkTn">
-                  
+
                   <div className="sc-1m7uu2m-0 lExsy">
                     <div className="sc-1m7uu2m-6 bimUfb">
                       <div className="sc-1m7uu2m-7 gPABWM">
@@ -687,8 +1061,8 @@ console.log(url);
               <div style={{ position: "relative", height: "100%" }}>
                 <div style={{ width: 600, height: 450 }} className="map-width-mobile">
                   {typeof filteredData !== "undefined" &&
-                  filteredData !== null &&
-                  filteredData.length > 0 ? (
+                    filteredData !== null &&
+                    filteredData.length > 0 ? (
                     <Map
                       google={google}
                       containerStyle={{
@@ -706,15 +1080,15 @@ console.log(url);
                       disableDefaultUI={true}
                       streetViewControl={true}
                     >
-                      { filteredData.map((item, index) => {
+                      {filteredData.map((item, index) => {
                         return (
                           <Marker
-                            key={item['_id']+index}
+                            key={item['_id'] + index}
                             onClick={handleActiveMarker}
                             position={item.location.position}
                             information={item}
                             icon={{
-                              title:"Test",
+                              title: "Test",
                               url: "https://www.svgrepo.com/show/1276/map-pin.svg",
                               anchor: new google.maps.Point(20, 20),
                               scaledSize: new google.maps.Size(20, 20),
@@ -756,7 +1130,7 @@ console.log(url);
                                   </h2>
                                   {typeof markerDetail?.information
                                     .roomAmenities !== "undefined" &&
-                                  markerDetail?.information.roomAmenities ? (
+                                    markerDetail?.information.roomAmenities ? (
                                     <ul className="rkh7f0-0 doqKNP">
                                       <li className="rkh7f0-1 ddpQTN">
                                         <span
@@ -866,7 +1240,7 @@ console.log(url);
         </div>
         {/* Filter */}
         <div className="container demo">
-         
+
           <div
             className="modal right fade"
             id="myModal2"
@@ -918,11 +1292,10 @@ console.log(url);
                                       <button
                                         key={item + i}
                                         type="button"
-                                        className={`sc-1oven2p-0 ${
-                                          interested === item.value
-                                            ? "gZszZo"
-                                            : "jUPYmK"
-                                        } `}
+                                        className={`sc-1oven2p-0 ${interested === item.value
+                                          ? "gZszZo"
+                                          : "jUPYmK"
+                                          } `}
                                         onClick={() => setInterested(item.value)}
                                       >
                                         {item.name}
@@ -933,10 +1306,10 @@ console.log(url);
                               </div>
                             </div>
                           </div>
+                          {/* Price drop down */}
                           <div
-                            className={`sc-11yfpl8-0  ${
-                              slider ? "ikzRsx" : "kKonjn"
-                            }`}
+                            className={`sc-11yfpl8-0  ${slider ? "ikzRsx" : "kKonjn"
+                              }`}
                           >
                             <h3 className="sc-11yfpl8-2 kPUAQh">
                               <button
@@ -989,11 +1362,11 @@ console.log(url);
                               </div>
                             )}
                           </div>
+                          {/* Property type drop down */}
 
                           <div
-                            className={`sc-11yfpl8-0  ${
-                              toggle1 ? "ikzRsx" : "kKonjn"
-                            }`}
+                            className={`sc-11yfpl8-0  ${toggle1 ? "ikzRsx" : "kKonjn"
+                              }`}
                           >
                             <h3 className="sc-11yfpl8-2 kPUAQh">
                               <button
@@ -1040,11 +1413,19 @@ console.log(url);
                                           key={item.value + i}
                                           className="sc-1tyddxu-0 hRTczC"
                                         >
-                                          <button
+
+                                          <CheckBox
+                                            id={i}
+                                            name={item.name}
+                                            handleCheckboxChange={(e) => handleCheckboxChange(e, item.value)}
+                                            // checked={selectedOptions.find((ml) => ml.key == item.name) ? selectedOptions.find((ml) => ml.key == item.name).checked : false}
+                                          />
+                                          {/* <button
                                             type="button"
                                             className="sc-10375bz-0 inAQUt"
                                             onClick={() => {
-                                              setPropertyDT(item.value);
+                                              // setPropertyDT(item.value);
+                                              handlePropertyType(item)
                                             }}
                                           >
                                             {PropertyDT === item.value ? (
@@ -1061,7 +1442,13 @@ console.log(url);
                                             >
                                               {item.count}
                                             </span>
-                                          </button>
+                                          </button> */}
+                                          {/* <CheckBox
+                                            name = {item.name}
+                                            handleCheckChange={handleCheckChange}
+                                          /> */}
+
+
                                         </li>
                                       );
                                     })}
@@ -1070,10 +1457,11 @@ console.log(url);
                               </div>
                             )}
                           </div>
+                          {/* Bedroom drop down */}
+
                           <div
-                            className={`sc-11yfpl8-0  ${
-                              toggle2 ? "ikzRsx" : "kKonjn"
-                            }`}
+                            className={`sc-11yfpl8-0  ${toggle2 ? "ikzRsx" : "kKonjn"
+                              }`}
                           >
                             <h3 className="sc-11yfpl8-2 kPUAQh">
                               <button
@@ -1120,11 +1508,16 @@ console.log(url);
                                           key={item.name + i}
                                           className="sc-1tyddxu-0 hRTczC"
                                         >
-                                          <button
+                                          <CheckBox
+                                            id = {i}
+                                            name={item.name}
+                                            handleCheckboxChange={(e)=>handleBedRoomDropdownChange(e,item.name)}
+                                          />
+                                          {/* <button
                                             type="button"
                                             className="sc-10375bz-0 inAQUt"
                                             onClick={() => {
-                                              setBedRoomDT(item.name);
+                                              handleBedRoom(item)
                                             }}
                                           >
                                             {bedRoomDT === item.name ? (
@@ -1141,7 +1534,7 @@ console.log(url);
                                             >
                                               {item.count}
                                             </span>
-                                          </button>
+                                          </button> */}
                                         </li>
                                       );
                                     })}
@@ -1150,6 +1543,274 @@ console.log(url);
                               </div>
                             )}
                           </div>
+                          {/* Bathroom dropdown */}
+                          <div
+                            className={`sc-11yfpl8-0  ${toggle3 ? "ikzRsx" : "kKonjn"
+                              }`}
+                          >
+                            <h3 className="sc-11yfpl8-2 kPUAQh">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setToggle3(!toggle3);
+                                }}
+                                id="side-proptype-section"
+                                aria-label="Property type filters"
+                                aria-expanded="false"
+                                aria-controls="side-proptype-region"
+                                className="sc-11yfpl8-1 gsheHX"
+                              >
+                                <div className="sc-11yfpl8-3 iBnkJT">
+                                  Bathrooms
+                                </div>
+                                <div className="sc-11yfpl8-4 kpgnTE">
+                                  <span
+                                    className="sc-1h490wc-0 cZohV icon-wrapper"
+                                    role="presentation"
+                                  >
+                                    <IoIosArrowDown className="sc-1h490wc-1 clDIaZ icon" />
+                                  </span>
+                                </div>
+                              </button>
+                            </h3>
+                            <div className="sc-11yfpl8-5 gbsVeP"></div>
+
+                            {toggle3 && (
+                              <div
+                                id="side-proptype-region"
+                                role="region"
+                                aria-labelledby="side-proptype-section"
+                                className="hide"
+                              >
+                                <div>
+                                  <ul
+                                    role="group"
+                                    className="sc-316fzr-0 jDEIHe"
+                                  >
+                                    {bathRoomData.map((item, i) => {
+                                      return (
+                                        <li
+                                          key={item.name + i}
+                                          className="sc-1tyddxu-0 hRTczC"
+                                        >
+                                          <CheckBox
+                                            id = {i}
+                                            name={item.name}
+                                            handleCheckboxChange={(e)=>handleBathRoomDropdownChange(e,item.name)}
+                                          />
+                                          {/* <button
+                                            type="button"
+                                            className="sc-10375bz-0 inAQUt"
+                                            onClick={() => {
+                                              // setBathRoomDT(item.name);
+                                              handleBathRoom(item)
+                                            }}
+                                          >
+                                            {bathRoomDt === item.name ? (
+                                              <GrCheckboxSelected className="chack-icons" />
+                                            ) : (
+                                              <GrCheckbox className="sc-1h490wc-1 clDIaZ icon" />
+                                            )}
+                                            <span aria-label="All Property Types">
+                                              {item.name}
+                                            </span>
+                                            <span
+                                              aria-label="1873 properties"
+                                              className="sc-1uzywjh-0 emTcCo"
+                                            >
+                                              {item.count}
+                                            </span>
+                                          </button> */}
+                                        </li>
+                                      );
+                                    })}
+                                  </ul>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Parking dropdown */}
+                          <div
+                            className={`sc-11yfpl8-0  ${toggle4 ? "ikzRsx" : "kKonjn"
+                              }`}
+                          >
+                            <h3 className="sc-11yfpl8-2 kPUAQh">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setToggle4(!toggle4);
+                                }}
+                                id="side-proptype-section"
+                                aria-label="Property type filters"
+                                aria-expanded="false"
+                                aria-controls="side-proptype-region"
+                                className="sc-11yfpl8-1 gsheHX"
+                              >
+                                <div className="sc-11yfpl8-3 iBnkJT">
+                                  Parking
+                                </div>
+                                <div className="sc-11yfpl8-4 kpgnTE">
+                                  <span
+                                    className="sc-1h490wc-0 cZohV icon-wrapper"
+                                    role="presentation"
+                                  >
+                                    <IoIosArrowDown className="sc-1h490wc-1 clDIaZ icon" />
+                                  </span>
+                                </div>
+                              </button>
+                            </h3>
+                            <div className="sc-11yfpl8-5 gbsVeP"></div>
+
+                            {toggle4 && (
+                              <div
+                                id="side-proptype-region"
+                                role="region"
+                                aria-labelledby="side-proptype-section"
+                                className="hide"
+                              >
+                                <div>
+                                  <ul
+                                    role="group"
+                                    className="sc-316fzr-0 jDEIHe"
+                                  >
+                                    {parkingData.map((item, i) => {
+                                      console.log(item, "parking item")
+                                      return (
+                                        <li
+                                          key={item.name + i}
+                                          className="sc-1tyddxu-0 hRTczC"
+                                        >
+                                          {/* <button
+                                            type="button"
+                                            className="sc-10375bz-0 inAQUt"
+                                            onClick={() => {
+                                              // setparkingDt(item.name);
+                                              handleParking(item)
+                                            }}
+                                          >
+                                            {console.log(parkingDt, "parkingDt parkinDt for checkbox")}
+                                            {parkingDt === item.name ? (
+                                              <GrCheckboxSelected className="chack-icons" />
+                                            ) : (
+                                              <GrCheckbox className="sc-1h490wc-1 clDIaZ icon" />
+                                            )}
+                                            <span aria-label="All Property Types">
+                                              {item.name}
+                                            </span>
+                                            <span
+                                              aria-label="1873 properties"
+                                              className="sc-1uzywjh-0 emTcCo"
+                                            >
+                                              {item.count}
+                                            </span>
+                                          </button> */}
+                                          <CheckBox
+                                            id = {i}
+                                            name={item.name}
+                                            handleCheckboxChange={(e)=>handleParkingDropdownChange(e,item.name)}
+                                          />
+                                        </li>
+                                      );
+                                    })}
+                                  </ul>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* more Filters */}
+                          <div
+                            className={`sc-11yfpl8-0  ${toggle5 ? "ikzRsx" : "kKonjn"
+                              }`}
+                          >
+                            <h3 className="sc-11yfpl8-2 kPUAQh">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setToggle5(!toggle5);
+                                }}
+                                id="side-proptype-section"
+                                aria-label="Property type filters"
+                                aria-expanded="false"
+                                aria-controls="side-proptype-region"
+                                className="sc-11yfpl8-1 gsheHX"
+                              >
+                                <div className="sc-11yfpl8-3 iBnkJT">
+                                  More Filters
+                                </div>
+                                <div className="sc-11yfpl8-4 kpgnTE">
+                                  <span
+                                    className="sc-1h490wc-0 cZohV icon-wrapper"
+                                    role="presentation"
+                                  >
+                                    <IoIosArrowDown className="sc-1h490wc-1 clDIaZ icon" />
+                                  </span>
+                                </div>
+                              </button>
+                            </h3>
+                            <div className="sc-11yfpl8-5 gbsVeP"></div>
+
+                            {toggle5 && (
+                              <div
+                                id="side-proptype-region"
+                                role="region"
+                                aria-labelledby="side-proptype-section"
+                                className="hide"
+                              >
+                                <div>
+                                  <ul
+                                    role="group"
+                                    className="sc-316fzr-0 jDEIHe"
+                                  >
+                                    {filtersData.map((item, i) => {
+                                      return (
+                                        <li
+                                          key={item.name + i}
+                                          className="sc-1tyddxu-0 hRTczC"
+                                        >
+                                          {/* <button
+                                            type="button"
+                                            className="sc-10375bz-0 inAQUt"
+                                            onClick={() => {
+                                              // setparkingDt(item.name);
+                                              moreFilters(item)
+
+
+                                              console.log(item.name)
+                                            }}
+                                          >
+
+                                            {filtersDt.field === item.name ? (
+                                              <GrCheckboxSelected className="chack-icons" />
+                                            ) : (
+                                              <GrCheckbox className="sc-1h490wc-1 clDIaZ icon" />
+                                            )}
+                                            <span aria-label="All Property Types">
+                                              {item.name}
+                                            </span>
+                                            <span
+                                              aria-label="1873 properties"
+                                              className="sc-1uzywjh-0 emTcCo"
+                                            >
+                                              {item.count}
+                                            </span>
+                                          </button> */}
+                                          <CheckBox
+                                            id = {i}
+                                            name={item.name}
+                                            handleCheckboxChange={(e)=>handleMoreFiltersDropdownChange(e,item)}
+                                          />
+                                        </li>
+                                      );
+                                    })}
+                                  </ul>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
+
                         </div>
                       </div>
                     </div>
