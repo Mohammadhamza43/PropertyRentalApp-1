@@ -360,6 +360,7 @@ const UploadProperty = () => {
         initialValues: initialValues,
         validationSchema: uploadPropertySchema,
         onSubmit: async (values) => {
+            console.log(values + "formic Value");
 
                 const location = {
                     country: values.country,
@@ -387,7 +388,7 @@ const UploadProperty = () => {
 
 
                 switch (propertyType.value) {
-                    case 'newHome' || 'home':
+                    case 'newHome':
                         newHomeAmenities = {
                             rooms: values.room,
                             kitchen: values.kitchen,
@@ -404,6 +405,24 @@ const UploadProperty = () => {
                             otherAmenities: [...otherFeatures]
                         }
                         console.log(newHomeAmenities);
+                        break;
+                    case 'home':
+                        homeAmenities = {
+                            rooms: values.room,
+                            kitchen: values.kitchen,
+                            bath: values.bath,
+                            livingRoom: values.livingRoom,
+                            parking: parking.value,
+                            airConditioning: airConditioning.value,
+                            balcony: balcony.value,
+                            window: window.value,
+                            furnished: furnished.value,
+                            floors: values.totalFloors,
+                            security: security.value,
+                            elevator: elevetor.value,
+                            otherAmenities: [...otherFeatures]
+                        }
+                        console.log(homeAmenities);
                         break;
                     case 'room':
                         roomAmenities = {
@@ -489,26 +508,26 @@ const UploadProperty = () => {
 
                     )
                 }
-                await fetch('https://walrus-app-ovpy2.ondigitalocean.app/property', {
-                    method: "POST",
-                    headers: {
-                        "Accept": "application/json",
-                        "AUTHORIZATION": `BEARER ${token}`
-                    },
-                    body: formData
-                })
-                    .then((res) => {
+                // await fetch('https://walrus-app-ovpy2.ondigitalocean.app/property', {
+                //     method: "POST",
+                //     headers: {
+                //         "Accept": "application/json",
+                //         "AUTHORIZATION": `BEARER ${token}`
+                //     },
+                //     body: formData
+                // })
+                //     .then((res) => {
 
-                        setFormLoader(false)
-                        navigate('/user-properties')
-                    })
-                    .catch((error) => {
-                        setFormLoader(false)
+                //         setFormLoader(false)
+                //         navigate('/user-properties')
+                //     })
+                //     .catch((error) => {
+                //         setFormLoader(false)
 
-                        toast.error(error, { position: toast.POSITION.TOP_LEFT })
+                //         toast.error(error, { position: toast.POSITION.TOP_LEFT })
 
 
-                    })
+                //     })
 
         }
     });
