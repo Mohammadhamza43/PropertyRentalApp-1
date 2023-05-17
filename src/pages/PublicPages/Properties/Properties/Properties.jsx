@@ -40,7 +40,7 @@ const Properties = ({ google }) => {
     pAddress = "";
   if (location.state !== null && location.state !== "") {
     if (typeof location.state.purpose !== "undefined") {
-      purpose =location.state.purpose;
+      purpose = location.state.purpose;
     }
     propertyType = location.state.propertyType;
     cityFiltertxt = location.state.city;
@@ -52,7 +52,7 @@ const Properties = ({ google }) => {
   const [filteredData, setFilteredData] = useState([]);
   const [priceRange, setPriceRange] = useState({ min: 0, max: 100000 }); // initial price range
   const [interested, setInterested] = useState(purpose);
-  const [PropertyDT, setPropertyDT] = useState(propertyType);
+  const [PropertyDT, setPropertyDT] = useState([propertyType]);
 
   const [cityFilter, setCityFilter] = useState(cityFiltertxt);
   const [latFilter, setLatFilter] = useState(latFiltertxt);
@@ -91,7 +91,7 @@ const Properties = ({ google }) => {
     place.address_components.forEach((component) => {
       const types = component.types;
       const value = component.long_name;
-      
+
       // Extract country
       if (types.includes("country")) {
         setCountry(value);
@@ -106,7 +106,6 @@ const Properties = ({ google }) => {
       if (types.includes("locality")) {
         setCity(value);
       }
-      
     });
 
     const latitude = place.geometry.location.lat();
@@ -182,7 +181,7 @@ const Properties = ({ google }) => {
       // componentRestrictions: {country: "us"}
     };
     const autocomplete = new window.google.maps.places.Autocomplete(
-      searchInput.current,
+      searchInput.current
     );
     autocomplete.setFields([
       "address_component",
@@ -209,9 +208,8 @@ const Properties = ({ google }) => {
         url: url,
       }).then(async function (response) {
         var res = response.data.data;
-        propertydata[0]['count'] = 100;
+        propertydata[0]["count"] = 100;
         propertydata.map((item, index) => {
-          
           var count = res.filter((curElem) => {
             return curElem.type.toLowerCase().includes(item.value);
           }).length;
@@ -219,7 +217,6 @@ const Properties = ({ google }) => {
         });
       });
     };
-
 
     const filterData = async () => {
       var url = `https://walrus-app-ovpy2.ondigitalocean.app/property/list`;
@@ -246,7 +243,11 @@ const Properties = ({ google }) => {
         PropertyDT !== "" &&
         PropertyDT !== "all"
       ) {
-        url += `&type=${PropertyDT}`;
+        PropertyDT.map((val, index) => {
+          if (val !== "all") {
+            url += `&type=${val}`;
+          }
+        });
       }
 
       if (
@@ -264,7 +265,7 @@ const Properties = ({ google }) => {
       ) {
         url += `&sortAttr=${sortingFilter}`;
       }
-console.log(url);
+      // console.log(url);
       axios({
         method: "get",
         url: url,
@@ -346,7 +347,7 @@ console.log(url);
 
   const [toggle1, setToggle1] = useState(false);
   const [toggle2, setToggle2] = useState(false);
-  const [slider, setSlider]   = useState(false);
+  const [slider, setSlider] = useState(false);
 
   const bedRoomdata = [
     { name: 1, count: 0 },
@@ -355,7 +356,10 @@ console.log(url);
     { name: 4, count: 0 },
     { name: "5+", count: 0 },
   ];
-  const intresteddata = [{ name: "Buy", value: "sale"} , { name: "Rent", value: "rent"}];
+  const intresteddata = [
+    { name: "Buy", value: "sale" },
+    { name: "Rent", value: "rent" },
+  ];
 
   const handleSliderChange = (value) => {
     // update the price range when slider value changes
@@ -393,7 +397,7 @@ console.log(url);
       max: 100000,
     });
     setInterested("");
-    setPropertyDT("all");
+    setPropertyDT(["all"]);
     setCityFilter("");
     setCity("");
     searchInput.current.value = "";
@@ -402,8 +406,15 @@ console.log(url);
   const sortingHandler = (e) => {
     setSortingFilter(e.value);
   };
-  
 
+  const find_in_arr = (current , arr) =>{
+    var val = arr.filter(note => note?.includes(current));
+    if(val.length >0){
+      return true
+    } else{
+      return false;
+    }
+  };
   return (
     <>
       <Header />
@@ -413,7 +424,6 @@ console.log(url);
             <div className="bjl0o1-2 dmEQCF">
               <div className="rjsm5l-0 cLARDm">
                 <div className="rjsm5l-1 dEOkTn">
-                  
                   <div className="sc-1m7uu2m-0 lExsy">
                     <div className="sc-1m7uu2m-6 bimUfb">
                       <div className="sc-1m7uu2m-7 gPABWM">
@@ -685,7 +695,10 @@ console.log(url);
             </div>
             <div className="r0xktz-2 gPahXz">
               <div style={{ position: "relative", height: "100%" }}>
-                <div style={{ width: 600, height: 450 }} className="map-width-mobile">
+                <div
+                  style={{ width: 600, height: 450 }}
+                  className="map-width-mobile"
+                >
                   {typeof filteredData !== "undefined" &&
                   filteredData !== null &&
                   filteredData.length > 0 ? (
@@ -706,15 +719,15 @@ console.log(url);
                       disableDefaultUI={true}
                       streetViewControl={true}
                     >
-                      { filteredData.map((item, index) => {
+                      {filteredData.map((item, index) => {
                         return (
                           <Marker
-                            key={item['_id']+index}
+                            key={item["_id"] + index}
                             onClick={handleActiveMarker}
                             position={item.location.position}
                             information={item}
                             icon={{
-                              title:"Test",
+                              title: "Test",
                               url: "https://www.svgrepo.com/show/1276/map-pin.svg",
                               anchor: new google.maps.Point(20, 20),
                               scaledSize: new google.maps.Size(20, 20),
@@ -866,7 +879,6 @@ console.log(url);
         </div>
         {/* Filter */}
         <div className="container demo">
-         
           <div
             className="modal right fade"
             id="myModal2"
@@ -923,7 +935,9 @@ console.log(url);
                                             ? "gZszZo"
                                             : "jUPYmK"
                                         } `}
-                                        onClick={() => setInterested(item.value)}
+                                        onClick={() =>
+                                          setInterested(item.value)
+                                        }
                                       >
                                         {item.name}
                                       </button>
@@ -1044,10 +1058,13 @@ console.log(url);
                                             type="button"
                                             className="sc-10375bz-0 inAQUt"
                                             onClick={() => {
-                                              setPropertyDT(item.value);
+                                              setPropertyDT([
+                                                ...PropertyDT,
+                                                item.value,
+                                              ]);
                                             }}
                                           >
-                                            {PropertyDT === item.value ? (
+                                            {find_in_arr(item.value ,PropertyDT)? (
                                               <GrCheckboxSelected className="chack-icons" />
                                             ) : (
                                               <GrCheckbox className="sc-1h490wc-1 clDIaZ icon" />
