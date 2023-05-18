@@ -191,9 +191,9 @@ const UploadProperty = () => {
     const [areaLocation, setAreaLocation] = useState('')
     const [longitude, setLongitude] = useState('')
     const [latitude, setLatitude] = useState('')
-    const [propertyStatus, setPropertyStatus] = useState({ value: 'active', label: 'Active' })
+    const [propertyStatus, setPropertyStatus] = useState({value: 'active', label: 'Active'})
     const [selectedImages, setSelectedImages] = useState([]);
-    const [otherFeatures, setOtherFeatures] = useState([{ id: Math.random(), name: '', value: '' }]);
+    const [otherFeatures, setOtherFeatures] = useState([{id: Math.random(), name: '', value: ''}]);
     const [unit, setUnit] = useState(0);
     const [wide, setWide] = useState(0);
     const [long, setLong] = useState(0);
@@ -204,159 +204,159 @@ const UploadProperty = () => {
     const [formLoader, setFormLoader] = useState(false)
     // console.log(otherFeatuers);
 
-    // const submit = async (event) => {
-    //     event.preventDefault()
+    /*const submit = async (event) => {
+        event.preventDefault()
 
-    //     const location = {
-    //         country: country,
-    //         city: city,
-    //         address: address,
-    //         areaLocation: areaLocation,
-    //         pinLocation: pinLocation,
-    //         postalCode: postalCode,
-    //         streetNumber: streetNumber
-    //     };
-    //     const area = { value: areaa, unit: areaUnit.value };
-    //     const purpose = advertising.value;
-    //     const availableFrom = date;
-    //     let newHomeAmenities = {}
-    //     let homeAmenities = {}
-    //     let roomAmenities = {}
-    //     let commercialAmenities = {}
-    //     let garageAmenities = {}
-    //     let landAmenities = {}
-
-
-    //     switch (propertyType.value) {
-    //         case 'newHome' || 'home':
-    //             newHomeAmenities = {
-    //                 rooms: room,
-    //                 kitchen: kitchen,
-    //                 bath: bath,
-    //                 livingRoom: livingRoom,
-    //                 parking: parking.value,
-    //                 airConditioning: airConditioning.value,
-    //                 balcony: balcony.value,
-    //                 window: window.value,
-    //                 furnished: furnished.value,
-    //                 floors: totalFloors,
-    //                 security: security.value,
-    //                 elevator: elevetor.value,
-    //                 otherAmenities: [...otherFeatures]
-    //             }
-    //             console.log(newHomeAmenities);
-    //             break;
-    //         case 'room':
-    //             roomAmenities = {
-    //                 kitchen: kitchen,
-    //                 bath: bath,
-    //                 parking: parking.value,
-    //                 airConditioning: airConditioning.value,
-    //                 balcony: balcony.value,
-    //                 security: security.value,
-    //                 elevator: elevetor.value,
-    //                 window: window.value,
-    //                 furnished: furnished.value,
-    //                 floorNo: floorNumber,
-    //                 otherAmenities: [...otherFeatures]
-    //             }
-    //             break;
-    //         case 'office' || 'commercialProperties' || 'building':
-    //             commercialAmenities = {
-    //                 kitchen: kitchen,
-    //                 bath: bath,
-    //                 parking: parking.value,
-    //                 airConditioning: airConditioning.value,
-    //                 security: security.value,
-    //                 balcony: balcony.value,
-    //                 window: window.value,
-    //                 furnished: furnished.value,
-    //                 floorNo: floorNumber,
-    //                 otherAmenities: [...otherFeatures]
-    //             }
-    //             break;
-    //         case 'land':
-    //             landAmenities = {
-    //                 type: type,
-    //                 fenced: fenced.value,
-    //                 otherAmenities: [...otherFeatures]
-    //             }
-    //             break;
-    //         case 'garage':
-    //             garageAmenities = {
-    //                 unit: unit,
-    //                 wide: wide,
-    //                 long: long,
-    //                 height: height,
-    //                 otherAmenities: [...otherFeatures]
-    //             }
-    //             break;
-
-    //         default:
-    //         //   text = "Looking forward to the Weekend";
-    //     }
-
-    //     const formData = new FormData();
-    //     formData.append('title', title)
-    //     formData.append('description', description)
-    //     formData.append('type', propertyType.value)
-    //     formData.append('location', JSON.stringify(location))
-    //     formData.append('area', JSON.stringify(area))
-    //     formData.append('purpose', purpose)
-    //     formData.append('availableFrom', date)
-    //     formData.append('newHomeAmenities', JSON.stringify(newHomeAmenities))
-    //     formData.append('homeAmenities', JSON.stringify(homeAmenities))
-    //     formData.append('roomAmenities', JSON.stringify(roomAmenities))
-    //     formData.append('commercialAmenities', JSON.stringify(commercialAmenities))
-    //     formData.append('garageAmenities', JSON.stringify(garageAmenities))
-    //     formData.append('landAmenities', JSON.stringify(landAmenities))
-    //     formData.append('price', pricee)
-    //     for (let i = 0; i < selectedImages.length; i++) {
-    //         formData.append('photos', selectedImages[i])
-    //     }
-
-    //     formData.append('videos', video)
-    //     formData.append('tours', tour)
-    //     for (var pair of formData.entries()) {
-    //         console.log(pair[0] + ' - ' + pair[1]);
-    //     }
-
-    //     setFormLoader(true)
-    //     if (selectedImages === '') {
-    //         setFormLoader(true)
-    //         return (
-    //             toast.success('Image is .',
-    //                 { position: toast.POSITION.TOP_LEFT })
-
-    //         )
-    //     }
-    //     await fetch('https://walrus-app-ovpy2.ondigitalocean.app/property', {
-    //         method: "POST",
-    //         headers: {
-    //             "Accept": "application/json",
-    //             "AUTHORIZATION": `BEARER ${token}`
-    //         },
-    //         body: formData
-    //     })
-    //         .then((res) => {
-
-    //             setFormLoader(false)
-    //             navigate('/user-properties')
-    //             // toast.success('Property Successfully uploaded.',
-    //             //     { position: toast.POSITION.TOP_LEFT })
-    //         })
-    //         .catch((error) => {
-    //             setFormLoader(false)
-
-    //             toast.error(error, { position: toast.POSITION.TOP_LEFT })
+        const location = {
+            country: country,
+            city: city,
+            address: address,
+            areaLocation: areaLocation,
+            pinLocation: pinLocation,
+            postalCode: postalCode,
+            streetNumber: streetNumber
+        };
+        const area = {value: areaa, unit: areaUnit.value};
+        const purpose = advertising.value;
+        const availableFrom = date;
+        let newHomeAmenities = {}
+        let homeAmenities = {}
+        let roomAmenities = {}
+        let commercialAmenities = {}
+        let garageAmenities = {}
+        let landAmenities = {}
 
 
-    //         })
+        switch (propertyType.value) {
+            case 'newHome' || 'home':
+                newHomeAmenities = {
+                    rooms: room,
+                    kitchen: kitchen,
+                    bath: bath,
+                    livingRoom: livingRoom,
+                    parking: parking.value,
+                    airConditioning: airConditioning.value,
+                    balcony: balcony.value,
+                    window: window.value,
+                    furnished: furnished.value,
+                    floors: totalFloors,
+                    security: security.value,
+                    elevator: elevetor.value,
+                    otherAmenities: [...otherFeatures]
+                }
+                console.log(newHomeAmenities);
+                break;
+            case 'room':
+                roomAmenities = {
+                    kitchen: kitchen,
+                    bath: bath,
+                    parking: parking.value,
+                    airConditioning: airConditioning.value,
+                    balcony: balcony.value,
+                    security: security.value,
+                    elevator: elevetor.value,
+                    window: window.value,
+                    furnished: furnished.value,
+                    floorNo: floorNumber,
+                    otherAmenities: [...otherFeatures]
+                }
+                break;
+            case 'office' || 'commercialProperties' || 'building':
+                commercialAmenities = {
+                    kitchen: kitchen,
+                    bath: bath,
+                    parking: parking.value,
+                    airConditioning: airConditioning.value,
+                    security: security.value,
+                    balcony: balcony.value,
+                    window: window.value,
+                    furnished: furnished.value,
+                    floorNo: floorNumber,
+                    otherAmenities: [...otherFeatures]
+                }
+                break;
+            case 'land':
+                landAmenities = {
+                    type: type,
+                    fenced: fenced.value,
+                    otherAmenities: [...otherFeatures]
+                }
+                break;
+            case 'garage':
+                garageAmenities = {
+                    unit: unit,
+                    wide: wide,
+                    long: long,
+                    height: height,
+                    otherAmenities: [...otherFeatures]
+                }
+                break;
 
-    // }
+            default:
+            //   text = "Looking forward to the Weekend";
+        }
+
+        const formData = new FormData();
+        formData.append('title', title)
+        formData.append('description', description)
+        formData.append('type', propertyType.value)
+        formData.append('location', JSON.stringify(location))
+        formData.append('area', JSON.stringify(area))
+        formData.append('purpose', purpose)
+        formData.append('availableFrom', date)
+        formData.append('newHomeAmenities', JSON.stringify(newHomeAmenities))
+        formData.append('homeAmenities', JSON.stringify(homeAmenities))
+        formData.append('roomAmenities', JSON.stringify(roomAmenities))
+        formData.append('commercialAmenities', JSON.stringify(commercialAmenities))
+        formData.append('garageAmenities', JSON.stringify(garageAmenities))
+        formData.append('landAmenities', JSON.stringify(landAmenities))
+        formData.append('price', pricee)
+        for (let i = 0; i < selectedImages.length; i++) {
+            formData.append('photos', selectedImages[i])
+        }
+
+        formData.append('videos', video)
+        formData.append('tours', tour)
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ' - ' + pair[1]);
+        }
+
+        setFormLoader(true)
+        if (selectedImages === '') {
+            setFormLoader(true)
+            return (
+                toast.success('Image is .',
+                    {position: toast.POSITION.TOP_LEFT})
+
+            )
+        }
+        await fetch('https://walrus-app-ovpy2.ondigitalocean.app/property', {
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "AUTHORIZATION": `BEARER ${token}`
+            },
+            body: formData
+        })
+            .then((res) => {
+
+                setFormLoader(false)
+                navigate('/user-properties')
+                // toast.success('Property Successfully uploaded.',
+                //     { position: toast.POSITION.TOP_LEFT })
+            })
+            .catch((error) => {
+                setFormLoader(false)
+
+                toast.error(error, {position: toast.POSITION.TOP_LEFT})
 
 
-    const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
+            })
+
+    }*/
+
+
+    const {values, errors, touched, handleBlur, handleChange, handleSubmit} = useFormik({
         initialValues: initialValues,
         validationSchema: uploadPropertySchema,
         onSubmit: async (values) => {
@@ -506,28 +506,28 @@ const UploadProperty = () => {
                         toast.success('Image is .',
                             { position: toast.POSITION.TOP_LEFT })
 
-                    )
-                }
-                // await fetch('https://walrus-app-ovpy2.ondigitalocean.app/property', {
-                //     method: "POST",
-                //     headers: {
-                //         "Accept": "application/json",
-                //         "AUTHORIZATION": `BEARER ${token}`
-                //     },
-                //     body: formData
-                // })
-                //     .then((res) => {
+                )
+            }
+            await fetch('https://walrus-app-ovpy2.ondigitalocean.app/property', {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "AUTHORIZATION": `BEARER ${token}`
+                },
+                body: formData
+            })
+                .then((res) => {
 
-                //         setFormLoader(false)
-                //         navigate('/user-properties')
-                //     })
-                //     .catch((error) => {
-                //         setFormLoader(false)
+                    setFormLoader(false)
+                    navigate('/user-properties')
+                })
+                .catch((error) => {
+                    setFormLoader(false)
 
-                //         toast.error(error, { position: toast.POSITION.TOP_LEFT })
+                    toast.error(error, { position: toast.POSITION.TOP_LEFT })
 
 
-                //     })
+                })
 
         }
     });
@@ -546,7 +546,7 @@ const UploadProperty = () => {
     }
 
     const removelines = (index) => {
-        console.log({ index })
+        console.log({index})
         const featureList = otherFeatures.filter((x) => x.id !== index)
         // featureList.splice(index, 1)
         setOtherFeatures(featureList)
@@ -731,7 +731,7 @@ const UploadProperty = () => {
                                                         name='title'
                                                         id='title'
                                                         placeholder='Enter title'
-                                                        style={{ borderColor: errors.title && 'red' }}
+                                                        style={{borderColor: errors.title && 'red'}}
                                                         defaultValue={values.title}
                                                         onChange={
                                                             handleChange
@@ -758,7 +758,7 @@ const UploadProperty = () => {
                                                         name='price'
                                                         id='price'
                                                         placeholder='Enter price'
-                                                        style={{ borderColor: errors.price && 'red' }}
+                                                        style={{borderColor: errors.price && 'red'}}
                                                         defaultValue={values.price}
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
