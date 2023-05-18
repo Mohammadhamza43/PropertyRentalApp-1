@@ -4,7 +4,8 @@ import axios from 'axios';
 const userAccessToken = localStorage.getItem('token');
 
 const axiosInstance = axios.create({
-    baseURL: 'https://walrus-app-ovpy2.ondigitalocean.app/',
+    // baseURL: 'https://walrus-app-ovpy2.ondigitalocean.app/',
+    baseURL: 'http://localhost:3000/',
 });
 
 axiosInstance.interceptors.request.use(

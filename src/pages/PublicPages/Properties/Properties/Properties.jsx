@@ -8,11 +8,11 @@ import { GrFormSearch } from "react-icons/gr";
 import { BiFilter } from "react-icons/bi";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 import { BiBed } from "react-icons/bi";
-import { BsArrowDownUp, BsFillCheckSquareFill } from "react-icons/bs";
+import { BsArrowDownUp, BsFillCheckSquareFill, BsArrowUp, BsArrowDown } from "react-icons/bs";
 import { FiPlayCircle } from "react-icons/fi";
-import { TbBath,T } from "react-icons/tb";
+import { TbBath, T } from "react-icons/tb";
 import { BiBath } from "react-icons/bi";
-import { AiOutlineCar, AiOutlineHeart } from "react-icons/ai";
+import { AiFillHeart, AiOutlineCar, AiOutlineHeart } from "react-icons/ai";
 import { IoIosArrowDown } from "react-icons/io";
 import { GrCheckboxSelected, GrCheckbox } from "react-icons/gr";
 
@@ -27,12 +27,16 @@ import { Map, InfoWindow, Marker, GoogleApiWrapper } from "google-maps-react";
 import axios from "axios";
 import MultiSelectCheckbox, { CheckBox } from "../../../../shared/components/checkbox";
 import Pagination from "../../../../shared/components/pagination";
+import axiosInstance from "../../../../shared/HttpClient/axiosInstance";
 
 const apiKey = process.env.REACT_APP_API_KEY;
 const mapApiJs = process.env.REACT_APP_MAP_API_JS;
 const geocodeJson = process.env.REACT_APP_GEOCODE_JSON;
 
 const Properties = ({ google }) => {
+
+  // const propertyUrl = process.env.PROPERTY_URL;
+  const propertyUrl = 'http://localhost:3000/property';
   const location = useLocation();
   var purpose,
     propertyType,
@@ -92,7 +96,7 @@ const Properties = ({ google }) => {
   const [lat, setLat] = useState("");
 
   const [planAddress, setPlanAddress] = useState(pAddress);
-  const [sortingFilter, setSortingFilter] = useState("");
+  const [sortingFilter, setSortingFilter] = useState(null);
   const [propertydata, setPropertyData] = useState([
     { name: "All", value: "all", count: 0 },
     { name: "New Home", value: "newHome", count: 0 },
@@ -106,9 +110,11 @@ const Properties = ({ google }) => {
   ]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [count,setCount] = useState()
-  const [limit , setLimit] = useState(15);
+  const [count, setCount] = useState(null)
+  const [limit, setLimit] = useState(5);
   const [searchValue, setSearchValue] = useState('')
+
+  const [favorited, setFavorited] = useState(null)
 
 
   // do something on address change
@@ -145,7 +151,6 @@ const Properties = ({ google }) => {
   };
 
   const extractAddress = (place) => {
-    console.log(place);
     const address = {
       city: "",
       state: "",
@@ -229,14 +234,16 @@ const Properties = ({ google }) => {
     let newArr = [...PropertyDT]
     // setPropertyDT(['room','newHome','office','land','building','garage','home','commercialProperties'])
     let tempObj = {
-      key:'all',
-      checked:true
+      key: 'all',
+      checked: true
     }
     setPropertyDT(['all'])
     setSelectedOptions([tempObj])
+    // console.log(,"check localstorageuser")
   }, []);
 
   useEffect(() => {
+    setFavorited(null)
     setLoading(true);
     const loadAllData = async () => {
       // var url = `https://walrus-app-ovpy2.ondigitalocean.app/property/list`;
@@ -262,7 +269,7 @@ const Properties = ({ google }) => {
     const filterData = async () => {
       // var url = `https://walrus-app-ovpy2.ondigitalocean.app/property/list`;
       var url = `http://localhost:3000/property/list`;
-      
+
       if (priceRange) {
         url += `?&priceFrom=${priceRange["min"]}&priceTo=${priceRange["max"]}`;
       }
@@ -291,46 +298,39 @@ const Properties = ({ google }) => {
       // console.log
       // url += `&type=room&type=newHome&type=office&type=land&type=building&type=garage&home=room&type=commercialProperties`
 
-      if(PropertyDT[0] == 'all'){
+      if (PropertyDT[0] == 'all') {
         url += `&type=room&type=newHome&type=office&type=land&type=building&type=garage&type=home&type=commercialProperties`
         // ['room','newHome','office','land','building','garage','home','commercialProperties']
-      }else{
-      if (PropertyDT.length > 0) {
-        console.log(PropertyDT, "check PropertyDT")
-        // let newArr = PropertyDT.filter((el)=>el !== undefined)
-        if (PropertyDT.length == 1) {
-          url += `&type=${PropertyDT[0]}`;
-        } else {
-          let newUrl = url
-          PropertyDT.forEach((el)=>{
-            newUrl +=`&type=${el}`
-          })
-          console.log(PropertyDT + typeof PropertyDT, "PropertyDT in else")
-          // url += `&type=${PropertyDT}`;
-          url = newUrl;
+      } else {
+        if (PropertyDT.length > 0) {
+          // let newArr = PropertyDT.filter((el)=>el !== undefined)
+          if (PropertyDT.length == 1) {
+            url += `&type=${PropertyDT[0]}`;
+          } else {
+            let newUrl = url
+            PropertyDT.forEach((el) => {
+              newUrl += `&type=${el}`
+            })
+            // url += `&type=${PropertyDT}`;
+            url = newUrl;
+          }
         }
       }
-    }
 
-      
+
       if (filtersDt.length > 0) {
         const checkIfAnyFiltersTrue = filtersDt.filter((el) => el.filtersType !== null && el.filtersType !== false);
-        console.log(checkIfAnyFiltersTrue, "checkIfAnyFiltersTrue")
         checkIfAnyFiltersTrue.forEach((el) => {
-          console.log(el, "check el")
-          console.log(el.dbName, "el.dbName")
-          console.log(el.filtersType, "el.filtersType")
           url += `&${el.dbName}=${el.filtersType}`
         })
       } else {
         if (
           filtersDt[0] !== null && filtersDt[0] != undefined
         ) {
-          console.log("single filterDt")
           url += `&${filtersDt[0].dbName}=${filtersDt[0].filtersType}`
         }
       }
-    
+
       // if(
       //   typeof filtersDt.filtersType != null &&
       //   filtersDt.filtersType != undefined,
@@ -341,13 +341,11 @@ const Properties = ({ google }) => {
       //   console.log(url)
       // }
       if (bedRoomDT.length > 0) {
-        console.log(bedRoomDT, "check bedRoomDt")
         if (bedRoomDT.length == 1) {
           url += `&rooms=${bedRoomDT[0]}`;
         } else {
           let newUrl = url
-          console.log(bedRoomDT + typeof bedRoomDT, "bedRoomDT in else")
-          bedRoomDT.forEach((el)=>{
+          bedRoomDT.forEach((el) => {
             newUrl += `&rooms=${el}`
           })
           // url += `&rooms=${bedRoomDT}`;
@@ -368,7 +366,7 @@ const Properties = ({ google }) => {
         } else {
           let newUrl = url
           console.log(bathRoomDt + typeof bathRoomDt, "bathRoomDt in else")
-          bathRoomDt.forEach((el)=>{
+          bathRoomDt.forEach((el) => {
             newUrl += `&bath=${el}`
           })
           url = newUrl;
@@ -410,20 +408,46 @@ const Properties = ({ google }) => {
 
       if (
         typeof sortingFilter !== "undefined" &&
-        sortingFilter !== null &&
-        sortingFilter !== ""
+        sortingFilter !== null
       ) {
-        url += `&sortAttr=${sortingFilter}`;
+        if (sortingFilter.key == 'Oldest') {
+          console.log("Oldest")
+          url += `&sortAttr=${sortingFilter.value}&sort='ASC'`;
+        }
+        if (sortingFilter.key == 'Newest') {
+          console.log("Newest")
+          url += `&sortAttr=${sortingFilter.value}&sort='DESC'`;
+        }
+        if (sortingFilter.key == 'Expensive') {
+          url += `&sortAttr=${sortingFilter.value}&sort='DESC'`;
+
+        }
+        if (sortingFilter.key == 'Cheapest') {
+          url += `&sortAttr=${sortingFilter.value}&sort='ASC'`;
+
+        }
+        if (
+          sortingFilter.key != 'Oldest' &&
+          sortingFilter.key != 'Newest' &&
+          sortingFilter.key != 'Expensive' &&
+          sortingFilter.key != 'Cheapest'
+
+        ) {
+          url += `&sortAttr=${sortingFilter.value}`;
+        }
+        // else{
+        //   console.log("notoldest")
+        //   console.log("notoldest")
+        //   url += `&sortAttr=${sortingFilter.value}`;
+        // }
       }
-      console.log(url);
-      
-      url += `&limit=${limit}&skip=${(currentPage*limit)-limit}`;
+
+      url += `&limit=${limit}&offset=${(currentPage * limit) - limit}`;
       // url += `&limit=2&skip=2`;
       axios({
         method: "get",
         url: url,
       }).then(async function (response) {
-        console.log(response,"check response for count");
         var res = response.data.data;
         res.map((item, index) => {
           var position = {
@@ -437,7 +461,7 @@ const Properties = ({ google }) => {
         setCount(response.data.count)
         setLoading(false);
       });
-      
+
     };
 
     filterData();
@@ -452,7 +476,9 @@ const Properties = ({ google }) => {
     parkingDt,
     filtersDt,
     sortingFilter,
-    currentPage
+    currentPage,
+    favorited
+    // handleFavoriteClick
   ]);
 
   const locations = [
@@ -476,12 +502,13 @@ const Properties = ({ google }) => {
   const [activeMarker, setActiveMarker] = useState(null);
   const [markerDetail, setMarkerDetail] = useState(null);
   const sortOptions = [
+    { value: "price", label: "Expensive" },
+    { value: "price", label: "Cheapest" },
+    { value: "createdAt", label: "Newest" },
+    { value: "createdAt", label: "Oldest" },
     { value: "city", label: "City" },
-    { value: "type", label: "Type" },
-    { value: "status", label: "Status" },
-    { value: "avalibleFrom", label: "Avalible From" },
-    { value: "createdAt", label: "Created Date" },
-    { value: "updatedAt", label: "Created Date" },
+    // { value: "type", label: "Type" },
+    // { value: "availableFrom", label: "Available From" },
   ];
 
   const [home, setHome] = useState({ value: "city", label: "City" });
@@ -581,9 +608,16 @@ const Properties = ({ google }) => {
   };
 
   const sortingHandler = (e) => {
-    setSortingFilter(e.value);
+    console.log(e.value, "check sorting")
+    console.log(e.label, "check sorting")
+    let obj = {
+      key: e.label,
+      value: e.value
+    }
+    // setSortingFilter(e.value);
+    setSortingFilter(obj)
   };
- 
+
 
   const handlePropertyType = (item) => {
     console.log(item, "check property item")
@@ -600,7 +634,6 @@ const Properties = ({ google }) => {
       setPropertyDT([...initArr, item.value])
     }
   }
-  console.log(PropertyDT, "check property Dt")
   const handleBedRoom = (item) => {
     if (bedRoomDT.length > 0) {
       const findIndex = bedRoomDT.findIndex((el) => el == item.name)
@@ -641,15 +674,15 @@ const Properties = ({ google }) => {
   const handleCheckboxChange = async (e, key) => {
     console.log("checkbox", key)
     console.log("checkbox", PropertyDT[0])
-    if(PropertyDT[0]== 'all'){
-      PropertyDT.splice(0,1)
-      selectedOptions.splice(0,1)
-      console.log(selectedOptions,"selected OPtions")
-      console.log(PropertyDT,"property Dt")
-    } 
+    if (PropertyDT[0] == 'all') {
+      PropertyDT.splice(0, 1)
+      selectedOptions.splice(0, 1)
+      console.log(selectedOptions, "selected OPtions")
+      console.log(PropertyDT, "property Dt")
+    }
     // else{
-      console.log("else block cant find at index 0")
-    
+    console.log("else block cant find at index 0")
+
     // let array = []
     // setPropertyDT(array)
     let tempObj = {
@@ -662,17 +695,17 @@ const Properties = ({ google }) => {
     if (findIndex != -1) {
       chec[findIndex].value = e.target.checked
       setSelectedOptions([...chec])
-      initArr.splice(findIndex,1)
+      initArr.splice(findIndex, 1)
       setPropertyDT([...initArr])
-      chec.splice(findIndex,1)
+      chec.splice(findIndex, 1)
     } else {
       console.log("asdf")
       setSelectedOptions([...chec, tempObj])
-      setPropertyDT([...initArr,tempObj.key])
+      setPropertyDT([...initArr, tempObj.key])
     }
-    
-  // }
-    
+
+    // }
+
     // let arrayToSend = selectedOptions?selectedOptions.map((el)=>{
     //   return el.value
     // }):[]
@@ -699,10 +732,8 @@ const Properties = ({ google }) => {
     //   setSelectedOptions([...selectedOptions, option]);
     // }
   };
-  console.log(selectedOptions, "selected options")
-  console.log(PropertyDT, "PropertyDT")
 
-  const handleBedRoomDropdownChange = (e,key)=>{
+  const handleBedRoomDropdownChange = (e, key) => {
     let array = []
     setBedRoomDT(array)
     let tempObj = {
@@ -714,18 +745,18 @@ const Properties = ({ google }) => {
     const findIndex = chec.findIndex((el) => el.key == key)
     if (findIndex != -1) {
       chec[findIndex].value = e.target.checked
-      chec.splice(findIndex,1)
+      chec.splice(findIndex, 1)
       setBedRoomOptions([...chec])
-      initArr.splice(findIndex,1)
+      initArr.splice(findIndex, 1)
       setBedRoomDT([...initArr])
     } else {
       console.log("asdf")
       setBedRoomOptions([...chec, tempObj])
-      setBedRoomDT([...initArr,tempObj.key])
+      setBedRoomDT([...initArr, tempObj.key])
     }
   }
 
-  const handleBathRoomDropdownChange = (e,key)=>{
+  const handleBathRoomDropdownChange = (e, key) => {
     let array = []
     setBathRoomDT(array)
     let tempObj = {
@@ -737,18 +768,18 @@ const Properties = ({ google }) => {
     const findIndex = chec.findIndex((el) => el.key == key)
     if (findIndex != -1) {
       chec[findIndex].value = e.target.checked
-      chec.splice(findIndex,1)
+      chec.splice(findIndex, 1)
       setBathRoomOptions([...chec])
-      initArr.splice(findIndex,1)
+      initArr.splice(findIndex, 1)
       setBathRoomDT([...initArr])
     } else {
       console.log("asdf")
       setBathRoomOptions([...chec, tempObj])
-      setBathRoomDT([...initArr,tempObj.key])
+      setBathRoomDT([...initArr, tempObj.key])
     }
   }
 
-  const handleParkingDropdownChange = (e,key)=>{
+  const handleParkingDropdownChange = (e, key) => {
     let array = []
     setparkingDt(array)
     let tempObj = {
@@ -760,14 +791,14 @@ const Properties = ({ google }) => {
     const findIndex = chec.findIndex((el) => el.key == key)
     if (findIndex != -1) {
       chec[findIndex].value = e.target.checked
-      chec.splice(findIndex,1)
+      chec.splice(findIndex, 1)
       setParkingOptions([...chec])
-      initArr.splice(findIndex,1)
+      initArr.splice(findIndex, 1)
       setparkingDt([...initArr])
     } else {
       console.log("asdf")
       setParkingOptions([...chec, tempObj])
-      setparkingDt([...initArr,tempObj.key])
+      setparkingDt([...initArr, tempObj.key])
     }
   }
   const moreFilters = (item) => {
@@ -809,7 +840,7 @@ const Properties = ({ google }) => {
     }
 
   }
-  const handleMoreFiltersDropdownChange = (e,item)=>{
+  const handleMoreFiltersDropdownChange = (e, item) => {
     // let array = []
     // setFiltersDt(array)
     let tempObj = {
@@ -821,27 +852,23 @@ const Properties = ({ google }) => {
     const findIndex = chec.findIndex((el) => el.key == item.name)
     if (findIndex != -1) {
       chec[findIndex].value = e.target.checked
-      chec.splice(findIndex,1)
+      chec.splice(findIndex, 1)
       setMoreFiltersOptions([...chec])
-      initArr.splice(findIndex,1)
+      initArr.splice(findIndex, 1)
       setFiltersDt([...initArr])
     } else {
       console.log("asdf")
       setMoreFiltersOptions([...chec, tempObj])
-      setFiltersDt([...initArr,{
+      setFiltersDt([...initArr, {
         filtersType: true,
         field: item.name,
         dbName: item.dbName
       }])
     }
   }
-  const totalPages = Math.ceil(count/limit);
-  console.log(totalPages, "total [ages")
+  const totalPages = Math.ceil(count / limit);
   const handlePageChange = (e, pageNumber) => {
-    console.log(e,"handle page working")
-    console.log(e.target.dataset.value,"handle page working")
-    setCurrentPage(parseFloat(e.target.dataset.value));
-console.log(currentPage)
+    setCurrentPage(Number(e.target.dataset.value));
     // console.log(pageNumber);
     // get((pageNumber)*limit-limit,limit,searchValue,`id`,'DESC')
     // console.log("first",property)
@@ -849,10 +876,27 @@ console.log(currentPage)
   const handlePageSizeChange = (event) => {
     setLimit(parseInt(event.target.value))
     // get((currentPage)*parseInt(event.target.value)-parseInt(event.target.value),parseInt(event.target.value),searchValue,'id','DESC')
-    console.log(limit);
   };
-
-  console.log(bedRoomDT,"check bedRoomDt")
+  const handleFavoriteClick = async (item) => {
+    let body = {
+      favorite: true
+    }
+    const response = await axiosInstance.put(`${propertyUrl}/favorite/${item._id}`, body)
+    console.log(response.data.message, "check response")
+    if (response.status == 200) {
+      setFavorited(true)
+    }
+  }
+  const handleRemoveFavorite = async (item) => {
+    let body = {
+      favorite: false
+    }
+    const response = await axiosInstance.put(`${propertyUrl}/favorite/${item._id}`, body)
+    console.log(response.data.message, "check response")
+    if (response.status == 200) {
+      setFavorited(false)
+    }
+  }
   // console.log(,"check bedRoomDt")
   return (
     <>
@@ -914,15 +958,16 @@ console.log(currentPage)
                         </div>
                         <div className="sc-1xux7xn-0 grRvLZ">
                           <button type="button" className="sc-125xj6w-0 cTGHMu">
-                            <BsArrowDownUp />
+                            <BsArrowDownUp onClick={(e) => console.log(e, "arrow down and up")} />
                             Sort:
                             <Dropdown
                               options={sortOptions}
+
                               onChange={(e) => {
                                 setHome(e);
                                 sortingHandler(e);
                               }}
-                              value={home.label}
+                              value={home.label == 'Newest' ? 'Newest' : home.label}
                               placeholder="Select advertising for"
                             />
                           </button>
@@ -979,7 +1024,7 @@ console.log(currentPage)
                 </h1>
                 <div className="u8rllx-2 iHZmYi">
                   <h2 className="u8rllx-3 gCIxxJ">
-                    {filteredData.length} properties including surrounding and
+                    {count} properties including surrounding and
                     nearby suburbs
                   </h2>
                 </div>
@@ -988,12 +1033,21 @@ console.log(currentPage)
               <section>
                 <div className="sc-1yg0wqx-0 kSqCqh">
                   {isLoading === true ? (
-                    <div>
-                      <h2>Loading...</h2>
+                    // <div>
+                    //   <h2>Loading...</h2>
+                    // </div>
+                    // <div style={{color:"deeppink"}} class="spinner-grow text-center" role="status">
+                    //   <span class="sr-only">Loading...</span>
+                    // </div>
+                    <div class="text-center mt-5">
+                      <div style={{color:"deeppink"}}  class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                      </div>
                     </div>
-                  ) : filteredData&&filteredData.length > 0 ? (
+                  ) : filteredData && filteredData.length > 0 ? (
                     filteredData.map((item, index) => {
-                      return (
+                      const ifFavorite = item.favorites.some((el) => el == JSON.parse(localStorage.getItem('user')).token.id)
+                      return (<>
                         <div key={item["_id"]} className="sc-1ti9q65-0 ggJHdq">
                           <article className="sc-1e63uev-0 kydbmE">
                             <Link
@@ -1050,7 +1104,9 @@ console.log(currentPage)
                                   </div>
                                 </div>
                                 <h3 className="sc-1e63uev-3 swIbZ">
-                                  ${item["price"]}
+                                  {/* ${item["price"]} */}
+                                  {item["description"]}
+
                                 </h3>
                                 <div className="ijsdcd-0 gWTwZn">
                                   <h2 className="ijsdcd-1 bjJoNh">
@@ -1101,13 +1157,14 @@ console.log(currentPage)
                                   </div>
                                 </div>
                               </div>
-                              <div className="ou1x8i-0 kXLBZg">
+                              {/* <div className="ou1x8i-0 kXLBZg">
                                 <div className="sc-2sewnk-0 kSoMrH">
                                   <button
                                     type="button"
                                     title="Add to collection"
                                     aria-label="Add to collection"
                                     className="sc-1pk2hw7-0 bToTeF"
+                                    onClick={()=>console.log("marked as favorite")}
                                   >
                                     <span
                                       width="32px"
@@ -1115,14 +1172,67 @@ console.log(currentPage)
                                       role="presentation"
                                       className="suraxk-0 coJfiJ"
                                     >
-                                      <AiOutlineHeart className="sc-1h490wc-1 fmZa-d icon" />
+                                      {
+                                        ifFavorite ?
+                                          <AiFillHeart color='deepPink' className="fmZa-d icon" />
+                                          :
+                                          <AiOutlineHeart  className="sc-1h490wc-1 fmZa-d icon" />
+                                      }
                                     </span>
                                   </button>
                                 </div>
-                              </div>
+                              </div> */}
                             </Link>
+
+                            {
+                              ifFavorite ?
+                                <div className="ou1x8i-0 kXLBZg">
+                                  <div className="sc-2sewnk-0 kSoMrH">
+                                    <button
+                                      type="button"
+                                      title="Add to collection"
+                                      aria-label="Add to collection"
+                                      className="sc-1pk2hw7-0 bToTeF"
+                                      onClick={() => handleRemoveFavorite(item)}
+                                    >
+                                      <span
+                                        width="32px"
+                                        stroke="currentColor"
+                                        role="presentation"
+                                        className="suraxk-0 coJfiJ"
+                                      >
+                                        <AiFillHeart color='deepPink' className="fmZa-d icon" />
+                                      </span>
+                                    </button>
+                                  </div>
+                                </div>
+                                :
+                                <div className="ou1x8i-0 kXLBZg">
+                                  <div className="sc-2sewnk-0 kSoMrH">
+                                    <button
+                                      onClick={() => handleFavoriteClick(item)}
+                                      type="button"
+                                      title="Add to collection"
+                                      aria-label="Add to collection"
+                                      className="sc-1pk2hw7-0 bToTeF"
+
+                                    >
+                                      <span
+                                        width="32px"
+                                        stroke="currentColor"
+                                        role="presentation"
+                                        className="suraxk-0 coJfiJ"
+                                      >
+                                        <AiOutlineHeart className="sc-1h490wc-1 fmZa-d icon" />
+                                      </span>
+                                    </button>
+                                  </div>
+                                </div>
+                            }
+
                           </article>
                         </div>
+                      </>
                       );
                     })
                   ) : (
@@ -1131,16 +1241,20 @@ console.log(currentPage)
                     </>
                   )}
                 </div>
-                <div style={{width:"80%"}} className="mx-auto d-flex justify-content-between align-items-center">
+                <div style={{ width: "80%" }} className="mx-auto d-flex justify-content-between align-items-center">
                   <h6>
-                  Displaying results 1-{filteredData.length<limit?filteredData.length:limit} of {filteredData.length}
+                    Displaying results {((currentPage * limit) - limit) + 1}-{count < limit ? count : (limit * currentPage) < count ? limit * currentPage : count} of {count}
                   </h6>
-                <Pagination
-                currentPage={Number(currentPage)}
-                totalPages={totalPages}
-                handlePageChange={(e)=>handlePageChange(e)}
-                count={totalPages}
-                />
+                  {
+                    console.log(typeof currentPage + currentPage, "currentPage")
+                    // console.log(typeof totalPages + totalPages,"totalPages")
+                  }
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    handlePageChange={(e) => handlePageChange(e)}
+                    count={totalPages}
+                  />
                 </div>
               </section>
             </div>
@@ -1282,7 +1396,9 @@ console.log(currentPage)
                                   role="presentation"
                                   className="suraxk-0 exDrMm"
                                 >
-                                  <AiOutlineHeart className="sc-1h490wc-1 fKOyQl icon" />
+
+                                  {/* <AiOutlineHeart className="sc-1h490wc-1 fKOyQl icon" /> */}
+                                  <AiFillHeart fill="none" />
                                 </span>
                               </button>
                             </div>
@@ -1505,7 +1621,7 @@ console.log(currentPage)
                                             id={i}
                                             name={item.name}
                                             handleCheckboxChange={(e) => handleCheckboxChange(e, item.value)}
-                                            checked={PropertyDT.find((ml) => ml == item.value)?true : false}
+                                            checked={PropertyDT.find((ml) => ml == item.value) ? true : false}
                                           />
                                           {/* <button
                                             type="button"
@@ -1596,9 +1712,9 @@ console.log(currentPage)
                                           className="sc-1tyddxu-0 hRTczC"
                                         >
                                           <CheckBox
-                                            id = {i}
+                                            id={i}
                                             name={item.name}
-                                            handleCheckboxChange={(e)=>handleBedRoomDropdownChange(e,item.name)}
+                                            handleCheckboxChange={(e) => handleBedRoomDropdownChange(e, item.name)}
                                           />
                                           {/* <button
                                             type="button"
@@ -1681,9 +1797,9 @@ console.log(currentPage)
                                           className="sc-1tyddxu-0 hRTczC"
                                         >
                                           <CheckBox
-                                            id = {i}
+                                            id={i}
                                             name={item.name}
-                                            handleCheckboxChange={(e)=>handleBathRoomDropdownChange(e,item.name)}
+                                            handleCheckboxChange={(e) => handleBathRoomDropdownChange(e, item.name)}
                                           />
                                           {/* <button
                                             type="button"
@@ -1793,9 +1909,9 @@ console.log(currentPage)
                                             </span>
                                           </button> */}
                                           <CheckBox
-                                            id = {i}
+                                            id={i}
                                             name={item.name}
-                                            handleCheckboxChange={(e)=>handleParkingDropdownChange(e,item.name)}
+                                            handleCheckboxChange={(e) => handleParkingDropdownChange(e, item.name)}
                                           />
                                         </li>
                                       );
@@ -1884,9 +2000,9 @@ console.log(currentPage)
                                             </span>
                                           </button> */}
                                           <CheckBox
-                                            id = {i}
+                                            id={i}
                                             name={item.name}
-                                            handleCheckboxChange={(e)=>handleMoreFiltersDropdownChange(e,item)}
+                                            handleCheckboxChange={(e) => handleMoreFiltersDropdownChange(e, item)}
                                           />
                                         </li>
                                       );

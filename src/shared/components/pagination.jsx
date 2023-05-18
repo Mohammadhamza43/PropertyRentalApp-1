@@ -3,12 +3,11 @@ import { AiOutlineLeft } from "react-icons/ai";
 import { AiOutlineRight } from "react-icons/ai";
 
 const Pagination = (props) => {
-  const pageNumbers = [ ...Array(props.count)].map((pageNumber) => 1);
-console.log(pageNumbers, "asdkasd")
-  console.log(typeof props.currentPage + props.currentPage,"check current page")
-// console.log(props.currentPage+1)
+  console.log(typeof props.currentPage + props.currentPage,"currentPage") 
+  const pageNumbers = [ ...Array(props.totalPages)].map((el) => el+1);
 let data = props.currentPage + 1
-console.log(data,"data", props.currentPage, "Props")
+console.log(props.currentPage,"props.currentPage")
+console.log(data,"data next button")
   return (
     <nav className='d-flex justify-content-center' aria-label="Page navigation example">
       <ul className="pagination">
