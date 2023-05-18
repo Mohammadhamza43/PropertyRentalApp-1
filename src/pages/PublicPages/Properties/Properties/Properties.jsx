@@ -58,7 +58,7 @@ const Properties = ({ google }) => {
   const [latFilter, setLatFilter] = useState(latFiltertxt);
   const [longFilter, setLongFilter] = useState(lngFiltertxt);
 
-  const [bedRoomDT, setBedRoomDT] = useState("");
+  const [bedRoomDT, setBedRoomDT] = useState([]);
   const searchInput = useRef(null);
   const [country, setCountry] = useState("");
 
@@ -219,6 +219,7 @@ const Properties = ({ google }) => {
     };
 
     const filterData = async () => {
+  
       var url = `https://walrus-app-ovpy2.ondigitalocean.app/property/list`;
       if (priceRange) {
         url += `?&priceFrom=${priceRange["min"]}&priceTo=${priceRange["max"]}`;
@@ -255,7 +256,13 @@ const Properties = ({ google }) => {
         bedRoomDT !== null &&
         bedRoomDT !== ""
       ) {
-        url += `&rooms=${bedRoomDT}`;
+        
+        bedRoomDT.map((val, index) => {
+          if (val !== "all") {
+            url += `&rooms=${val}`;
+          }
+        });
+        
       }
 
       if (
@@ -265,7 +272,7 @@ const Properties = ({ google }) => {
       ) {
         url += `&sortAttr=${sortingFilter}`;
       }
-      // console.log(url);
+
       axios({
         method: "get",
         url: url,
@@ -350,11 +357,11 @@ const Properties = ({ google }) => {
   const [slider, setSlider] = useState(false);
 
   const bedRoomdata = [
-    { name: 1, count: 0 },
-    { name: 2, count: 0 },
-    { name: 3, count: 0 },
-    { name: 4, count: 0 },
-    { name: "5+", count: 0 },
+    { name: 1, value:"1",count: 0 },
+    { name: 2, value:"2",count: 0 },
+    { name: 3, value:"3",count: 0 },
+    { name: 4, value:"4",count: 0 },
+    { name: "5+", value:"5+", count: 0 },
   ];
   const intresteddata = [
     { name: "Buy", value: "sale" },
@@ -400,6 +407,7 @@ const Properties = ({ google }) => {
     setPropertyDT(["all"]);
     setCityFilter("");
     setCity("");
+    setBedRoomDT([]);
     searchInput.current.value = "";
   };
 
@@ -1141,16 +1149,19 @@ const Properties = ({ google }) => {
                                             type="button"
                                             className="sc-10375bz-0 inAQUt"
                                             onClick={() => {
-                                              setBedRoomDT(item.name);
+                                              setBedRoomDT([
+                                                ...bedRoomDT,
+                                                item.value,
+                                              ]);
                                             }}
                                           >
-                                            {bedRoomDT === item.name ? (
+                                            {find_in_arr(item.value ,bedRoomDT )? (
                                               <GrCheckboxSelected className="chack-icons" />
                                             ) : (
                                               <GrCheckbox className="sc-1h490wc-1 clDIaZ icon" />
                                             )}
                                             <span aria-label="All Property Types">
-                                              {item.name}
+                                              {item.value}
                                             </span>
                                             <span
                                               aria-label="1873 properties"
