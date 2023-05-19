@@ -81,7 +81,7 @@ const Properties = ({ google }) => {
     { name: "Balcony", dbName: "balcony", value: null, count: 0 },
     { name: "Fenced", dbName: "fenced", value: null, count: 0 },
   ]);
-
+  const [handleSearch, setHandleSearch] = useState(false)
 
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [bedRoomOptions, setBedRoomOptions] = useState([]);
@@ -387,8 +387,9 @@ const Properties = ({ google }) => {
           url += `&parking=${parkingDt[0]}`;
         } else {
           let newUrl = url
-          console.log(parkingDt + typeof parkingDt, "parkingDt in else")
-          newUrl += `&parking=${parkingDt}`
+          parkingDt.forEach((el)=>{
+            newUrl += `&parking=${el}`
+          })
           url = newUrl
         }
       }
@@ -477,7 +478,8 @@ const Properties = ({ google }) => {
     filtersDt,
     sortingFilter,
     currentPage,
-    favorited
+    favorited,
+    handleSearch
     // handleFavoriteClick
   ]);
 
@@ -540,28 +542,28 @@ const Properties = ({ google }) => {
   const [slider, setSlider] = useState(false);
 
   const bedRoomdata = [
-    { name: 1, count: 0 },
-    { name: 2, count: 0 },
-    { name: 3, count: 0 },
-    { name: 4, count: 0 },
-    { name: 5, count: 0 },
+    { name: 1, count: 0, value:"bedRoom1" },
+    { name: 2, count: 0, value:"bedRoom2" },
+    { name: 3, count: 0, value:"bedRoom3" },
+    { name: 4, count: 0, value:"bedRoom4" },
+    { name: 5, count: 0, value:"bedRoom5" },
   ];
   const intresteddata = [{ name: "Buy", value: "sale" }, { name: "Rent", value: "rent" }];
 
   const bathRoomData = [
-    { name: 1, count: 0 },
-    { name: 2, count: 0 },
-    { name: 3, count: 0 },
-    { name: 4, count: 0 },
-    { name: "5+", count: 0 },
+    { name: 1, count: 0, value:'bathRoom1' },
+    { name: 2, count: 0, value:'bathRoom2' },
+    { name: 3, count: 0, value:'bathRoom3' },
+    { name: 4, count: 0, value:'bathRoom4' },
+    { name: 5, count: 0, value:'bathRoom5' },
   ]
 
   const parkingData = [
-    { name: 1, count: 0 },
-    { name: 2, count: 0 },
-    { name: 3, count: 0 },
-    { name: 4, count: 0 },
-    { name: "5+", count: 0 },
+    { name: 1, count: 0,value:'parking1' },
+    { name: 2, count: 0,value:'parking2' },
+    { name: 3, count: 0,value:'parking3' },
+    { name: 4, count: 0,value:'parking4' },
+    { name: 5, count: 0,value:'parking5' },
   ]
 
 
@@ -602,10 +604,22 @@ const Properties = ({ google }) => {
     });
     setInterested("");
     setPropertyDT(["all"]);
+    setSelectedOptions([])
+    setParkingOptions([])
+    setparkingDt([])
+    setBathRoomDT([])
+    setBedRoomDT([])
+    setBedRoomOptions([])
+    setFiltersDt([])
+
     setCityFilter("");
     setCity("");
     searchInput.current.value = "";
   };
+
+  const handleSearchProperties = ()=>{
+        setHandleSearch(!handleSearch)
+  }
 
   const sortingHandler = (e) => {
     console.log(e.value, "check sorting")
@@ -734,8 +748,9 @@ const Properties = ({ google }) => {
   };
 
   const handleBedRoomDropdownChange = (e, key) => {
-    let array = []
-    setBedRoomDT(array)
+    console.log(bedRoomDT,'bedRoomDT')
+    // let array = []
+    // setBedRoomDT(array)
     let tempObj = {
       key: key,
       checked: e.target.checked
@@ -745,10 +760,10 @@ const Properties = ({ google }) => {
     const findIndex = chec.findIndex((el) => el.key == key)
     if (findIndex != -1) {
       chec[findIndex].value = e.target.checked
-      chec.splice(findIndex, 1)
       setBedRoomOptions([...chec])
       initArr.splice(findIndex, 1)
       setBedRoomDT([...initArr])
+      chec.splice(findIndex, 1)
     } else {
       console.log("asdf")
       setBedRoomOptions([...chec, tempObj])
@@ -757,8 +772,8 @@ const Properties = ({ google }) => {
   }
 
   const handleBathRoomDropdownChange = (e, key) => {
-    let array = []
-    setBathRoomDT(array)
+    // let array = []
+    // setBathRoomDT(array)
     let tempObj = {
       key: key,
       checked: e.target.checked
@@ -768,10 +783,10 @@ const Properties = ({ google }) => {
     const findIndex = chec.findIndex((el) => el.key == key)
     if (findIndex != -1) {
       chec[findIndex].value = e.target.checked
-      chec.splice(findIndex, 1)
       setBathRoomOptions([...chec])
       initArr.splice(findIndex, 1)
       setBathRoomDT([...initArr])
+      chec.splice(findIndex, 1)
     } else {
       console.log("asdf")
       setBathRoomOptions([...chec, tempObj])
@@ -841,6 +856,7 @@ const Properties = ({ google }) => {
 
   }
   const handleMoreFiltersDropdownChange = (e, item) => {
+    console.log(filtersDt,'check filters dt')
     // let array = []
     // setFiltersDt(array)
     let tempObj = {
@@ -852,10 +868,10 @@ const Properties = ({ google }) => {
     const findIndex = chec.findIndex((el) => el.key == item.name)
     if (findIndex != -1) {
       chec[findIndex].value = e.target.checked
-      chec.splice(findIndex, 1)
       setMoreFiltersOptions([...chec])
       initArr.splice(findIndex, 1)
       setFiltersDt([...initArr])
+      chec.splice(findIndex, 1)
     } else {
       console.log("asdf")
       setMoreFiltersOptions([...chec, tempObj])
@@ -882,9 +898,12 @@ const Properties = ({ google }) => {
       favorite: true
     }
     const response = await axiosInstance.put(`${propertyUrl}/favorite/${item._id}`, body)
-    console.log(response.data.message, "check response")
     if (response.status == 200) {
-      setFavorited(true)
+      let tempData = [...filteredData]
+      console.log(tempData,"tempData")
+      let index = tempData.findIndex((el)=>el._id == item._id)
+      tempData[index].favorites.push(JSON.parse(localStorage.getItem('user')).token.id)
+      setFilteredData(tempData)
     }
   }
   const handleRemoveFavorite = async (item) => {
@@ -894,7 +913,13 @@ const Properties = ({ google }) => {
     const response = await axiosInstance.put(`${propertyUrl}/favorite/${item._id}`, body)
     console.log(response.data.message, "check response")
     if (response.status == 200) {
-      setFavorited(false)
+      let tempData = [...filteredData]
+      console.log(tempData,"tempData")
+      let index = tempData.findIndex((el)=>el._id == item._id)
+      let idIndex = tempData[index].favorites.find((el)=>el==JSON.parse(localStorage.getItem('user')).token.id)
+      tempData[index].favorites.splice(idIndex,1)
+      setFilteredData(tempData)
+      // setFavorited(false)
     }
   }
   // console.log(,"check bedRoomDt")
@@ -1046,6 +1071,7 @@ const Properties = ({ google }) => {
                     </div>
                   ) : filteredData && filteredData.length > 0 ? (
                     filteredData.map((item, index) => {
+                      // const ifFavorite = item.favorites.some((el) => el == JSON.parse(localStorage.getItem('user')).token.id)
                       const ifFavorite = item.favorites.some((el) => el == JSON.parse(localStorage.getItem('user')).token.id)
                       return (<>
                         <div key={item["_id"]} className="sc-1ti9q65-0 ggJHdq">
@@ -1185,6 +1211,7 @@ const Properties = ({ google }) => {
                             </Link>
 
                             {
+                              // ifFavorite ?
                               ifFavorite ?
                                 <div className="ou1x8i-0 kXLBZg">
                                   <div className="sc-2sewnk-0 kSoMrH">
@@ -1618,7 +1645,7 @@ const Properties = ({ google }) => {
                                         >
 
                                           <CheckBox
-                                            id={i}
+                                            id={item.name}
                                             name={item.name}
                                             handleCheckboxChange={(e) => handleCheckboxChange(e, item.value)}
                                             checked={PropertyDT.find((ml) => ml == item.value) ? true : false}
@@ -1706,15 +1733,17 @@ const Properties = ({ google }) => {
                                     className="sc-316fzr-0 jDEIHe"
                                   >
                                     {bedRoomdata.map((item, i) => {
+                                      console.log(item ,'bedRoomItem')
                                       return (
                                         <li
                                           key={item.name + i}
                                           className="sc-1tyddxu-0 hRTczC"
                                         >
                                           <CheckBox
-                                            id={i}
+                                            id={item.value}
                                             name={item.name}
                                             handleCheckboxChange={(e) => handleBedRoomDropdownChange(e, item.name)}
+                                            checked = {bedRoomDT.find((ml)=>ml ==item.name)? true :false}
                                           />
                                           {/* <button
                                             type="button"
@@ -1797,9 +1826,11 @@ const Properties = ({ google }) => {
                                           className="sc-1tyddxu-0 hRTczC"
                                         >
                                           <CheckBox
-                                            id={i}
+                                            id={item.value}
                                             name={item.name}
                                             handleCheckboxChange={(e) => handleBathRoomDropdownChange(e, item.name)}
+                                            checked = {bathRoomDt.find((ml)=>ml ==item.name)? true :false}
+                                          
                                           />
                                           {/* <button
                                             type="button"
@@ -1909,9 +1940,11 @@ const Properties = ({ google }) => {
                                             </span>
                                           </button> */}
                                           <CheckBox
-                                            id={i}
+                                            id={item.value}
                                             name={item.name}
                                             handleCheckboxChange={(e) => handleParkingDropdownChange(e, item.name)}
+                                            checked = {parkingDt.find((ml)=>ml ==item.name)? true :false}
+                                          
                                           />
                                         </li>
                                       );
@@ -1967,6 +2000,7 @@ const Properties = ({ google }) => {
                                     className="sc-316fzr-0 jDEIHe"
                                   >
                                     {filtersData.map((item, i) => {
+                                      console.log(item,"check item for filters data")
                                       return (
                                         <li
                                           key={item.name + i}
@@ -2000,9 +2034,11 @@ const Properties = ({ google }) => {
                                             </span>
                                           </button> */}
                                           <CheckBox
-                                            id={i}
+                                            id={item.name}
                                             name={item.name}
                                             handleCheckboxChange={(e) => handleMoreFiltersDropdownChange(e, item)}
+                                            checked = {filtersDt.find((ml)=>ml.dbName ==item.dbName)? true :false}
+                                          
                                           />
                                         </li>
                                       );
@@ -2030,8 +2066,9 @@ const Properties = ({ google }) => {
                           </button>
                         </div>
                         <div className="sc-1y0l0ze-9 iuAQpx">
-                          <button type="button" className="sc-9rc7kn-0 hyeZAL">
-                            Search {filteredData?.length} properties
+                          <button onClick={handleSearchProperties} type="button" className="sc-9rc7kn-0 hyeZAL">
+                            {/* Search {filteredData?.length} properties */}
+                            Search {count} properties
                           </button>
                         </div>
                       </div>

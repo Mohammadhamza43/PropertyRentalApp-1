@@ -7,7 +7,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import ProtectedRoutes from "./ProtectedRoutes";
 import GoogleMapApi from "./GoogleMapApi";
 import UserProperties from "./pages/dashboard/UserProperties/UserProperties";
-
 const Home = lazy(() => import('./pages/PublicPages/home/Home'))
 const About = lazy(() => import('./pages/PublicPages/About/About'))
 const Agent = lazy(() => import('./pages/PublicPages/Agent/Agent'))
@@ -26,7 +25,7 @@ const Dashboard = lazy(() => import('./pages/dashboard/Dashboard/Dashboard'))
 const Profile = lazy(() => import('./pages/dashboard/Profile/Profile'))
 const Verify = lazy(() => import('./pages/Verify/Verify'));
 const UploadProperty = lazy(() => import('./pages/dashboard/UploadProperty/UploadProperty'))
-// const UserProperty = lazy(() => import('./pages/dashboard/UserProperty/UserProperty'))
+const UserProperty = lazy(() => import('./pages/dashboard/UserProperty/UserProperty'))
 const UpdateProperty = lazy(() => import('./pages/dashboard/UpdateProperty/UpdateProperty'))
 
 const apiKey = process.env.REACT_APP_API_KEY;
@@ -85,7 +84,7 @@ function App() {
                         <Route path="/dashboard" element={<ProtectedRoutes Component={Dashboard}/>}/>
                         <Route path="/profile" element={<ProtectedRoutes Component={Profile}/>}/>
                         <Route path="/upload-property" element={<ProtectedRoutes Component={UploadProperty}/>}/>
-                        {/* <Route path="/user-properties" element={<ProtectedRoutes Component={UserProperties}/>}/> */}
+                        <Route path="/user-properties" element={<ProtectedRoutes Component={UserProperties}/>}/>
                         <Route path="/update-properties/" element={<ProtectedRoutes Component={UpdateProperty}/>}/>
                         <Route path="/verify" element={<Verify/>}/>
                         <Route path="*" element={<Home/>}/>

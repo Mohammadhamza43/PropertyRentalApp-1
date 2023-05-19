@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { MdDelete, MdGpsFixed } from 'react-icons/md'
 import { toast, ToastContainer } from 'react-toastify';
 import Dropdown from 'react-dropdown';
@@ -202,6 +202,7 @@ const UploadProperty = () => {
     const [video, setVideo] = useState('');
     const [tour, setTour] = useState('');
     const [formLoader, setFormLoader] = useState(false)
+
     // console.log(otherFeatuers);
 
     // const submit = async (event) => {
@@ -361,155 +362,155 @@ const UploadProperty = () => {
         validationSchema: uploadPropertySchema,
         onSubmit: async (values) => {
 
-                const location = {
-                    country: values.country,
-                    city: values.city,
-                    address: address,
-                    areaLocation: values.areaLocation,
-                    pinLocation: values.location,
-                    postalCode: values.postalCode,
-                    streetNumber: values.streetNumber,
-                    longitude: values.longitude,
-                    latitude: values.latitude
-                };
-                const area = { value: values.area, unit: areaUnit.value };
-                const purpose = advertising.value;
-                const availableFrom = values.date;
-                const description = values.description;
-                const title = values.title;
-                const price = values.price;
-                let newHomeAmenities = {}
-                let homeAmenities = {}
-                let roomAmenities = {}
-                let commercialAmenities = {}
-                let garageAmenities = {}
-                let landAmenities = {}
+            const location = {
+                country: values.country,
+                city: values.city,
+                address: address,
+                areaLocation: values.areaLocation,
+                pinLocation: values.location,
+                postalCode: values.postalCode,
+                streetNumber: values.streetNumber,
+                longitude: values.longitude,
+                latitude: values.latitude
+            };
+            const area = { value: values.area, unit: areaUnit.value };
+            const purpose = advertising.value;
+            const availableFrom = values.date;
+            const description = values.description;
+            const title = values.title;
+            const price = values.price;
+            let newHomeAmenities = {}
+            let homeAmenities = {}
+            let roomAmenities = {}
+            let commercialAmenities = {}
+            let garageAmenities = {}
+            let landAmenities = {}
 
 
-                switch (propertyType.value) {
-                    case 'newHome' || 'home':
-                        newHomeAmenities = {
-                            rooms: values.room,
-                            kitchen: values.kitchen,
-                            bath: values.bath,
-                            livingRoom: values.livingRoom,
-                            parking: parking.value,
-                            airConditioning: airConditioning.value,
-                            balcony: balcony.value,
-                            window: window.value,
-                            furnished: furnished.value,
-                            floors: values.totalFloors,
-                            security: security.value,
-                            elevator: elevetor.value,
-                            otherAmenities: [...otherFeatures]
-                        }
-                        console.log(newHomeAmenities);
-                        break;
-                    case 'room':
-                        roomAmenities = {
-                            kitchen: values.kitchen,
-                            bath: values.bath,
-                            parking: parking.value,
-                            airConditioning: airConditioning.value,
-                            balcony: balcony.value,
-                            security: security.value,
-                            elevator: elevetor.value,
-                            window: window.value,
-                            furnished: furnished.value,
-                            floorNo: values.floorNumber,
-                            otherAmenities: [...otherFeatures]
-                        }
-                        break;
-                    case 'office' || 'commercialProperties' || 'building':
-                        commercialAmenities = {
-                            kitchen: values.kitchen,
-                            bath: values.bath,
-                            parking: parking.value,
-                            airConditioning: airConditioning.value,
-                            security: security.value,
-                            balcony: balcony.value,
-                            window: window.value,
-                            furnished: furnished.value,
-                            floorNo: values.totalFloors,
-                            otherAmenities: [...otherFeatures]
-                        }
-                        break;
-                    case 'land':
-                        landAmenities = {
-                            type: values.landType,
-                            fenced: fenced.value,
-                            otherAmenities: [...otherFeatures]
-                        }
-                        break;
-                    case 'garage':
-                        garageAmenities = {
-                            unit: values.unit,
-                            wide: values.wide,
-                            long: values.long,
-                            height: values.height,
-                            otherAmenities: [...otherFeatures]
-                        }
-                        break;
+            switch (propertyType.value) {
+                case 'newHome' || 'home':
+                    newHomeAmenities = {
+                        rooms: values.room,
+                        kitchen: values.kitchen,
+                        bath: values.bath,
+                        livingRoom: values.livingRoom,
+                        parking: parking.value,
+                        airConditioning: airConditioning.value,
+                        balcony: balcony.value,
+                        window: window.value,
+                        furnished: furnished.value,
+                        floors: values.totalFloors,
+                        security: security.value,
+                        elevator: elevetor.value,
+                        otherAmenities: [...otherFeatures]
+                    }
+                    console.log(newHomeAmenities);
+                    break;
+                case 'room':
+                    roomAmenities = {
+                        kitchen: values.kitchen,
+                        bath: values.bath,
+                        parking: parking.value,
+                        airConditioning: airConditioning.value,
+                        balcony: balcony.value,
+                        security: security.value,
+                        elevator: elevetor.value,
+                        window: window.value,
+                        furnished: furnished.value,
+                        floorNo: values.floorNumber,
+                        otherAmenities: [...otherFeatures]
+                    }
+                    break;
+                case 'office' || 'commercialProperties' || 'building':
+                    commercialAmenities = {
+                        kitchen: values.kitchen,
+                        bath: values.bath,
+                        parking: parking.value,
+                        airConditioning: airConditioning.value,
+                        security: security.value,
+                        balcony: balcony.value,
+                        window: window.value,
+                        furnished: furnished.value,
+                        floorNo: values.totalFloors,
+                        otherAmenities: [...otherFeatures]
+                    }
+                    break;
+                case 'land':
+                    landAmenities = {
+                        type: values.landType,
+                        fenced: fenced.value,
+                        otherAmenities: [...otherFeatures]
+                    }
+                    break;
+                case 'garage':
+                    garageAmenities = {
+                        unit: values.unit,
+                        wide: values.wide,
+                        long: values.long,
+                        height: values.height,
+                        otherAmenities: [...otherFeatures]
+                    }
+                    break;
 
-                    default:
-                    //   text = "Looking forward to the Weekend";
-                }
+                default:
+                //   text = "Looking forward to the Weekend";
+            }
 
-                const formData = new FormData();
-                formData.append('title', title)
-                formData.append('description', description)
-                formData.append('type', propertyType.value)
-                formData.append('location', JSON.stringify(location))
-                formData.append('area', JSON.stringify(area))
-                formData.append('purpose', purpose)
-                formData.append('availableFrom', availableFrom)
-                formData.append('newHomeAmenities', JSON.stringify(newHomeAmenities))
-                formData.append('homeAmenities', JSON.stringify(homeAmenities))
-                formData.append('roomAmenities', JSON.stringify(roomAmenities))
-                formData.append('commercialAmenities', JSON.stringify(commercialAmenities))
-                formData.append('garageAmenities', JSON.stringify(garageAmenities))
-                formData.append('landAmenities', JSON.stringify(landAmenities))
-                formData.append('price', price)
-                for (let i = 0; i < selectedImages.length; i++) {
-                    formData.append('photos', selectedImages[i])
-                }
+            const formData = new FormData();
+            formData.append('title', title)
+            formData.append('description', description)
+            formData.append('type', propertyType.value)
+            formData.append('location', JSON.stringify(location))
+            formData.append('area', JSON.stringify(area))
+            formData.append('purpose', purpose)
+            formData.append('availableFrom', availableFrom)
+            formData.append('newHomeAmenities', JSON.stringify(newHomeAmenities))
+            formData.append('homeAmenities', JSON.stringify(homeAmenities))
+            formData.append('roomAmenities', JSON.stringify(roomAmenities))
+            formData.append('commercialAmenities', JSON.stringify(commercialAmenities))
+            formData.append('garageAmenities', JSON.stringify(garageAmenities))
+            formData.append('landAmenities', JSON.stringify(landAmenities))
+            formData.append('price', price)
+            for (let i = 0; i < selectedImages.length; i++) {
+                formData.append('photos', selectedImages[i])
+            }
 
-                formData.append('videos', video)
-                formData.append('tours', tour)
-                for (var pair of formData.entries()) {
-                    console.log(pair[0] + ' - ' + pair[1]);
-                }
+            formData.append('videos', video)
+            formData.append('tours', tour)
+            for (var pair of formData.entries()) {
+                console.log(pair[0] + ' - ' + pair[1]);
+            }
 
+            setFormLoader(true)
+            if (selectedImages === '') {
                 setFormLoader(true)
-                if (selectedImages === '') {
-                    setFormLoader(true)
-                    return (
-                        toast.success('Image is .',
-                            { position: toast.POSITION.TOP_LEFT })
+                return (
+                    toast.success('Image is .',
+                        { position: toast.POSITION.TOP_LEFT })
 
-                    )
-                }
-                await fetch('https://walrus-app-ovpy2.ondigitalocean.app/property', {
-                    method: "POST",
-                    headers: {
-                        "Accept": "application/json",
-                        "AUTHORIZATION": `BEARER ${token}`
-                    },
-                    body: formData
+                )
+            }
+            await fetch('https://walrus-app-ovpy2.ondigitalocean.app/property', {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "AUTHORIZATION": `BEARER ${token}`
+                },
+                body: formData
+            })
+                .then((res) => {
+
+                    setFormLoader(false)
+                    navigate('/user-properties')
+                    console.log(res)
                 })
-                    .then((res) => {
+                .catch((error) => {
+                    setFormLoader(false)
 
-                        setFormLoader(false)
-                        navigate('/user-properties')
-                        console.log(res)
-                    })
-                    .catch((error) => {
-                        setFormLoader(false)
-
-                        toast.error(error, { position: toast.POSITION.TOP_LEFT })
+                    toast.error(error, { position: toast.POSITION.TOP_LEFT })
 
 
-                    })
+                })
 
         }
     });
@@ -571,7 +572,7 @@ const UploadProperty = () => {
 
     // do something on address change
     const onChangeAddress = (autocomplete) => {
-        console.log({autocomplete})
+        console.log({ autocomplete })
         const place = autocomplete.getPlace();
         const lat = place.geometry.location.lat();
         const lng = place.geometry.location.lng();
@@ -587,7 +588,7 @@ const UploadProperty = () => {
         setStreetNumber(placeDetails.streetNumber)
         values.streetNumber = placeDetails.streetNumber
         setAreaLocation(placeDetails.area)
-        values.areaLocation =placeDetails.area
+        values.areaLocation = placeDetails.area
         setPinLocation(address)
         values.location = address
         setLatitude(lat);
@@ -653,7 +654,10 @@ const UploadProperty = () => {
         values.propertyType = propertyType.value
     },);
 
+    const queryId = useParams()
+    useEffect(() => {
 
+    }, [])
     return (
         <>
             <Header />
@@ -684,11 +688,11 @@ const UploadProperty = () => {
                                                 <div className='password-filed'>
                                                     <label>Property Type</label>
                                                     <Dropdown
-                                                    options={propertytypeOptions}
-                                                    name='propertyType'
-                                                    onChange={(e) => {setPropertyType(e)}}
-                                                    value={propertyType.value}
-                                                    placeholder="Select property type" />
+                                                        options={propertytypeOptions}
+                                                        name='propertyType'
+                                                        onChange={(e) => { setPropertyType(e) }}
+                                                        value={propertyType.value}
+                                                        placeholder="Select property type" />
                                                 </div>
                                             </div>
                                             {/* {propertyType.value !== 'propertytype' && propertyType.value !== '' */}
@@ -1230,11 +1234,11 @@ const UploadProperty = () => {
                                                     placeholder='Enter description'
                                                     rows="5"
                                                     style={{ borderColor: errors.description && 'red' }}
-                                                            defaultValue={values.description}
-                                                            onChange={handleChange}
-                                                            onBlur={handleBlur}>
+                                                    defaultValue={values.description}
+                                                    onChange={handleChange}
+                                                    onBlur={handleBlur}>
                                                 </textarea>
-                                                        {errors.description && touched.description && <p className='error'>{errors.description}</p>}
+                                                {errors.description && touched.description && <p className='error'>{errors.description}</p>}
                                             </div>
 
 
