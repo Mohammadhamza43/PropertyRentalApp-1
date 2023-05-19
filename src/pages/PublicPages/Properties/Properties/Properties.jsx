@@ -1649,7 +1649,8 @@ const Properties = ({ google }) => {
                                             name={item.name}
                                             handleCheckboxChange={(e) => handleCheckboxChange(e, item.value)}
                                             checked={PropertyDT.find((ml) => ml == item.value) ? true : false}
-                                          />
+                                            
+                                         />
                                           {/* <button
                                             type="button"
                                             className="sc-10375bz-0 inAQUt"
