@@ -490,7 +490,7 @@ const UploadProperty = () => {
 
                 )
             }
-            await fetch('https://walrus-app-ovpy2.ondigitalocean.app/property', {
+            await fetch(`${process.env.REACT_APP_PROPERTY_URL}/property`, {
                 method: "POST",
                 headers: {
                     "Accept": "application/json",
@@ -656,7 +656,9 @@ const UploadProperty = () => {
 
     const queryId = useParams()
     useEffect(() => {
-
+        if(queryId !=undefined){
+            // setPropertyData()
+        }
     }, [])
     return (
         <>

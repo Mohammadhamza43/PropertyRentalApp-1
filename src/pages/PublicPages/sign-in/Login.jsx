@@ -69,14 +69,14 @@ const Login = () => {
         setPasswordType("password")
     }
 
-
+    let url = process.env.REACT_APP_PROPERTY_URL
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
         validationSchema: loginSchema,
         onSubmit: (values) => {
             setLoader(true)
             // axios.post('user/login', values)
-            axios.post('http://localhost:3000/user/login', values)
+            axios.post(`${url}/user/login`, values)
                 .then((res) => {
                     setLoader(false)
                     toast.success('Successfully login',

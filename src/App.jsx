@@ -84,6 +84,7 @@ function App() {
                         <Route path="/dashboard" element={<ProtectedRoutes Component={Dashboard}/>}/>
                         <Route path="/profile" element={<ProtectedRoutes Component={Profile}/>}/>
                         <Route path="/upload-property" element={<ProtectedRoutes Component={UploadProperty}/>}/>
+                        <Route path="/upload-property/:id" element={<ProtectedRoutes Component={UploadProperty}/>}/>
                         <Route path="/user-properties" element={<ProtectedRoutes Component={UserProperties}/>}/>
                         <Route path="/update-properties/" element={<ProtectedRoutes Component={UpdateProperty}/>}/>
                         <Route path="/verify" element={<Verify/>}/>

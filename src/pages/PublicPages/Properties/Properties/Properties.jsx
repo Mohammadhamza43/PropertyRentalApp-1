@@ -34,9 +34,11 @@ const mapApiJs = process.env.REACT_APP_MAP_API_JS;
 const geocodeJson = process.env.REACT_APP_GEOCODE_JSON;
 
 const Properties = ({ google }) => {
-
+  
   // const propertyUrl = process.env.PROPERTY_URL;
-  const propertyUrl = 'http://localhost:3000/property';
+  // const propertyUrl = 'http://localhost:3000/property';
+  const propertyUrl = process.env.REACT_APP_PROPERTY_URL
+  console.log(propertyUrl,"propertyUrl")
   const location = useLocation();
   var purpose,
     propertyType,
@@ -897,7 +899,7 @@ const Properties = ({ google }) => {
     let body = {
       favorite: true
     }
-    const response = await axiosInstance.put(`${propertyUrl}/favorite/${item._id}`, body)
+    const response = await axiosInstance.put(`${propertyUrl}/property/favorite/${item._id}`, body)
     if (response.status == 200) {
       let tempData = [...filteredData]
       console.log(tempData,"tempData")
@@ -910,7 +912,7 @@ const Properties = ({ google }) => {
     let body = {
       favorite: false
     }
-    const response = await axiosInstance.put(`${propertyUrl}/favorite/${item._id}`, body)
+    const response = await axiosInstance.put(`${propertyUrl}/property/favorite/${item._id}`, body)
     console.log(response.data.message, "check response")
     if (response.status == 200) {
       let tempData = [...filteredData]
@@ -1130,8 +1132,8 @@ const Properties = ({ google }) => {
                                   </div>
                                 </div>
                                 <h3 className="sc-1e63uev-3 swIbZ">
-                                  {/* ${item["price"]} */}
-                                  {item["description"]}
+                                  ${item["price"]}
+                                  {/* {item["description"]} */}
 
                                 </h3>
                                 <div className="ijsdcd-0 gWTwZn">
