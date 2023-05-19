@@ -708,10 +708,10 @@ const Properties = ({ google }) => {
     const findIndex = chec.findIndex((el) => el.key === key)
     if (findIndex != -1) {
       chec[findIndex].value = e.target.checked
-      setSelectedOptions([...chec])
-      initArr.splice(findIndex, 1)
-      setPropertyDT([...initArr])
       chec.splice(findIndex, 1)
+      initArr.splice(findIndex, 1)
+      setSelectedOptions([...chec])
+      setPropertyDT([...initArr])
     } else {
       console.log("asdf")
       setSelectedOptions([...chec, tempObj])
@@ -760,10 +760,10 @@ const Properties = ({ google }) => {
     const findIndex = chec.findIndex((el) => el.key == key)
     if (findIndex != -1) {
       chec[findIndex].value = e.target.checked
+      chec.splice(findIndex, 1)
       setBedRoomOptions([...chec])
       initArr.splice(findIndex, 1)
       setBedRoomDT([...initArr])
-      chec.splice(findIndex, 1)
     } else {
       console.log("asdf")
       setBedRoomOptions([...chec, tempObj])
@@ -783,10 +783,10 @@ const Properties = ({ google }) => {
     const findIndex = chec.findIndex((el) => el.key == key)
     if (findIndex != -1) {
       chec[findIndex].value = e.target.checked
+      chec.splice(findIndex, 1)
       setBathRoomOptions([...chec])
       initArr.splice(findIndex, 1)
       setBathRoomDT([...initArr])
-      chec.splice(findIndex, 1)
     } else {
       console.log("asdf")
       setBathRoomOptions([...chec, tempObj])
@@ -795,8 +795,8 @@ const Properties = ({ google }) => {
   }
 
   const handleParkingDropdownChange = (e, key) => {
-    let array = []
-    setparkingDt(array)
+    // let array = []
+    // setparkingDt(array)
     let tempObj = {
       key: key,
       checked: e.target.checked
@@ -806,9 +806,9 @@ const Properties = ({ google }) => {
     const findIndex = chec.findIndex((el) => el.key == key)
     if (findIndex != -1) {
       chec[findIndex].value = e.target.checked
+      initArr.splice(findIndex, 1)
       chec.splice(findIndex, 1)
       setParkingOptions([...chec])
-      initArr.splice(findIndex, 1)
       setparkingDt([...initArr])
     } else {
       console.log("asdf")
@@ -868,10 +868,10 @@ const Properties = ({ google }) => {
     const findIndex = chec.findIndex((el) => el.key == item.name)
     if (findIndex != -1) {
       chec[findIndex].value = e.target.checked
-      setMoreFiltersOptions([...chec])
       initArr.splice(findIndex, 1)
-      setFiltersDt([...initArr])
       chec.splice(findIndex, 1)
+      setMoreFiltersOptions([...chec])
+      setFiltersDt([...initArr])
     } else {
       console.log("asdf")
       setMoreFiltersOptions([...chec, tempObj])
