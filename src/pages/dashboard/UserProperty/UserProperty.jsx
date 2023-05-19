@@ -30,8 +30,8 @@ const UserProperty = () => {
 
     const getPropertyList = async () => {
         const response = await axiosInstance.get('property/user')
+        console.log(response,"check data for user prpoerties")
         const data = await response.data
-
         setLoader(false)
         setList(data.data)
     }

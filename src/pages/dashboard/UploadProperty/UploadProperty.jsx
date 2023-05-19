@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { MdDelete, MdGpsFixed } from 'react-icons/md'
 import { toast, ToastContainer } from 'react-toastify';
 import Dropdown from 'react-dropdown';
@@ -202,6 +202,7 @@ const UploadProperty = () => {
     const [video, setVideo] = useState('');
     const [tour, setTour] = useState('');
     const [formLoader, setFormLoader] = useState(false)
+
     // console.log(otherFeatuers);
 
     /*const submit = async (event) => {
@@ -362,29 +363,29 @@ const UploadProperty = () => {
         onSubmit: async (values) => {
             console.log(values + "formic Value");
 
-                const location = {
-                    country: values.country,
-                    city: values.city,
-                    address: address,
-                    areaLocation: values.areaLocation,
-                    pinLocation: values.location,
-                    postalCode: values.postalCode,
-                    streetNumber: values.streetNumber,
-                    longitude: values.longitude,
-                    latitude: values.latitude
-                };
-                const area = { value: values.area, unit: areaUnit.value };
-                const purpose = advertising.value;
-                const availableFrom = values.date;
-                const description = values.description;
-                const title = values.title;
-                const price = values.price;
-                let newHomeAmenities = {}
-                let homeAmenities = {}
-                let roomAmenities = {}
-                let commercialAmenities = {}
-                let garageAmenities = {}
-                let landAmenities = {}
+            const location = {
+                country: values.country,
+                city: values.city,
+                address: address,
+                areaLocation: values.areaLocation,
+                pinLocation: values.location,
+                postalCode: values.postalCode,
+                streetNumber: values.streetNumber,
+                longitude: values.longitude,
+                latitude: values.latitude
+            };
+            const area = { value: values.area, unit: areaUnit.value };
+            const purpose = advertising.value;
+            const availableFrom = values.date;
+            const description = values.description;
+            const title = values.title;
+            const price = values.price;
+            let newHomeAmenities = {}
+            let homeAmenities = {}
+            let roomAmenities = {}
+            let commercialAmenities = {}
+            let garageAmenities = {}
+            let landAmenities = {}
 
 
                 switch (propertyType.value) {
@@ -470,9 +471,9 @@ const UploadProperty = () => {
                         }
                         break;
 
-                    default:
-                    //   text = "Looking forward to the Weekend";
-                }
+                default:
+                //   text = "Looking forward to the Weekend";
+            }
 
                 const formData = new FormData();
                 formData.append('title', title)
@@ -508,7 +509,7 @@ const UploadProperty = () => {
 
                 )
             }
-            await fetch('https://walrus-app-ovpy2.ondigitalocean.app/property', {
+            await fetch(`${process.env.REACT_APP_PROPERTY_URL}/property`, {
                 method: "POST",
                 headers: {
                     "Accept": "application/json",
@@ -520,7 +521,7 @@ const UploadProperty = () => {
 
                     setFormLoader(false)
                     navigate('/user-properties')
-                })
+                console.log(res)})
                 .catch((error) => {
                     setFormLoader(false)
 
@@ -589,7 +590,7 @@ const UploadProperty = () => {
 
     // do something on address change
     const onChangeAddress = (autocomplete) => {
-        console.log({autocomplete})
+        console.log({ autocomplete })
         const place = autocomplete.getPlace();
         const lat = place.geometry.location.lat();
         const lng = place.geometry.location.lng();
@@ -605,7 +606,7 @@ const UploadProperty = () => {
         setStreetNumber(placeDetails.streetNumber)
         values.streetNumber = placeDetails.streetNumber
         setAreaLocation(placeDetails.area)
-        values.areaLocation =placeDetails.area
+        values.areaLocation = placeDetails.area
         setPinLocation(address)
         values.location = address
         setLatitude(lat);
@@ -671,7 +672,12 @@ const UploadProperty = () => {
         values.propertyType = propertyType.value
     },);
 
-
+    const queryId = useParams()
+    useEffect(() => {
+        if(queryId !=undefined){
+            // setPropertyData()
+        }
+    }, [])
     return (
         <>
             <Header />
@@ -702,11 +708,11 @@ const UploadProperty = () => {
                                                 <div className='password-filed'>
                                                     <label>Property Type</label>
                                                     <Dropdown
-                                                    options={propertytypeOptions}
-                                                    name='propertyType'
-                                                    onChange={(e) => {setPropertyType(e)}}
-                                                    value={propertyType.value}
-                                                    placeholder="Select property type" />
+                                                        options={propertytypeOptions}
+                                                        name='propertyType'
+                                                        onChange={(e) => { setPropertyType(e) }}
+                                                        value={propertyType.value}
+                                                        placeholder="Select property type" />
                                                 </div>
                                             </div>
                                             {/* {propertyType.value !== 'propertytype' && propertyType.value !== '' */}
@@ -1248,11 +1254,11 @@ const UploadProperty = () => {
                                                     placeholder='Enter description'
                                                     rows="5"
                                                     style={{ borderColor: errors.description && 'red' }}
-                                                            defaultValue={values.description}
-                                                            onChange={handleChange}
-                                                            onBlur={handleBlur}>
+                                                    defaultValue={values.description}
+                                                    onChange={handleChange}
+                                                    onBlur={handleBlur}>
                                                 </textarea>
-                                                        {errors.description && touched.description && <p className='error'>{errors.description}</p>}
+                                                {errors.description && touched.description && <p className='error'>{errors.description}</p>}
                                             </div>
 
 
