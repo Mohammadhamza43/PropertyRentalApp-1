@@ -366,7 +366,7 @@ svg:not(:root) {
     line-height: 34px;
     text-align: center;
     white-space: nowrap;
-    color: rgb(16, 16, 16);
+    /* color: rgb(16, 16, 16); */
     background-color: rgb(255, 255, 255);
     border: 1px solid rgb(224, 227, 229);
     border-radius: 20px;
@@ -676,9 +676,7 @@ margin-top: 0.2px;
     padding: 0px;
 }
 
-.rkh7f0-1 .rkh7f0-2{
-    
-}
+
 
 .ddpQTN {
     display: inline-flex;
@@ -724,8 +722,11 @@ margin-top: 0.2px;
     display: inline-flex;
     -webkit-box-align: center;
     align-items: center;
+    /* position: absolute; */
     position: absolute;
     right: 6px;
+    /* right: -22px; */
+    /* top: 10px; */
     bottom: 129px;
 }
 
@@ -807,6 +808,10 @@ margin-top: 0.2px;
     .cTGHMu:hover .is-open .Dropdown-arrow {
         border-color: transparent transparent rgb(255, 0, 134) !important;
         border-width: 0 5px 5px;
+    }
+
+    .is-open .Dropdown-menu{
+        overflow: auto;
     }
 
     .cTGHMu:hover {
@@ -1746,10 +1751,6 @@ img {
     .gm-style .gm-style-iw-c{
        max-width: 400px !important;
        min-width: 360px !important;
-    }
-
-    .gm-style .gm-style-iw-d{
-        /* max-height: 150px !important; */
     }
 
     .kpjXrq{
