@@ -249,7 +249,7 @@ const Properties = ({ google }) => {
     setLoading(true);
     const loadAllData = async () => {
       // var url = `https://walrus-app-ovpy2.ondigitalocean.app/property/list`;
-      var url = `http://localhost:3000/property/list`;
+      var url = `${process.env.REACT_APP_PROPERTY_URL}/property/list`;
       axios({
         method: "get",
         url: url,
@@ -269,7 +269,7 @@ const Properties = ({ google }) => {
 
     const filterData = async () => {
       // var url = `https://walrus-app-ovpy2.ondigitalocean.app/property/list`;
-      var url = `http://localhost:3000/property/list`;
+      var url = `${process.env.REACT_APP_PROPERTY_URL}/property/list`;
 
       if (priceRange) {
         url += `?&priceFrom=${priceRange["min"]}&priceTo=${priceRange["max"]}`;
