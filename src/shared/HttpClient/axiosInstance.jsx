@@ -6,7 +6,7 @@ const userAccessToken = localStorage.getItem('token');
 const axiosInstance = axios.create({
     // baseURL: 'https://walrus-app-ovpy2.ondigitalocean.app/',
     // baseURL: 'http://localhost:3000/',
-    baseURL: `${proces.env.REACT_APP_PROPERTY_URL}`,
+    baseURL: `${process.env.REACT_APP_PROPERTY_URL}`,
 });
 
 axiosInstance.interceptors.request.use(
