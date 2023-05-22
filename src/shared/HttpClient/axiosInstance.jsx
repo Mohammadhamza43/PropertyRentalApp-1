@@ -6,13 +6,13 @@ const userAccessToken = localStorage.getItem('token');
 const axiosInstance = axios.create({
     // baseURL: 'https://walrus-app-ovpy2.ondigitalocean.app/',
     // baseURL: 'http://localhost:3000/',
-    baseURL: `${process.env.REACT_APP_PROPERTY_URL}`,
+    baseURL: `${process.env.REACT_APP_BASE_URL}`,
 });
 
 axiosInstance.interceptors.request.use(
     (config) => {
         // Add any custom headers or request configurations here
-        console.log({userAccessToken})
+        console.log({userAccessToken},"check userAccesstoken")
         if (!userAccessToken) {
             localStorage.clear()
             window.location.reload(false);

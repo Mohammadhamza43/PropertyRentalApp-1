@@ -69,7 +69,7 @@ const Login = () => {
         setPasswordType("password")
     }
 
-    let url = process.env.REACT_APP_PROPERTY_URL
+    let url = process.env.REACT_APP_BASE_URL
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
         validationSchema: loginSchema,

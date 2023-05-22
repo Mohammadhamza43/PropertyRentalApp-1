@@ -45,7 +45,7 @@ function PropertiesDetails() {
 
   useEffect(() => {
     axiosInstance
-      .get(`property/${params.id}`)
+      .get(`/property/${params.id}`)
       .then((response) => setPropertyData(response.data))
       .catch((error) => console.log(error));
   }, []);

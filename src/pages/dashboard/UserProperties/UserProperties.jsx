@@ -18,7 +18,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 
 const UserProperties = () => {
     // const propertyUrl = 'http://localhost:3000/property';
-    const propertyUrl = `${process.env.REACT_APP_PROPERTY_URL}/property`;
+    const propertyUrl = `${process.env.REACT_APP_BASE_URL}/property`;
     const location = useLocation();
     var purpose,
         propertyType,

@@ -15,7 +15,7 @@ import { BiBath } from "react-icons/bi";
 import { AiFillHeart, AiOutlineCar, AiOutlineHeart } from "react-icons/ai";
 import { IoIosArrowDown } from "react-icons/io";
 import { GrCheckboxSelected, GrCheckbox } from "react-icons/gr";
-
+import Tooltip  from '../../../../assets/media/svg/tooltip.svg'
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 import "./Properties.css";
@@ -37,8 +37,8 @@ const Properties = ({ google }) => {
 
   // const propertyUrl = process.env.PROPERTY_URL;
   // const propertyUrl = 'http://localhost:3000/property';
-  const propertyUrl = process.env.REACT_APP_PROPERTY_URL
-  console.log(propertyUrl,"propertyUrl")
+  const propertyUrl = process.env.REACT_APP_BASE_URL
+  console.log(propertyUrl, "propertyUrl")
   const location = useLocation();
   var purpose,
     propertyType,
@@ -60,6 +60,7 @@ const Properties = ({ google }) => {
   }
   const [isLoading, setLoading] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
+  const [mapData, setMapData] = useState([])
   const [priceRange, setPriceRange] = useState({ min: 0, max: 100000 }); // initial price range
   const [interested, setInterested] = useState(purpose);
   const [PropertyDT, setPropertyDT] = useState([propertyType]);
@@ -388,7 +389,7 @@ const Properties = ({ google }) => {
           url += `&parking=${parkingDt[0]}`;
         } else {
           let newUrl = url
-          parkingDt.forEach((el)=>{
+          parkingDt.forEach((el) => {
             newUrl += `&parking=${el}`
           })
           url = newUrl
@@ -462,6 +463,32 @@ const Properties = ({ google }) => {
         setFilteredData(res);
         setCount(response.data.count)
         setLoading(false);
+      });
+      axios({
+        method: "get",
+        url: `${process.env.REACT_APP_BASE_URL}/property/mapProperties`,
+      }).then(async function (response) {
+        console.log(response.data, "response for map data")
+        response.data.map((item, index) => {
+          var position = {
+            lat: item.location.latitude,
+            lng: item.location.longitude,
+          };
+          item["location"]["position"] = position;
+        })
+        setMapData(response.data)
+        // var res = response.data.data;
+        // res.map((item, index) => {
+        //   var position = {
+        //     lat: item.location.latitude,
+        //     lng: item.location.longitude,
+        //   };
+        //   item["location"]["position"] = position;
+        // });
+
+        // setFilteredData(res);
+        // setCount(response.data.count)
+        // setLoading(false);
       });
 
     };
@@ -543,28 +570,28 @@ const Properties = ({ google }) => {
   const [slider, setSlider] = useState(false);
 
   const bedRoomdata = [
-    { name: 1, count: 0, value:"bedRoom1" },
-    { name: 2, count: 0, value:"bedRoom2" },
-    { name: 3, count: 0, value:"bedRoom3" },
-    { name: 4, count: 0, value:"bedRoom4" },
-    { name: 5, count: 0, value:"bedRoom5" },
+    { name: 1, count: 0, value: "bedRoom1" },
+    { name: 2, count: 0, value: "bedRoom2" },
+    { name: 3, count: 0, value: "bedRoom3" },
+    { name: 4, count: 0, value: "bedRoom4" },
+    { name: 5, count: 0, value: "bedRoom5" },
   ];
   const intresteddata = [{ name: "Buy", value: "sale" }, { name: "Rent", value: "rent" }];
 
   const bathRoomData = [
-    { name: 1, count: 0, value:'bathRoom1' },
-    { name: 2, count: 0, value:'bathRoom2' },
-    { name: 3, count: 0, value:'bathRoom3' },
-    { name: 4, count: 0, value:'bathRoom4' },
-    { name: 5, count: 0, value:'bathRoom5' },
+    { name: 1, count: 0, value: 'bathRoom1' },
+    { name: 2, count: 0, value: 'bathRoom2' },
+    { name: 3, count: 0, value: 'bathRoom3' },
+    { name: 4, count: 0, value: 'bathRoom4' },
+    { name: 5, count: 0, value: 'bathRoom5' },
   ]
 
   const parkingData = [
-    { name: 1, count: 0,value:'parking1' },
-    { name: 2, count: 0,value:'parking2' },
-    { name: 3, count: 0,value:'parking3' },
-    { name: 4, count: 0,value:'parking4' },
-    { name: 5, count: 0,value:'parking5' },
+    { name: 1, count: 0, value: 'parking1' },
+    { name: 2, count: 0, value: 'parking2' },
+    { name: 3, count: 0, value: 'parking3' },
+    { name: 4, count: 0, value: 'parking4' },
+    { name: 5, count: 0, value: 'parking5' },
   ]
 
 
@@ -618,8 +645,9 @@ const Properties = ({ google }) => {
     searchInput.current.value = "";
   };
 
-  const handleSearchProperties = ()=>{
-        setHandleSearch(!handleSearch)
+  const handleSearchProperties = () => {
+    setHandleSearch(!handleSearch)
+    setCurrentPage(1)
   }
 
   const sortingHandler = (e) => {
@@ -631,6 +659,7 @@ const Properties = ({ google }) => {
     }
     // setSortingFilter(e.value);
     setSortingFilter(obj)
+    setCurrentPage(1)
   };
 
 
@@ -715,10 +744,17 @@ const Properties = ({ google }) => {
       setPropertyDT([...initArr])
     } else {
       console.log("asdf")
-      setSelectedOptions([...chec, tempObj])
-      setPropertyDT([...initArr, tempObj.key])
+      if (tempObj.key == 'all') {
+        setSelectedOptions([tempObj])
+        setPropertyDT([tempObj.key])
+      } else {
+        setSelectedOptions([...chec, tempObj])
+        setPropertyDT([...initArr, tempObj.key])
+      }
+
     }
 
+    setCurrentPage(1)
     // }
 
     // let arrayToSend = selectedOptions?selectedOptions.map((el)=>{
@@ -749,7 +785,7 @@ const Properties = ({ google }) => {
   };
 
   const handleBedRoomDropdownChange = (e, key) => {
-    console.log(bedRoomDT,'bedRoomDT')
+    console.log(bedRoomDT, 'bedRoomDT')
     // let array = []
     // setBedRoomDT(array)
     let tempObj = {
@@ -770,6 +806,7 @@ const Properties = ({ google }) => {
       setBedRoomOptions([...chec, tempObj])
       setBedRoomDT([...initArr, tempObj.key])
     }
+    setCurrentPage(1)
   }
 
   const handleBathRoomDropdownChange = (e, key) => {
@@ -793,6 +830,7 @@ const Properties = ({ google }) => {
       setBathRoomOptions([...chec, tempObj])
       setBathRoomDT([...initArr, tempObj.key])
     }
+    setCurrentPage(1)
   }
 
   const handleParkingDropdownChange = (e, key) => {
@@ -816,6 +854,7 @@ const Properties = ({ google }) => {
       setParkingOptions([...chec, tempObj])
       setparkingDt([...initArr, tempObj.key])
     }
+    setCurrentPage(1)
   }
   const moreFilters = (item) => {
     console.log(item, "item in moreFilters")
@@ -857,7 +896,7 @@ const Properties = ({ google }) => {
 
   }
   const handleMoreFiltersDropdownChange = (e, item) => {
-    console.log(filtersDt,'check filters dt')
+    console.log(filtersDt, 'check filters dt')
     // let array = []
     // setFiltersDt(array)
     let tempObj = {
@@ -882,6 +921,7 @@ const Properties = ({ google }) => {
         dbName: item.dbName
       }])
     }
+    setCurrentPage(1)
   }
   const totalPages = Math.ceil(count / limit);
   const handlePageChange = (e, pageNumber) => {
@@ -901,8 +941,8 @@ const Properties = ({ google }) => {
     const response = await axiosInstance.put(`${propertyUrl}/property/favorite/${item._id}`, body)
     if (response.status == 200) {
       let tempData = [...filteredData]
-      console.log(tempData,"tempData")
-      let index = tempData.findIndex((el)=>el._id == item._id)
+      console.log(tempData, "tempData")
+      let index = tempData.findIndex((el) => el._id == item._id)
       tempData[index].favorites.push(JSON.parse(localStorage.getItem('user')).token.id)
       setFilteredData(tempData)
     }
@@ -915,10 +955,10 @@ const Properties = ({ google }) => {
     console.log(response.data.message, "check response")
     if (response.status == 200) {
       let tempData = [...filteredData]
-      console.log(tempData,"tempData")
-      let index = tempData.findIndex((el)=>el._id == item._id)
-      let idIndex = tempData[index].favorites.find((el)=>el==JSON.parse(localStorage.getItem('user')).token.id)
-      tempData[index].favorites.splice(idIndex,1)
+      console.log(tempData, "tempData")
+      let index = tempData.findIndex((el) => el._id == item._id)
+      let idIndex = tempData[index].favorites.find((el) => el == JSON.parse(localStorage.getItem('user')).token.id)
+      tempData[index].favorites.splice(idIndex, 1)
       setFilteredData(tempData)
       // setFavorited(false)
     }
@@ -1066,7 +1106,7 @@ const Properties = ({ google }) => {
                     //   <span class="sr-only">Loading...</span>
                     // </div>
                     <div class="text-center mt-5">
-                      <div style={{color:"deeppink"}}  class="spinner-border" role="status">
+                      <div style={{ color: "deeppink" }} class="spinner-border" role="status">
                         <span class="sr-only">Loading...</span>
                       </div>
                     </div>
@@ -1074,6 +1114,7 @@ const Properties = ({ google }) => {
                     filteredData.map((item, index) => {
                       // const ifFavorite = item.favorites.some((el) => el == JSON.parse(localStorage.getItem('user')).token.id)
                       const ifFavorite = item.favorites.some((el) => el == JSON.parse(localStorage.getItem('user')).token.id)
+                      console.log(item)
                       return (<>
                         <div key={item["_id"]} className="sc-1ti9q65-0 ggJHdq">
                           <article className="sc-1e63uev-0 kydbmE">
@@ -1176,7 +1217,7 @@ const Properties = ({ google }) => {
                                   )}
                                   <div className="mna96j-0 hcVMxo">
                                     <h4 className="mna96j-1 bWMeDG">
-                                      Apartment for Rent
+                                      {item['type']} for {item['purpose']}
                                     </h4>
                                     <h4 className="mna96j-1 bWMeDG">
                                       NEW on Homely
@@ -1312,8 +1353,9 @@ const Properties = ({ google }) => {
                       disableDefaultUI={true}
                       streetViewControl={true}
                     >
-                      {filteredData.map((item, index) => {
+                      {mapData.map((item, index) => {
                         return (
+
                           <Marker
                             key={item['_id'] + index}
                             onClick={handleActiveMarker}
@@ -1321,11 +1363,20 @@ const Properties = ({ google }) => {
                             information={item}
                             icon={{
                               title: "Test",
-                              url: "https://www.svgrepo.com/show/1276/map-pin.svg",
-                              anchor: new google.maps.Point(20, 20),
-                              scaledSize: new google.maps.Size(20, 20),
+                              // url: "https://www.svgrepo.com/show/1276/map-pin.svg",
+                              url: require('../../../../assets/media/svg/tooltip.svg').default,
+                              anchor: new google.maps.Point(120, 120),
+                              scaledSize: new google.maps.Size(120, 120),
+                              scale:1.2
                             }}
-                          ></Marker>
+                            label={'Check'}
+                            style={{color:'#fff'}}
+
+                          >
+                            
+                          </Marker>
+
+
                         );
                       })}
 
@@ -1656,7 +1707,7 @@ const Properties = ({ google }) => {
                                             handleCheckboxChange={(e) => handleCheckboxChange(e, item.value)}
                                             checked={PropertyDT.find((ml) => ml == item.value) ? true : false}
 
-                                         />
+                                          />
                                           {/* <button
                                             type="button"
                                             className="sc-10375bz-0 inAQUt"
@@ -1740,7 +1791,7 @@ const Properties = ({ google }) => {
                                     className="sc-316fzr-0 jDEIHe"
                                   >
                                     {bedRoomdata.map((item, i) => {
-                                      console.log(item ,'bedRoomItem')
+                                      console.log(item, 'bedRoomItem')
                                       return (
                                         <li
                                           key={item.name + i}
@@ -1750,7 +1801,7 @@ const Properties = ({ google }) => {
                                             id={item.value}
                                             name={item.name}
                                             handleCheckboxChange={(e) => handleBedRoomDropdownChange(e, item.name)}
-                                            checked = {bedRoomDT.find((ml)=>ml ==item.name)? true :false}
+                                            checked={bedRoomDT.find((ml) => ml == item.name) ? true : false}
                                           />
                                           {/* <button
                                             type="button"
@@ -1836,7 +1887,7 @@ const Properties = ({ google }) => {
                                             id={item.value}
                                             name={item.name}
                                             handleCheckboxChange={(e) => handleBathRoomDropdownChange(e, item.name)}
-                                            checked = {bathRoomDt.find((ml)=>ml ==item.name)? true :false}
+                                            checked={bathRoomDt.find((ml) => ml == item.name) ? true : false}
 
                                           />
                                           {/* <button
@@ -1950,7 +2001,7 @@ const Properties = ({ google }) => {
                                             id={item.value}
                                             name={item.name}
                                             handleCheckboxChange={(e) => handleParkingDropdownChange(e, item.name)}
-                                            checked = {parkingDt.find((ml)=>ml ==item.name)? true :false}
+                                            checked={parkingDt.find((ml) => ml == item.name) ? true : false}
 
                                           />
                                         </li>
@@ -2007,7 +2058,7 @@ const Properties = ({ google }) => {
                                     className="sc-316fzr-0 jDEIHe"
                                   >
                                     {filtersData.map((item, i) => {
-                                      console.log(item,"check item for filters data")
+                                      console.log(item, "check item for filters data")
                                       return (
                                         <li
                                           key={item.name + i}
@@ -2044,7 +2095,7 @@ const Properties = ({ google }) => {
                                             id={item.name}
                                             name={item.name}
                                             handleCheckboxChange={(e) => handleMoreFiltersDropdownChange(e, item)}
-                                            checked = {filtersDt.find((ml)=>ml.dbName ==item.dbName)? true :false}
+                                            checked={filtersDt.find((ml) => ml.dbName == item.dbName) ? true : false}
 
                                           />
                                         </li>

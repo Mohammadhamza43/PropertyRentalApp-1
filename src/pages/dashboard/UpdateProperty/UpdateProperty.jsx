@@ -206,7 +206,7 @@ const UpdateProperty = () => {
     useEffect(() => {
 
         initAutocomplete();
-        fetch(`${process.env.REACT_APP_PROPERTY_URL}/property/user`, {
+        fetch(`${process.env.REACT_APP_BASE_URL}/property/user`, {
 
             method: "GET",
             headers: {
@@ -506,7 +506,7 @@ const UpdateProperty = () => {
     const DeleteOldImages = async (url, index) => {
         // console.log(url , index , id );
         setFormLoader(true)
-        await fetch(`${process.env.REACT_APP_PROPERTY_URL}/property/delete/image/${id}`, {
+        await fetch(`${process.env.REACT_APP_BASE_URL}/property/delete/image/${id}`, {
             method: "PUT",
             headers: {
                 "Accept": "application/json",

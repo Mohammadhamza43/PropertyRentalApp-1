@@ -509,7 +509,7 @@ const UploadProperty = () => {
 
                 )
             }
-            await fetch(`${process.env.REACT_APP_PROPERTY_URL}/property`, {
+            await fetch(`${process.env.REACT_APP_BASE_URL}/property`, {
                 method: "POST",
                 headers: {
                     "Accept": "application/json",
