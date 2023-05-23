@@ -250,11 +250,7 @@ const Properties = ({ google }) => {
     setLoading(true);
     const loadAllData = async () => {
       // var url = `https://walrus-app-ovpy2.ondigitalocean.app/property/list`;
-<<<<<<< HEAD
       var url = `${propertyUrl}/property/list`;
-=======
-      var url = `${process.env.REACT_APP_PROPERTY_URL}/property/list`;
->>>>>>> 016d849103a31d36cd2855d503668477aa503950
       axios({
         method: "get",
         url: url,
@@ -274,12 +270,8 @@ const Properties = ({ google }) => {
 
     const filterData = async () => {
       // var url = `https://walrus-app-ovpy2.ondigitalocean.app/property/list`;
-<<<<<<< HEAD
       // var url = `http://localhost:3000/property/list`;
       var url = `${process.env.REACT_APP_BASE_URL}/property/list`;
-=======
-      var url = `${process.env.REACT_APP_PROPERTY_URL}/property/list`;
->>>>>>> 016d849103a31d36cd2855d503668477aa503950
 
       if (priceRange) {
         url += `?&priceFrom=${priceRange["min"]}&priceTo=${priceRange["max"]}`;
@@ -1397,35 +1389,6 @@ const Properties = ({ google }) => {
             <div className="r0xktz-2 gPahXz">
               {console.log(mapData, "qwert")}
               <div style={{ position: "relative", height: "100%" }}>
-<<<<<<< HEAD
-=======
-                <div
-                  style={{ width: 600, height: 450 }}
-                  className="map-width-mobile"
-                >
-                  {typeof filteredData !== "undefined" &&
-                    filteredData !== null &&
-                    filteredData.length > 0 ? (
-                    <Map
-                      google={google}
-                      containerStyle={{
-                        position: "static",
-                        width: "100%",
-                        height: "100%",
-                      }}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                      }}
-                      center={filteredData[0]["location"]["position"]}
-                      initialCenter={filteredData[0]["location"]["position"]}
-                      zoom={filteredData.length === 1 ? 15 : 13}
-                      disableDefaultUI={true}
-                      streetViewControl={true}
-                    >
-                      {mapData.map((item, index) => {
-                        return (
->>>>>>> 016d849103a31d36cd2855d503668477aa503950
 
                 {isLoaded ? <div style={{ width: 600, height: 450 }} className="map-width-mobile">
 
