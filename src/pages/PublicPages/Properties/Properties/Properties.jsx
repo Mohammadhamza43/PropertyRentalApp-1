@@ -15,26 +15,26 @@ import { BiBath } from "react-icons/bi";
 import { AiFillHeart, AiOutlineCar, AiOutlineHeart } from "react-icons/ai";
 import { IoIosArrowDown } from "react-icons/io";
 import { GrCheckboxSelected, GrCheckbox } from "react-icons/gr";
-import Tooltip  from '../../../../assets/media/svg/tooltip.svg'
+import Tooltip from '../../../../assets/media/svg/tooltip.svg'
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 import "./Properties.css";
 import "react-multi-carousel/lib/styles.css";
 import Slider, { Range } from "rc-slider";
 import "rc-slider/assets/index.css";
-
-import { Map, InfoWindow, Marker, GoogleApiWrapper } from "google-maps-react";
+// import { GoogleApiWrapper, } from "google-maps-react";
 import axios from "axios";
 import MultiSelectCheckbox, { CheckBox } from "../../../../shared/components/checkbox";
 import Pagination from "../../../../shared/components/pagination";
 import axiosInstance from "../../../../shared/HttpClient/axiosInstance";
-
+import MyMapComponent from "../../../../shared/components/Map";
+import { GoogleMap, LoadScript, Marker, MarkerF, useLoadScript, InfoWindow } from "@react-google-maps/api";
+const { MarkerClusterer } = require("react-google-maps/lib/components/addons/MarkerClusterer");
 const apiKey = process.env.REACT_APP_API_KEY;
 const mapApiJs = process.env.REACT_APP_MAP_API_JS;
 const geocodeJson = process.env.REACT_APP_GEOCODE_JSON;
 
 const Properties = ({ google }) => {
-
   // const propertyUrl = process.env.PROPERTY_URL;
   // const propertyUrl = 'http://localhost:3000/property';
   const propertyUrl = process.env.REACT_APP_BASE_URL
@@ -65,7 +65,7 @@ const Properties = ({ google }) => {
   const [interested, setInterested] = useState(purpose);
   const [PropertyDT, setPropertyDT] = useState([propertyType]);
   const [filtersDt, setFiltersDt] = useState([]);
-
+  const [mapInstance, setMapInstance] = useState()
   const [cityFilter, setCityFilter] = useState(cityFiltertxt);
   const [latFilter, setLatFilter] = useState(latFiltertxt);
   const [longFilter, setLongFilter] = useState(lngFiltertxt);
@@ -217,18 +217,18 @@ const Properties = ({ google }) => {
       types: ["establishment"],
       // componentRestrictions: {country: "us"}
     };
-    const autocomplete = new window.google.maps.places.Autocomplete(
-      searchInput.current,
-    );
-    autocomplete.setFields([
-      "address_component",
-      "geometry",
-      "formatted_address",
-    ]);
-    autocomplete.addListener("place_changed", () =>
-      onChangeAddress(autocomplete)
-    );
-    const address = extractAddress(autocomplete);
+    // const autocomplete = new window.google.maps.places.Autocomplete(
+    //   searchInput.current,
+    // );
+    // autocomplete.setFields([
+    //   "address_component",
+    //   "geometry",
+    //   "formatted_address",
+    // ]);
+    // autocomplete.addListener("place_changed", () =>
+    //   onChangeAddress(autocomplete)
+    // );
+    // const address = extractAddress(autocomplete);
   };
 
   useEffect(() => {
@@ -250,7 +250,11 @@ const Properties = ({ google }) => {
     setLoading(true);
     const loadAllData = async () => {
       // var url = `https://walrus-app-ovpy2.ondigitalocean.app/property/list`;
+<<<<<<< HEAD
+      var url = `${propertyUrl}/property/list`;
+=======
       var url = `${process.env.REACT_APP_PROPERTY_URL}/property/list`;
+>>>>>>> 016d849103a31d36cd2855d503668477aa503950
       axios({
         method: "get",
         url: url,
@@ -270,7 +274,12 @@ const Properties = ({ google }) => {
 
     const filterData = async () => {
       // var url = `https://walrus-app-ovpy2.ondigitalocean.app/property/list`;
+<<<<<<< HEAD
+      // var url = `http://localhost:3000/property/list`;
+      var url = `${process.env.REACT_APP_BASE_URL}/property/list`;
+=======
       var url = `${process.env.REACT_APP_PROPERTY_URL}/property/list`;
+>>>>>>> 016d849103a31d36cd2855d503668477aa503950
 
       if (priceRange) {
         url += `?&priceFrom=${priceRange["min"]}&priceTo=${priceRange["max"]}`;
@@ -459,37 +468,44 @@ const Properties = ({ google }) => {
           };
           item["location"]["position"] = position;
         });
-
+        console.log(res, "check response")
         setFilteredData(res);
         setCount(response.data.count)
         setLoading(false);
-      });
-      axios({
-        method: "get",
-        url: `${process.env.REACT_APP_BASE_URL}/property/mapProperties`,
-      }).then(async function (response) {
-        console.log(response.data, "response for map data")
-        response.data.map((item, index) => {
-          var position = {
-            lat: item.location.latitude,
-            lng: item.location.longitude,
-          };
-          item["location"]["position"] = position;
-        })
-        setMapData(response.data)
-        // var res = response.data.data;
-        // res.map((item, index) => {
-        //   var position = {
-        //     lat: item.location.latitude,
-        //     lng: item.location.longitude,
-        //   };
-        //   item["location"]["position"] = position;
-        // });
 
-        // setFilteredData(res);
-        // setCount(response.data.count)
-        // setLoading(false);
-      });
+      })
+        .then(() => {
+          axios({
+            method: "get",
+            url: `${process.env.REACT_APP_BASE_URL}/property/mapProperties`,
+          }).then(async function (response) {
+            console.log(response.data, "response for map data")
+            response.data.map((item, index) => {
+              var position = {
+                lat: item.location.latitude,
+                lng: item.location.longitude,
+              };
+              item["location"]["position"] = position;
+            })
+            setMapData(response.data)
+
+
+            // var res = response.data.data;
+            // res.map((item, index) => {
+            //   var position = {
+            //     lat: item.location.latitude,
+            //     lng: item.location.longitude,
+            //   };
+            //   item["location"]["position"] = position;
+            // });
+
+            // setFilteredData(res);
+            // setCount(response.data.count)
+            // setLoading(false);
+          });
+        })
+
+
 
     };
 
@@ -602,14 +618,25 @@ const Properties = ({ google }) => {
       max: value[1],
     });
   };
-
+  const [modalItems, setModalItems] = useState([])
   const handleActiveMarker = (props, marker) => {
+    const { information } = props
+    const { position, items } = information
     console.log(props);
     if (marker === activeMarker) {
       return;
     }
+    console.log(props, "modal items")
+    console.log(information, "modal items")
+    // if(items.length>1){
+    //   setActiveMarker(marker);
+    //   setMarkerDetail(props);
+    //   setModalItems(items)
+    // }else{
+
     setActiveMarker(marker);
     setMarkerDetail(props);
+    // }
   };
 
   const handleOnLoad = (map) => {
@@ -856,6 +883,10 @@ const Properties = ({ google }) => {
     }
     setCurrentPage(1)
   }
+  const containerStyle = {
+    width: '100vh',
+    height: '100vh',
+  };
   const moreFilters = (item) => {
     console.log(item, "item in moreFilters")
     console.log("moreFilters function")
@@ -963,6 +994,9 @@ const Properties = ({ google }) => {
       // setFavorited(false)
     }
   }
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: 'AIzaSyCgOmfEnqxNlDabf7Qug0VKGl-l1WqdXLc'
+  });
   // console.log(,"check bedRoomDt")
   return (
     <>
@@ -1115,6 +1149,14 @@ const Properties = ({ google }) => {
                       // const ifFavorite = item.favorites.some((el) => el == JSON.parse(localStorage.getItem('user')).token.id)
                       const ifFavorite = item.favorites.some((el) => el == JSON.parse(localStorage.getItem('user')).token.id)
                       console.log(item)
+                      const ifNew = new Date(item.createdAt).getTime() > (Date.now() - (1000 * 60 * 60 * 24 * 7))
+                      console.log(ifNew)
+                      const newHome = item.newHomeAmenities != null
+                      const commercial = item.commercialAmenities != null
+                      const garage = item.garageAmenities != null
+                      const land = item.landAmenities != null
+                      const room = item.roomAmenities != null
+                      console.log(item)
                       return (<>
                         <div key={item["_id"]} className="sc-1ti9q65-0 ggJHdq">
                           <article className="sc-1e63uev-0 kydbmE">
@@ -1163,14 +1205,20 @@ const Properties = ({ google }) => {
                                 </div>
                               </div>
                               <div className="sc-1e63uev-1 dyWqS">
-                                <div
-                                  aria-label="Property Listing Status Label"
-                                  className="sc-1e63uev-2 emUQRl"
-                                >
-                                  <div className="sc-111qxzs-0 lfdbms">
-                                    <h3 className="sc-111qxzs-1 mQJFy">New</h3>
-                                  </div>
-                                </div>
+                                {
+
+                                  ifNew ?
+                                    <div
+                                      aria-label="Property Listing Status Label"
+                                      className="sc-1e63uev-2 emUQRl"
+                                    >
+                                      <div className="sc-111qxzs-0 lfdbms">
+                                        <h3 className="sc-111qxzs-1 mQJFy">New</h3>
+                                      </div>
+                                    </div>
+                                    : null
+                                }
+
                                 <h3 className="sc-1e63uev-3 swIbZ">
                                   ${item["price"]}
                                   {/* {item["description"]} */}
@@ -1181,7 +1229,7 @@ const Properties = ({ google }) => {
                                     {item["location"]["pinLocation"]}
                                     {/* <span className="ijsdcd-2 dHYeSr">Melbourne VIC 3000</span> */}
                                   </h2>
-                                  {item["newHomeAmenities"] && (
+                                  {item && (
                                     <ul className="rkh7f0-0 doqKNP">
                                       <li className="rkh7f0-1 ddpQTN">
                                         <span
@@ -1191,7 +1239,13 @@ const Properties = ({ google }) => {
                                         >
                                           <BiBed />
                                         </span>{" "}
-                                        {item["newHomeAmenities"]["room"]}
+                                        {/* {item["newHomeAmenities"]["room"]} */}
+                                        {newHome ? item["newHomeAmenities"]["rooms"] :
+                                          commercial ? item["commercialAmenities"]["rooms"] != undefined ? item["commercialAmenities"]["rooms"] : 1 :
+                                            room ? item["roomAmenities"]["rooms"] :
+                                              garage ? 0 :
+                                                0
+                                        }
                                       </li>
                                       <li className="rkh7f0-1 ddpQTN">
                                         <span
@@ -1201,7 +1255,13 @@ const Properties = ({ google }) => {
                                         >
                                           <TbBath />
                                         </span>{" "}
-                                        {item["newHomeAmenities"]["bath"]}
+                                        {/* {item["newHomeAmenities"]["bath"]} */}
+                                        {newHome ? item["newHomeAmenities"]["bath"] :
+                                          commercial ? item["commercialAmenities"]["bath"] :
+                                            room ? item["roomAmenities"]["bath"] :
+                                              garage ? 0 :
+                                                0
+                                        }
                                       </li>
                                       <li className="rkh7f0-1 ddpQTN">
                                         <span
@@ -1211,13 +1271,20 @@ const Properties = ({ google }) => {
                                         >
                                           <AiOutlineCar />
                                         </span>{" "}
-                                        {item["newHomeAmenities"]["parking"]}
+                                        {/* {item["newHomeAmenities"]["parking"]} */}
+                                        {newHome ? item["newHomeAmenities"]["parking"] :
+                                          commercial ? item["commercialAmenities"]["parking"] :
+                                            room ? item["roomAmenities"]["parking"] :
+                                              garage ? 0 :
+                                                0
+                                        }
                                       </li>
                                     </ul>
                                   )}
                                   <div className="mna96j-0 hcVMxo">
                                     <h4 className="mna96j-1 bWMeDG">
-                                      {item['type']} for {item['purpose']}
+                                      {/* {item['type'].toUpperCase()} for {item['purpose'].toUpperCase()} */}
+                                      {item['type'].charAt(0).toUpperCase() + item['type'].slice(1).toLowerCase()} for {item['purpose'].charAt(0).toUpperCase() + item['purpose'].slice(1).toLowerCase()}
                                     </h4>
                                     <h4 className="mna96j-1 bWMeDG">
                                       NEW on Homely
@@ -1328,7 +1395,10 @@ const Properties = ({ google }) => {
               </section>
             </div>
             <div className="r0xktz-2 gPahXz">
+              {console.log(mapData, "qwert")}
               <div style={{ position: "relative", height: "100%" }}>
+<<<<<<< HEAD
+=======
                 <div
                   style={{ width: 600, height: 450 }}
                   className="map-width-mobile"
@@ -1355,141 +1425,240 @@ const Properties = ({ google }) => {
                     >
                       {mapData.map((item, index) => {
                         return (
+>>>>>>> 016d849103a31d36cd2855d503668477aa503950
 
-                          <Marker
-                            key={item['_id'] + index}
-                            onClick={handleActiveMarker}
-                            position={item.location.position}
-                            information={item}
-                            icon={{
-                              title: "Test",
-                              // url: "https://www.svgrepo.com/show/1276/map-pin.svg",
-                              url: require('../../../../assets/media/svg/tooltip.svg').default,
-                              anchor: new google.maps.Point(120, 120),
-                              scaledSize: new google.maps.Size(120, 120),
-                              scale:1.2
-                            }}
-                            label={'Check'}
-                            style={{color:'#fff'}}
+                {isLoaded ? <div style={{ width: 600, height: 450 }} className="map-width-mobile">
 
-                          >
-                            
-                          </Marker>
+                  {
+                    mapData && mapData.length > 0 ? (
 
+                      <GoogleMap
+                        mapContainerStyle={containerStyle}
+                        center={{ lat: 24.8123727, lng: 67.049962 }}
+                        // center={{ lat: Number(mapData[3]["location"]["position"].lat), lng: Number(mapData[0]["location"]["position"].lng) }}
+                        zoom={20}
 
-                        );
-                      })}
-
-                      <InfoWindow marker={activeMarker} visible={true}>
-                        <div className="v95puu-6 ">
-                          <article
-                            aria-label="Property Listing"
-                            data-listing-id="9896476"
-                            className="sc-1e63uev-0 kpjXrq"
-                          >
-                            <a
-                              aria-label="609/228 Abeckett Street, Melbourne VIC 3000"
-                              href="/homes/609-228-abeckett-street-melbourne-vic-3000/9896476"
-                              className="sc-1fvt3tm-0 eRPHdN"
+                      // onLoad={(map)=>setTimeout(()=>setMapInstance(map))}
+                      >
+                        {mapData && mapData.map((marker, i) => {
+                          // console.log(marker, "check marker")
+                          let latLong = {
+                            lat: Number(marker.location.position.lat),
+                            lng: Number(marker.location.position.lng)
+                          }
+                          // console.log(latLong, "latLong")
+                          return (<>
+                            <MarkerClusterer
+                              onClick={() => console.log("cluster")}
+                              averageCenter
+                              enableRetinaIcons
+                              gridSize={60}
                             >
-                              <div className="sc-3i257o-0 bXIqeS">
-                                <div className="sc-1qqt7z5-0 bIhZyK fade in">
-                                  <img
-                                    src={markerDetail?.information.photos[0]}
-                                    loading="lazy"
-                                    alt={
-                                      markerDetail?.information.location.address
-                                    }
-                                  />
-                                </div>
-                              </div>
-                              <div className="sc-1e63uev-1 dOPMYK">
-                                <h3 className="sc-1e63uev-3 swIbZ">
-                                  $ {markerDetail?.information.price}
-                                </h3>
-                                <div className="ijsdcd-0 gWTwZn">
-                                  <h2 className="ijsdcd-1 bjJoNh">
-                                    {markerDetail?.information.location.address}
-                                  </h2>
-                                  {typeof markerDetail?.information
-                                    .roomAmenities !== "undefined" &&
-                                    markerDetail?.information.roomAmenities ? (
-                                    <ul className="rkh7f0-0 doqKNP">
-                                      <li className="rkh7f0-1 ddpQTN">
-                                        <span
-                                          role="img"
-                                          aria-label="Bed"
-                                          className="rkh7f0-2 iMDBSi"
-                                        >
-                                          <BiBed className="sc-1h490wc-1 fKOyQl icon" />
-                                        </span>{" "}
-                                        1
-                                      </li>
-                                      {markerDetail?.information.roomAmenities
-                                        .bath ? (
-                                        <li className="rkh7f0-1 ddpQTN">
-                                          <span
-                                            role="img"
-                                            aria-label="Bath"
-                                            className="rkh7f0-2 iMDBSi"
-                                          >
-                                            <BiBath className="sc-1h490wc-1 fKOyQl icon" />
-                                          </span>{" "}
-                                          {
-                                            markerDetail?.information
-                                              .roomAmenities.bath
-                                          }
-                                        </li>
-                                      ) : (
-                                        <></>
-                                      )}
-                                      {markerDetail?.information.roomAmenities
-                                        .parking ? (
-                                        <li className="rkh7f0-1 ddpQTN">
-                                          <span
-                                            role="img"
-                                            aria-label="Car"
-                                            className="rkh7f0-2 iMDBSi"
-                                          >
-                                            <AiOutlineCar className="sc-1h490wc-1 fKOyQl icon" />
-                                          </span>{" "}
-                                          1
-                                        </li>
-                                      ) : (
-                                        <></>
-                                      )}
-                                    </ul>
-                                  ) : (
-                                    <></>
-                                  )}
-                                </div>
-                              </div>
-                            </a>
-                            <div className="ou1x8i-0 gOrroY">
-                              <button
-                                type="button"
-                                title="Add to collection"
-                                aria-label="Add to collection"
-                                className="sc-1pk2hw7-0 bToTeF"
-                              >
-                                <span
-                                  width="24px"
-                                  stroke="currentColor"
-                                  role="presentation"
-                                  className="suraxk-0 exDrMm"
-                                >
+                              <MarkerF
+                                key={i}
+                                // position={{lat:24,lng:67}}
+                                // position={marker.location.position}
+                                position={latLong}
 
-                                  {/* <AiOutlineHeart className="sc-1h490wc-1 fKOyQl icon" /> */}
-                                  <AiFillHeart fill="none" />
-                                </span>
-                              </button>
-                            </div>
-                          </article>
-                        </div>
-                      </InfoWindow>
-                    </Map>
-                  ) : null}
-                </div>
+                                // clusterer={clusterer}
+                                icon={{
+                                  title: 'check',
+
+                                  // path: "https://www.svgrepo.com/show/1276/map-pin.svg",
+
+                                  url: require('../../../../assets/media/svg/tooltip.svg').default,
+                                  anchor: new window.google.maps.Point(120, 120),
+                                  scaledSize: new window.google.maps.Size(50, 180),
+                                }}
+                                label={`$  ${marker['price']}`}
+                              >
+
+                              </MarkerF>
+                            </MarkerClusterer>
+
+
+                            {/* <MarkerClusterer>
+                            {(clusterer) => {
+                             mapData&& mapData.map((marker, i) => {
+                                // console.log(marker, "check marker")
+                                let latLong = {
+                                  lat: Number(marker.location.position.lat),
+                                  lng: Number(marker.location.position.lng)
+                                }
+                                console.log(latLong,"latLong")
+                                return (<>
+                                 
+                                </>)
+                              })
+                  
+                            }}
+                           </MarkerClusterer> */}
+                          </>)
+                        })}
+
+
+                      </GoogleMap>
+
+
+                      // <Map
+                      //   google={google}
+                      //   containerStyle={{
+                      //     position: "static",
+                      //     width: "100%",
+                      //     height: "100%",
+                      //   }}
+                      //   style={{
+                      //     width: "100%",
+                      //     height: "100%",
+                      //   }}
+                      //   center={mapData[0]["location"]["position"]}
+                      //   initialCenter={mapData[0]["location"]["position"]}
+                      //   zoom={mapData.length === 1 ? 15 : 13}
+                      //   disableDefaultUI={true}
+                      //   streetViewControl={true}
+                      // >
+                      //   {/* <MarkerClusterer
+                      //    averageCenter
+                      //    enableRetinaIcons
+                      //    gridSize={60}
+                      //   > */}
+                      //     {mapData.map((item, index) => {
+                      //     // console.log()
+                      //     return (
+                      //         <Marker
+                      //           key={item['_id'] + index}
+                      //           onClick={handleActiveMarker}
+                      //           position={item.location.position}
+                      //           information={item}
+                      //           icon={{
+                      //             title: "Test",
+                      //             // url: "https://www.svgrepo.com/show/1276/map-pin.svg",
+                      //             url: require('../../../../assets/media/svg/tooltip.svg').default,
+                      //             anchor: new google.maps.Point(120, 120),
+                      //             scaledSize: new google.maps.Size(50, 180),
+                      //             // scale: 1.2
+                      //           }}
+                      //           label={`$  ${item['price']}`}
+                      //         >
+                      //         </Marker>
+
+                      //     );
+                      //   })}
+
+
+
+                      // <InfoWindow marker={activeMarker} visible={true}>
+                      //   <div className="v95puu-6 ">
+                      //     <article
+                      //       aria-label="Property Listing"
+                      //       data-listing-id="9896476"
+                      //       className="sc-1e63uev-0 kpjXrq"
+                      //     >
+                      //       <a
+                      //         aria-label="609/228 Abeckett Street, Melbourne VIC 3000"
+                      //         href="/homes/609-228-abeckett-street-melbourne-vic-3000/9896476"
+                      //         className="sc-1fvt3tm-0 eRPHdN"
+                      //       >
+                      //         <div className="sc-3i257o-0 bXIqeS">
+                      //           <div className="sc-1qqt7z5-0 bIhZyK fade in">
+                      //             <img
+                      //               src={markerDetail?.information.photos[0]}
+                      //               loading="lazy"
+                      //               alt={
+                      //                 markerDetail?.information.location.address
+                      //               }
+                      //             />
+                      //           </div>
+                      //         </div>
+                      //         <div className="sc-1e63uev-1 dOPMYK">
+                      //           <h3 className="sc-1e63uev-3 swIbZ">
+                      //             $ {markerDetail?.information.price}
+                      //           </h3>
+                      //           <div className="ijsdcd-0 gWTwZn">
+                      //             <h2 className="ijsdcd-1 bjJoNh">
+                      //               {markerDetail?.information.location.address}
+                      //             </h2>
+                      //             {typeof markerDetail?.information
+                      //               .roomAmenities !== "undefined" &&
+                      //               markerDetail?.information.roomAmenities ? (
+                      //               <ul className="rkh7f0-0 doqKNP">
+                      //                 <li className="rkh7f0-1 ddpQTN">
+                      //                   <span
+                      //                     role="img"
+                      //                     aria-label="Bed"
+                      //                     className="rkh7f0-2 iMDBSi"
+                      //                   >
+                      //                     <BiBed className="sc-1h490wc-1 fKOyQl icon" />
+                      //                   </span>{" "}
+                      //                   1
+                      //                 </li>
+                      //                 {markerDetail?.information.roomAmenities
+                      //                   .bath ? (
+                      //                   <li className="rkh7f0-1 ddpQTN">
+                      //                     <span
+                      //                       role="img"
+                      //                       aria-label="Bath"
+                      //                       className="rkh7f0-2 iMDBSi"
+                      //                     >
+                      //                       <BiBath className="sc-1h490wc-1 fKOyQl icon" />
+                      //                     </span>{" "}
+                      //                     {
+                      //                       markerDetail?.information
+                      //                         .roomAmenities.bath
+                      //                     }
+                      //                   </li>
+                      //                 ) : (
+                      //                   <></>
+                      //                 )}
+                      //                 {markerDetail?.information.roomAmenities
+                      //                   .parking ? (
+                      //                   <li className="rkh7f0-1 ddpQTN">
+                      //                     <span
+                      //                       role="img"
+                      //                       aria-label="Car"
+                      //                       className="rkh7f0-2 iMDBSi"
+                      //                     >
+                      //                       <AiOutlineCar className="sc-1h490wc-1 fKOyQl icon" />
+                      //                     </span>{" "}
+                      //                     1
+                      //                   </li>
+                      //                 ) : (
+                      //                   <></>
+                      //                 )}
+                      //               </ul>
+                      //             ) : (
+                      //               <></>
+                      //             )}
+                      //           </div>
+                      //         </div>
+                      //       </a>
+                      //       <div className="ou1x8i-0 gOrroY">
+                      //         <button
+                      //           type="button"
+                      //           title="Add to collection"
+                      //           aria-label="Add to collection"
+                      //           className="sc-1pk2hw7-0 bToTeF"
+                      //         >
+                      //           <span
+                      //             width="24px"
+                      //             stroke="currentColor"
+                      //             role="presentation"
+                      //             className="suraxk-0 exDrMm"
+                      //           >
+
+                      //             {/* <AiOutlineHeart className="sc-1h490wc-1 fKOyQl icon" /> */}
+                      //             <AiFillHeart fill="none" />
+                      //           </span>
+                      //         </button>
+                      //       </div>
+                      //     </article>
+
+                      //   </div>
+                      // </InfoWindow>
+                      //   {/* </MarkerClusterer> */}
+                      // </Map>
+                    ) : null}
+                </div> : null}
                 <div className="v95puu-4 fuUXys">
                   <span
                     className="LoadingFade"
@@ -2144,8 +2313,8 @@ const Properties = ({ google }) => {
     </>
   );
 };
-
-export default GoogleApiWrapper({
-  apiKey: process.env.REACT_APP_API_KEY,
-  version: "3.38",
-})(Properties);
+export default React.memo(Properties)
+// export default GoogleApiWrapper({
+//   apiKey: process.env.REACT_APP_API_KEY,
+//   version: "3.38",
+// })(Properties);

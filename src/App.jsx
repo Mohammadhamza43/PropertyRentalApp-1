@@ -32,35 +32,35 @@ const apiKey = process.env.REACT_APP_API_KEY;
 const mapApiJs = process.env.REACT_APP_MAP_API_JS;
 const geocodeJson = process.env.REACT_APP_GEOCODE_JSON;
 
-function loadAsyncScript(src) {
-    return new Promise(resolve => {
-        const script = document.createElement('script');
-        Object.assign(script, {
-            type: 'text/javascript',
-            async: true,
-            src
-        })
-        script.addEventListener("load", () => resolve(script));
-        document.head.appendChild(script);
-    })
-}
+// function loadAsyncScript(src) {
+//     return new Promise(resolve => {
+//         const script = document.createElement('script');
+//         Object.assign(script, {
+//             type: 'text/javascript',
+//             async: true,
+//             src
+//         })
+//         script.addEventListener("load", () => resolve(script));
+//         document.head.appendChild(script);
+//     })
+// }
 
 function App() {
     let user = localStorage.getItem('user')
 
     // init gmap script
-    const initMapScript = () => {
-      // if script already loaded
-      if(window.google) {
-        return Promise.resolve();
-      }
-      const src = `${mapApiJs}?key=${apiKey}&libraries=places&v=weekly`;
-      return loadAsyncScript(src);
-    }
+    // const initMapScript = () => {
+    //   // if script already loaded
+    //   if(window.google) {
+    //     return Promise.resolve();
+    //   }
+    //   const src = `${mapApiJs}?key=${apiKey}&libraries=places&v=weekly`;
+    //   return loadAsyncScript(src);
+    // }
 
 
     useEffect(() => {
-        initMapScript().then()
+        // initMapScript().then()
     }, [])
 
     return (
